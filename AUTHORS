@@ -1,0 +1,20 @@
+List of authors of code contained in BusyBox-RS.
+
+If you have contributed code to BusyBox-RS, you should be listed here.
+Please keep this file updated as new applets and modules are authored.
+
+-----------
+
+BusyBox-RS Contributors <busybox-rust@users.noreply.github.com>
+    Initial Rust rewrite architecture, modular Applet trait dispatcher,
+    Linux/POSIX syscall abstraction layer, raw OsStr/byte stream engine.
+
+Applets & Subsystems:
+    - Core utils: echo, true, false, pwd, printenv, sleep, yes, clear, reset
+    - File utils: ls, cp, mv, rm, mkdir, rmdir, touch, link, unlink, dirname, basename, which
+    - Text utils: cat, head, tail, wc, fold, rev, expand, unexpand
+    - Stream & Filters: cut, tr, sort, grep, uniq, comm, tee, strings
+    - Encoding: uuencode, uudecode, xxd
+    - Math & Analysis: seq, factor, tsort
+    - Shell: sh (modular AST / executor)
+    - Embedded sizing & optimization profile (z-opt, LTO, panic-abort, symbol strip)
