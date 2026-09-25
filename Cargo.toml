@@ -1,0 +1,90 @@
+[package]
+name = "busybox"
+version = "0.1.0"
+edition = "2021"
+authors = ["Busybox-RS Contributors"]
+description = "A memory-safe, modular, customizable reimplementation of BusyBox in Rust"
+license = "MIT"
+
+[dependencies]
+libc = "0.2"
+
+[features]
+default = [
+    # Phase 1: Core Essentials
+    "cat", "echo", "true", "false", "pwd", "printenv",
+    # Phase 2: Core Filesystem
+    "ls", "cp", "mv", "rm", "mkdir", "rmdir", "touch", "link", "unlink", "dirname", "basename", "which",
+    # Phase 3: Text & Data Processing
+    "head", "tail", "wc", "cut", "tr", "uniq", "comm", "fold", "rev", "tee", "strings", "expand", "unexpand", "sort", "grep", "egrep", "fgrep",
+    # Phase 4: Numbers & Utilities
+    "seq", "tsort", "factor", "uuencode", "uudecode", "xxd", "sleep", "yes", "sync", "clear", "reset", "whoami", "arch", "nproc",
+    # Phase 5: Shell & Execution
+    "sh", "xargs",
+]
+
+# Applet compile-time feature selection flags
+cat = []
+echo = []
+true = []
+false = []
+pwd = []
+printenv = []
+
+ls = []
+cp = []
+mv = []
+rm = []
+mkdir = []
+rmdir = []
+touch = []
+link = []
+unlink = []
+dirname = []
+basename = []
+which = []
+
+head = []
+tail = []
+wc = []
+cut = []
+tr = []
+uniq = []
+comm = []
+fold = []
+rev = []
+tee = []
+strings = []
+expand = []
+unexpand = []
+sort = []
+grep = []
+egrep = ["grep"]
+fgrep = ["grep"]
+
+seq = []
+tsort = []
+factor = []
+uuencode = []
+uudecode = []
+xxd = []
+sleep = []
+yes = []
+sync = []
+clear = []
+reset = []
+whoami = []
+arch = []
+nproc = []
+
+sh = []
+xargs = []
+
+feature_verbose_usage = []
+
+[profile.release]
+opt-level = "z"     # Optimize for size
+lto = true          # Enable link-time optimization
+codegen-units = 1   # Single codegen unit for better size reduction
+panic = "abort"     # Remove unwind tables
+strip = true        # Strip symbols
