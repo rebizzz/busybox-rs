@@ -1,28 +1,17 @@
-BusyBox-RS Roadmap & TODO
-========================
+Busybox TODO
 
-- [x] Phase 1: Core Applet Trait Architecture
-  - Trait-based dispatcher with argv[0] / symlink resolution
-  - Structured POSIX errors & raw OsStr / byte stream abstractions
-  - Embedded profile (opt-level = "z", LTO, panic-abort, symbol stripping)
+Stuff that needs to be done.
 
-- [x] Phase 2: Core Filesystem & Text Processing
-  - echo, true, false, pwd, printenv, sleep, yes, clear, reset
-  - ls, cp (-a, -R, -d, -P, -H, -L, -p, -f), mv, rm, mkdir, rmdir, touch, link, unlink
-  - cat, head, tail, wc, fold, rev, expand, unexpand
-  - cut (full field, regex, byte, char, and delimiter support)
-  - tr (sets, ranges, character classes, squeeze, complement)
-  - uuencode, uudecode, xxd
+Applet parity roadmap:
+  * Complete POSIX audit against Single Unix Specification V3
+  * sed: stream editor pattern matching and in-place editing
+  * awk: pattern-directed scanning and processing language
+  * tar: ustar/pax archive format reading and writing
+  * find: expression tree traversal with -exec and prune
+  * ash: POSIX shell parsing, job control, signals, parameter expansion
+  * mount / umount: Linux mount syscall wrapper with fstab parsing
 
-- [ ] Phase 3: Advanced Stream & Filtration Engines
-  - grep (-E, -F, -i, -v, -n, -c, -l, -L, -q, -o, -H, -h, -s)
-  - sort (-n, -g, -k, -t, -r, -u, -o, -c, -s, -M, -z)
-  - sed (stream editor script parsing & address matching)
-  - awk (minimal pattern-action interpreter)
-  - tar & cpio (pure-Rust archive extraction)
-
-- [ ] Phase 4: Embedded Shell & Process Tree
-  - sh: Lexer, recursive-descent parser, AST representation
-  - Process pipelines, redirections (<, >, >>, 2>&1, pipes)
-  - Job control, signals, subshells
-  - init, halt, reboot, poweroff
+Architecture and performance:
+  * Further size optimizations for embedded targets
+  * Direct zero-copy splicing on Linux kernels via splice/tee syscalls
+  * Strict memory safety without sacrificing byte-level compatibility

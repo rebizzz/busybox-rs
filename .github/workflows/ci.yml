@@ -64,6 +64,7 @@ jobs:
         run: |
           mkdir -p test-bin
           cp busybox-rs/target/release/busybox test-bin/busybox
+          cp busybox-rs/configs/defconfig test-bin/.config
 
       - name: Clone upstream BusyBox
         run: git clone --depth 1 https://git.busybox.net/busybox busybox-upstream
@@ -71,4 +72,4 @@ jobs:
       - name: Execute Upstream BusyBox Test Suite
         working-directory: busybox-upstream/testsuite
         run: |
-          bindir=$GITHUB_WORKSPACE/test-bin ./runtest echo dirname basename fold tsort comm factor expand unexpand uuencode cut rev xxd head uniq seq cp grep sort tail tr cat
+          bindir=$GITHUB_WORKSPACE/test-bin ./runtest echo dirname basename fold tsort comm factor expand unexpand uuencode cut rev xxd head uniq seq cp grep sort tail tr cat cmp readlink realpath md5sum sha1sum sha256sum sha512sum sum printf

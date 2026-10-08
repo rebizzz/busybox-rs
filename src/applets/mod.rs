@@ -15,6 +15,18 @@
 ))]
 pub mod core_cmds;
 
+#[cfg(any(
+    feature = "md5sum",
+    feature = "sha1sum",
+    feature = "sha256sum",
+    feature = "sha512sum",
+    feature = "sum"
+))]
+pub mod checksum_cmds;
+
+#[cfg(feature = "cmp")]
+pub mod cmp_cmd;
+
 #[cfg(feature = "cut")]
 pub mod cut_cmd;
 
@@ -43,8 +55,14 @@ pub mod fs_cmds;
 #[cfg(any(feature = "grep", feature = "egrep", feature = "fgrep"))]
 pub mod grep_cmd;
 
+#[cfg(any(feature = "readlink", feature = "realpath"))]
+pub mod link_cmds;
+
 #[cfg(any(feature = "factor", feature = "seq", feature = "tsort"))]
 pub mod number_cmds;
+
+#[cfg(feature = "printf")]
+pub mod printf_cmd;
 
 #[cfg(feature = "rev")]
 pub mod rev_cmd;
@@ -93,6 +111,8 @@ pub fn get_applets() -> Vec<Arc<dyn Applet>> {
     applets.push(Arc::new(text_cmds::CatApplet));
     #[cfg(feature = "clear")]
     applets.push(Arc::new(core_cmds::ClearApplet));
+    #[cfg(feature = "cmp")]
+    applets.push(Arc::new(cmp_cmd::CmpApplet));
     #[cfg(feature = "comm")]
     applets.push(Arc::new(stream_cmds::CommApplet));
     #[cfg(feature = "cp")]
@@ -123,6 +143,8 @@ pub fn get_applets() -> Vec<Arc<dyn Applet>> {
     applets.push(Arc::new(fs_cmds::LinkApplet));
     #[cfg(feature = "ls")]
     applets.push(Arc::new(fs_cmds::LsApplet));
+    #[cfg(feature = "md5sum")]
+    applets.push(Arc::new(checksum_cmds::Md5SumApplet));
     #[cfg(feature = "mkdir")]
     applets.push(Arc::new(fs_cmds::MkdirApplet));
     #[cfg(feature = "mv")]
@@ -131,8 +153,14 @@ pub fn get_applets() -> Vec<Arc<dyn Applet>> {
     applets.push(Arc::new(core_cmds::NprocApplet));
     #[cfg(feature = "printenv")]
     applets.push(Arc::new(core_cmds::PrintenvApplet));
+    #[cfg(feature = "printf")]
+    applets.push(Arc::new(printf_cmd::PrintfApplet));
     #[cfg(feature = "pwd")]
     applets.push(Arc::new(core_cmds::PwdApplet));
+    #[cfg(feature = "readlink")]
+    applets.push(Arc::new(link_cmds::ReadlinkApplet));
+    #[cfg(feature = "realpath")]
+    applets.push(Arc::new(link_cmds::RealpathApplet));
     #[cfg(feature = "reset")]
     applets.push(Arc::new(core_cmds::ResetApplet));
     #[cfg(feature = "rev")]
@@ -145,10 +173,18 @@ pub fn get_applets() -> Vec<Arc<dyn Applet>> {
     applets.push(Arc::new(number_cmds::SeqApplet));
     #[cfg(feature = "sh")]
     applets.push(Arc::new(shell_cmds::ShApplet));
+    #[cfg(feature = "sha1sum")]
+    applets.push(Arc::new(checksum_cmds::Sha1SumApplet));
+    #[cfg(feature = "sha256sum")]
+    applets.push(Arc::new(checksum_cmds::Sha256SumApplet));
+    #[cfg(feature = "sha512sum")]
+    applets.push(Arc::new(checksum_cmds::Sha512SumApplet));
     #[cfg(feature = "sleep")]
     applets.push(Arc::new(core_cmds::SleepApplet));
     #[cfg(feature = "sort")]
     applets.push(Arc::new(sort_cmd::SortApplet));
+    #[cfg(feature = "sum")]
+    applets.push(Arc::new(checksum_cmds::SumApplet));
     #[cfg(feature = "tail")]
     applets.push(Arc::new(text_cmds::TailApplet));
     #[cfg(feature = "strings")]

@@ -19,25 +19,28 @@ path = "src/main.rs"
 
 [features]
 default = [
-    # Phase 1: Core Essentials
-    "cat", "echo", "true", "false", "pwd", "printenv",
-    # Phase 2: Core Filesystem
-    "ls", "cp", "mv", "rm", "mkdir", "rmdir", "touch", "link", "unlink", "dirname", "basename", "which",
-    # Phase 3: Text & Data Processing
-    "head", "tail", "wc", "cut", "tr", "uniq", "comm", "fold", "rev", "tee", "strings", "expand", "unexpand", "sort", "grep", "egrep", "fgrep",
-    # Phase 4: Numbers & Utilities
+    "cat", "echo", "true", "false", "pwd", "printenv", "printf",
+    "ls", "cp", "mv", "rm", "mkdir", "rmdir", "touch", "link", "unlink", "dirname", "basename", "which", "readlink", "realpath",
+    "head", "tail", "wc", "cut", "tr", "uniq", "comm", "fold", "rev", "tee", "strings", "expand", "unexpand", "sort", "grep", "egrep", "fgrep", "cmp",
     "seq", "tsort", "factor", "uuencode", "uudecode", "xxd", "sleep", "yes", "sync", "clear", "reset", "whoami", "arch", "nproc",
-    # Phase 5: Shell & Execution
     "sh", "xargs",
+    "md5sum", "sha1sum", "sha256sum", "sha512sum", "sum",
 ]
 
 # Applet compile-time feature selection flags
+md5sum = []
+sha1sum = []
+sha256sum = []
+sha512sum = []
+sum = []
+
 cat = []
 echo = []
 true = []
 false = []
 pwd = []
 printenv = []
+printf = []
 
 ls = []
 cp = []
@@ -51,7 +54,10 @@ unlink = []
 dirname = []
 basename = []
 which = []
+readlink = []
+realpath = []
 
+cmp = []
 head = []
 tail = []
 wc = []

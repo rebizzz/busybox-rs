@@ -1,0 +1,73 @@
+Please see the LICENSE file for details on copying and usage.
+Please refer to the INSTALL file for instructions on how to build.
+
+What is busybox:
+
+  BusyBox combines tiny versions of many common UNIX utilities into a single
+  small executable.  It provides minimalist replacements for most of the
+  utilities you usually find in bzip2, coreutils, dhcp, diffutils, e2fsprogs,
+  file, findutils, gawk, grep, inetutils, less, modutils, net-tools, procps,
+  sed, shadow, sysklogd, sysvinit, tar, util-linux, and vim.  The utilities
+  in BusyBox often have fewer options than their full-featured cousins;
+  however, the options that are included provide the expected functionality
+  and behave very much like their larger counterparts.
+
+  BusyBox has been written with size-optimization and limited resources in
+  mind, both to produce small binaries and to reduce run-time memory usage.
+  Busybox is also extremely modular so you can easily include or exclude
+  commands (or features) at compile time.  This makes it easy to customize
+  embedded systems; to create a working system, just add /dev, /etc, and a
+  Linux kernel.  Busybox has also been used as a component of "thin client"
+  desktop systems, live-CD distributions, rescue disks, installers, and so on.
+
+  BusyBox provides a fairly complete POSIX environment for any small system,
+  both embedded environments and more full featured systems concerned about
+  space.  Busybox is slowly working towards implementing the full Single Unix
+  Specification V3 (http://www.opengroup.org/onlinepubs/009695399/).
+
+----------------
+
+Using busybox:
+
+  BusyBox is extremely configurable.  This allows you to include only the
+  components and options you need, thereby reducing binary size.  Run 'make
+  config' or 'make menuconfig' to select the functionality that you wish to
+  enable.  (See 'make help' for more commands.)
+
+  The behavior of busybox is determined by the name it's called under: as
+  "cp" it behaves like cp, as "sed" it behaves like sed, and so on.  Called
+  as "busybox" it takes the second argument as the name of the applet to
+  run (I.E. "./busybox ls -l /proc").
+
+  The "standalone shell" mode is an easy way to try out busybox; this is a
+  command shell that calls the built-in applets without needing them to be
+  installed in the path.
+
+  The build automatically generates symlinks to the BusyBox binary for all
+  compiled in commands with 'make install'.  This uses the CONFIG_PREFIX
+  environment variable to specify where to install.
+
+----------------
+
+Portability & Architecture:
+
+  BusyBox is developed and tested on Linux and Unix environments. It is
+  written in memory-safe, byte-oriented Rust, preserving arbitrary non-UTF-8
+  byte sequences across all standard I/O streams and file paths.
+
+  Applets are fully selectable at compile time via Cargo features or the
+  Kbuild-compatible Makefile targets:
+
+    make defconfig     # default feature configuration
+    make allnoconfig   # minimal stub configuration
+    make tinyconfig    # compact embedded profile
+    make check         # run upstream regression test suite
+
+----------------
+
+Bugs:
+
+  If you find bugs, please submit a detailed bug report. A well-written bug
+  report should include a transcript of a shell session that demonstrates
+  the bad behavior and enables anyone else to duplicate the bug on their own
+  machine.
