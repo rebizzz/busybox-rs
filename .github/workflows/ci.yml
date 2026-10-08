@@ -1,0 +1,74 @@
+name: CI & BusyBox Upstream Compatibility
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  static-checks:
+    name: Code Formatting & Static Analysis
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+
+      - name: Check formatting
+        run: cargo fmt --all --check
+
+      - name: Run Clippy
+        run: cargo clippy --all-targets -- -D warnings
+
+  build-and-test:
+    name: Build & Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Build Default Config
+        run: cargo build --release
+
+      - name: Run Unit Tests
+        run: cargo test --release
+
+      - name: Test Compile-Time Feature Selectivity (Tiny Profile)
+        run: cargo build --release --no-default-features --features "echo,cat,ls,sh"
+
+  upstream-compat:
+    name: BusyBox Upstream Compatibility Suite
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          path: busybox-rs
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Build busybox-rs release binary
+        working-directory: busybox-rs
+        run: cargo build --release
+
+      - name: Prepare test binary directory
+        run: |
+          mkdir -p test-bin
+          cp busybox-rs/target/release/busybox test-bin/busybox
+
+      - name: Clone upstream BusyBox
+        run: git clone --depth 1 https://git.busybox.net/busybox busybox-upstream
+
+      - name: Execute Upstream BusyBox Test Suite
+        working-directory: busybox-upstream/testsuite
+        run: |
+          bindir=$GITHUB_WORKSPACE/test-bin ./runtest echo dirname basename fold tsort comm factor expand unexpand uuencode cut rev xxd head uniq seq
