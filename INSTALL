@@ -1,0 +1,53 @@
+Building BusyBox-RS:
+====================
+
+The BusyBox-RS build process provides multiple mechanisms: standard Make,
+Cargo, or modern Nix Flakes.
+
+Quick Start with Make:
+----------------------
+
+  make                # Builds the release binary via Cargo
+  make test           # Runs test verification against the upstream test suite
+  make install        # Installs binary and applet symlinks to $(PREFIX)
+
+Quick Start with Nix Flakes:
+----------------------------
+
+  nix develop         # Drops into a fully provisioned development shell
+  nix build           # Builds the static release package
+
+Quick Start with Cargo:
+-----------------------
+
+  cargo build --release
+
+  The compiled executable will be located at:
+  target/release/busybox
+
+Configuring Applets (Kconfig-style Feature Selection):
+------------------------------------------------------
+
+BusyBox-RS is optimized for size and modularity. Unused functionality can be
+completely eliminated at compile time by selecting features in Cargo:
+
+  # Build a minimal binary containing only specific applets:
+  cargo build --release --no-default-features --features "echo,cat,ls,sh"
+
+  # Or using Make targets:
+  make defconfig      # Builds with all standard applets enabled
+  make tiny           # Builds a minimal embedded profile
+
+Installing Symlinks:
+--------------------
+
+To create the standard BusyBox symlink farm (pointing each applet command to the
+single multi-call binary):
+
+  make PREFIX=/usr/local/bin install
+
+Or manually:
+
+  for applet in $(./target/release/busybox --list); do
+      ln -s busybox /usr/local/bin/"$applet"
+  done
