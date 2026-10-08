@@ -4,15 +4,13 @@ use std::path::Path;
 use std::process;
 use std::sync::Arc;
 
-mod core;
-mod applets;
-
-use core::Applet;
+use busybox::applets;
+use busybox::core::Applet;
 
 fn print_general_help(applets: &[Arc<dyn Applet>]) {
     eprintln!("BusyBox v1.39.0.git (rust) multi-call binary.");
     eprintln!("BusyBox is copyrighted by many authors between 1998-2026.");
-    eprintln!("Licensed under GPLv2. See source distribution for detailed");
+    eprintln!("Licensed under MIT. See source distribution for detailed");
     eprintln!("copyright notices.\n");
     eprintln!("Usage: busybox [function [arguments]...]");
     eprintln!("   or: busybox --list[-full]");
@@ -55,12 +53,16 @@ fn main() {
     let applets = applets::get_applets();
     let raw_args: Vec<OsString> = env::args_os().collect();
 
-    let invocation_name = raw_args.first().map(|s| {
-        let p = Path::new(s);
-        p.file_name().and_then(|n| n.to_str()).unwrap_or("busybox")
-    }).unwrap_or("busybox");
+    let invocation_name = raw_args
+        .first()
+        .map(|s| {
+            let p = Path::new(s);
+            p.file_name().and_then(|n| n.to_str()).unwrap_or("busybox")
+        })
+        .unwrap_or("busybox");
 
-    let is_direct_busybox = invocation_name == "busybox" || invocation_name.ends_with("busybox-suffix");
+    let is_direct_busybox =
+        invocation_name == "busybox" || invocation_name.ends_with("busybox-suffix");
 
     if is_direct_busybox {
         if raw_args.len() <= 1 {

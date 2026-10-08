@@ -71,4 +71,4 @@ jobs:
       - name: Execute Upstream BusyBox Test Suite
         working-directory: busybox-upstream/testsuite
         run: |
-          bindir=$GITHUB_WORKSPACE/test-bin ./runtest echo dirname basename fold tsort comm factor expand unexpand uuencode cut rev xxd head uniq seq
+          bindir=$GITHUB_WORKSPACE/test-bin ./runtest echo dirname basename fold tsort comm factor expand unexpand uuencode cut rev xxd head uniq seq cp grep sort tail tr cat

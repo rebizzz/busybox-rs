@@ -1,14 +1,18 @@
-use std::ffi::OsString;
-use std::io::{self, BufRead, BufReader, Read, Write};
-use std::os::unix::ffi::OsStrExt;
-use std::path::Path;
 use crate::core::fs::{open_or_stdin, read_bytes_or_stdin};
 use crate::core::{Applet, Result};
+use std::ffi::OsString;
+use std::io::{self, BufRead, BufReader, Write};
+use std::os::unix::ffi::OsStrExt;
+use std::path::Path;
 
 pub struct CatApplet;
 impl Applet for CatApplet {
-    fn name(&self) -> &'static str { "cat" }
-    fn description(&self) -> &'static str { "Concatenate FILE(s) and print on standard output" }
+    fn name(&self) -> &'static str {
+        "cat"
+    }
+    fn description(&self) -> &'static str {
+        "Concatenate FILE(s) and print on standard output"
+    }
     fn run(&self, args: &[OsString]) -> Result<i32> {
         let mut show_ends = false;
         let mut number_all = false;
@@ -21,11 +25,22 @@ impl Applet for CatApplet {
             if bytes.starts_with(b"-") && bytes.len() > 1 && bytes != b"-" {
                 for &b in &bytes[1..] {
                     match b {
-                        b'e' => { show_ends = true; show_nonprinting = true; }
-                        b'E' => { show_ends = true; }
-                        b'n' => { number_all = true; }
-                        b'b' => { number_nonblank = true; }
-                        b'v' => { show_nonprinting = true; }
+                        b'e' => {
+                            show_ends = true;
+                            show_nonprinting = true;
+                        }
+                        b'E' => {
+                            show_ends = true;
+                        }
+                        b'n' => {
+                            number_all = true;
+                        }
+                        b'b' => {
+                            number_nonblank = true;
+                        }
+                        b'v' => {
+                            show_nonprinting = true;
+                        }
                         _ => {}
                     }
                 }
@@ -53,7 +68,9 @@ impl Applet for CatApplet {
 
             let mut line_buf = Vec::new();
             while let Ok(n) = buf_reader.read_until(b'\n', &mut line_buf) {
-                if n == 0 { break; }
+                if n == 0 {
+                    break;
+                }
                 let is_blank = line_buf.len() == 1 && line_buf[0] == b'\n';
                 if number_nonblank {
                     if !is_blank {
@@ -67,16 +84,18 @@ impl Applet for CatApplet {
 
                 for &b in &line_buf {
                     if b == b'\n' {
-                        if show_ends { handle.write_all(b"$")?; }
+                        if show_ends {
+                            handle.write_all(b"$")?;
+                        }
                         handle.write_all(b"\n")?;
                     } else if show_nonprinting {
                         if b < 32 && b != b'\t' {
                             handle.write_all(&[b'^', b + 64])?;
                         } else if b == 127 {
                             handle.write_all(b"^?")?;
-                        } else if b >= 128 && b < 160 {
+                        } else if (128..160).contains(&b) {
                             handle.write_all(&[b'M', b'-', b'^', b - 128 + 64])?;
-                        } else if b >= 160 && b < 255 {
+                        } else if (160..255).contains(&b) {
                             handle.write_all(&[b'M', b'-', b - 128])?;
                         } else if b == 255 {
                             handle.write_all(b"M-^?")?;
@@ -96,8 +115,12 @@ impl Applet for CatApplet {
 
 pub struct HeadApplet;
 impl Applet for HeadApplet {
-    fn name(&self) -> &'static str { "head" }
-    fn description(&self) -> &'static str { "Output the first part of files" }
+    fn name(&self) -> &'static str {
+        "head"
+    }
+    fn description(&self) -> &'static str {
+        "Output the first part of files"
+    }
     fn run(&self, args: &[OsString]) -> Result<i32> {
         let mut lines: i64 = 10;
         let mut files = Vec::new();
@@ -114,7 +137,10 @@ impl Applet for HeadApplet {
                 }
             } else if bytes.starts_with(b"-n") {
                 lines = arg.to_string_lossy()[2..].parse().unwrap_or(10);
-            } else if bytes.starts_with(b"-") && bytes.len() > 1 && bytes[1..].iter().all(|b| b.is_ascii_digit()) {
+            } else if bytes.starts_with(b"-")
+                && bytes.len() > 1
+                && bytes[1..].iter().all(|b| b.is_ascii_digit())
+            {
                 lines = arg.to_string_lossy()[1..].parse().unwrap_or(10);
             } else {
                 files.push(Path::new(arg));
@@ -136,14 +162,19 @@ impl Applet for HeadApplet {
             if lines >= 0 {
                 let mut count = 0;
                 for l in buf_reader.lines() {
-                    if count >= lines { break; }
+                    if count >= lines {
+                        break;
+                    }
                     if let Ok(line) = l {
                         writeln!(handle, "{}", line)?;
                         count += 1;
                     }
                 }
             } else {
-                let all_lines: Vec<String> = buf_reader.lines().filter_map(std::result::Result::ok).collect();
+                let all_lines: Vec<String> = buf_reader
+                    .lines()
+                    .map_while(std::result::Result::ok)
+                    .collect();
                 let keep = all_lines.len().saturating_sub((-lines) as usize);
                 for l in &all_lines[..keep] {
                     writeln!(handle, "{}", l)?;
@@ -156,8 +187,12 @@ impl Applet for HeadApplet {
 
 pub struct WcApplet;
 impl Applet for WcApplet {
-    fn name(&self) -> &'static str { "wc" }
-    fn description(&self) -> &'static str { "Print newline, word, and byte counts" }
+    fn name(&self) -> &'static str {
+        "wc"
+    }
+    fn description(&self) -> &'static str {
+        "Print newline, word, and byte counts"
+    }
     fn run(&self, args: &[OsString]) -> Result<i32> {
         let mut count_lines = false;
         let mut count_words = false;
@@ -207,7 +242,9 @@ impl Applet for WcApplet {
             for &b in &content {
                 if b == b'\n' {
                     lines += 1;
-                    if cur_line_len > longest { longest = cur_line_len; }
+                    if cur_line_len > longest {
+                        longest = cur_line_len;
+                    }
                     cur_line_len = 0;
                 } else {
                     cur_line_len += 1;
@@ -220,13 +257,23 @@ impl Applet for WcApplet {
                     in_word = true;
                 }
             }
-            if cur_line_len > longest { longest = cur_line_len; }
+            if cur_line_len > longest {
+                longest = cur_line_len;
+            }
 
             let mut parts = Vec::new();
-            if count_lines { parts.push(format!("{}", lines)); }
-            if count_words { parts.push(format!("{}", words)); }
-            if count_chars { parts.push(format!("{}", chars)); }
-            if max_line { parts.push(format!("{}", longest)); }
+            if count_lines {
+                parts.push(format!("{}", lines));
+            }
+            if count_words {
+                parts.push(format!("{}", words));
+            }
+            if count_chars {
+                parts.push(format!("{}", chars));
+            }
+            if max_line {
+                parts.push(format!("{}", longest));
+            }
 
             if file.as_os_str() != "-" {
                 parts.push(file.display().to_string());
@@ -239,8 +286,12 @@ impl Applet for WcApplet {
 
 pub struct TailApplet;
 impl Applet for TailApplet {
-    fn name(&self) -> &'static str { "tail" }
-    fn description(&self) -> &'static str { "Output the last part of files" }
+    fn name(&self) -> &'static str {
+        "tail"
+    }
+    fn description(&self) -> &'static str {
+        "Output the last part of files"
+    }
     fn run(&self, args: &[OsString]) -> Result<i32> {
         let mut count: usize = 10;
         let mut from_beginning = false;
@@ -268,7 +319,11 @@ impl Applet for TailApplet {
                     count = String::from_utf8_lossy(&val_str[1..]).parse().unwrap_or(1);
                 } else {
                     from_beginning = false;
-                    let s = if val_str.starts_with(b"-") { &val_str[1..] } else { val_str };
+                    let s = if val_str.starts_with(b"-") {
+                        &val_str[1..]
+                    } else {
+                        val_str
+                    };
                     count = String::from_utf8_lossy(s).parse().unwrap_or(10);
                 }
             } else if bytes.starts_with(b"-n") {
@@ -286,14 +341,24 @@ impl Applet for TailApplet {
                     count = String::from_utf8_lossy(&val_str[1..]).parse().unwrap_or(1);
                 } else {
                     from_beginning = false;
-                    let s = if val_str.starts_with(b"-") { &val_str[1..] } else { val_str };
+                    let s = if val_str.starts_with(b"-") {
+                        &val_str[1..]
+                    } else {
+                        val_str
+                    };
                     count = String::from_utf8_lossy(s).parse().unwrap_or(10);
                 }
-            } else if bytes.starts_with(b"-") && bytes.len() > 1 && bytes[1..].iter().all(|b| b.is_ascii_digit()) {
+            } else if bytes.starts_with(b"-")
+                && bytes.len() > 1
+                && bytes[1..].iter().all(|b| b.is_ascii_digit())
+            {
                 byte_mode = false;
                 from_beginning = false;
                 count = String::from_utf8_lossy(&bytes[1..]).parse().unwrap_or(10);
-            } else if bytes.starts_with(b"+") && bytes.len() > 1 && bytes[1..].iter().all(|b| b.is_ascii_digit()) {
+            } else if bytes.starts_with(b"+")
+                && bytes.len() > 1
+                && bytes[1..].iter().all(|b| b.is_ascii_digit())
+            {
                 byte_mode = false;
                 from_beginning = true;
                 count = String::from_utf8_lossy(&bytes[1..]).parse().unwrap_or(1);

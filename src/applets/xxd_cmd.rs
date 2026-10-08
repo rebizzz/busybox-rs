@@ -1,14 +1,18 @@
-use std::ffi::OsString;
-use std::io::{self, Read, Write};
-use std::os::unix::ffi::OsStrExt;
-use std::path::Path;
 use crate::core::fs::read_bytes_or_stdin;
 use crate::core::{Applet, Result};
+use std::ffi::OsString;
+use std::io::{self, Write};
+use std::os::unix::ffi::OsStrExt;
+use std::path::Path;
 
 pub struct XxdApplet;
 impl Applet for XxdApplet {
-    fn name(&self) -> &'static str { "xxd" }
-    fn description(&self) -> &'static str { "Hexdump and reverse hexdump" }
+    fn name(&self) -> &'static str {
+        "xxd"
+    }
+    fn description(&self) -> &'static str {
+        "Hexdump and reverse hexdump"
+    }
     fn run(&self, args: &[OsString]) -> Result<i32> {
         let mut plain = false;
         let mut revert = false;
@@ -40,7 +44,11 @@ impl Applet for XxdApplet {
             i += 1;
         }
 
-        let file = if files.is_empty() { Path::new("-") } else { files[0] };
+        let file = if files.is_empty() {
+            Path::new("-")
+        } else {
+            files[0]
+        };
         let content = read_bytes_or_stdin(file)?;
 
         let stdout = io::stdout();
@@ -53,10 +61,17 @@ impl Applet for XxdApplet {
 
             while ptr < content.len() {
                 // Skip leading whitespace
-                while ptr < content.len() && (content[ptr] == b' ' || content[ptr] == b'\t' || content[ptr] == b'\r' || content[ptr] == b'\n') {
+                while ptr < content.len()
+                    && (content[ptr] == b' '
+                        || content[ptr] == b'\t'
+                        || content[ptr] == b'\r'
+                        || content[ptr] == b'\n')
+                {
                     ptr += 1;
                 }
-                if ptr >= content.len() { break; }
+                if ptr >= content.len() {
+                    break;
+                }
 
                 if !plain {
                     // Skip address if present
@@ -68,9 +83,15 @@ impl Applet for XxdApplet {
                 // Process line hex bytes
                 while ptr < content.len() && content[ptr] != b'\n' {
                     if content[ptr] == b' ' || content[ptr] == b'\t' || content[ptr] == b'\r' {
-                        if !plain && content[ptr] == b' ' && ptr + 1 < content.len() && content[ptr + 1] == b' ' {
+                        if !plain
+                            && content[ptr] == b' '
+                            && ptr + 1 < content.len()
+                            && content[ptr + 1] == b' '
+                        {
                             // Two spaces: end of hex section, ASCII representation begins!
-                            while ptr < content.len() && content[ptr] != b'\n' { ptr += 1; }
+                            while ptr < content.len() && content[ptr] != b'\n' {
+                                ptr += 1;
+                            }
                             break;
                         }
                         ptr += 1;
@@ -79,8 +100,13 @@ impl Applet for XxdApplet {
 
                     // Check for truncation at two consecutive bad chars
                     if !content[ptr].is_ascii_hexdigit() {
-                        if ptr + 1 < content.len() && !content[ptr + 1].is_ascii_hexdigit() && content[ptr + 1] != b'\n' {
-                            while ptr < content.len() && content[ptr] != b'\n' { ptr += 1; }
+                        if ptr + 1 < content.len()
+                            && !content[ptr + 1].is_ascii_hexdigit()
+                            && content[ptr + 1] != b'\n'
+                        {
+                            while ptr < content.len() && content[ptr] != b'\n' {
+                                ptr += 1;
+                            }
                             break;
                         }
                         ptr += 1;
@@ -91,7 +117,9 @@ impl Applet for XxdApplet {
                     ptr += 1;
 
                     // Allow whitespace between nibbles
-                    while ptr < content.len() && (content[ptr] == b' ' || content[ptr] == b'\t' || content[ptr] == b'\r') {
+                    while ptr < content.len()
+                        && (content[ptr] == b' ' || content[ptr] == b'\t' || content[ptr] == b'\r')
+                    {
                         ptr += 1;
                     }
 
@@ -102,7 +130,10 @@ impl Applet for XxdApplet {
                             out.push((hi << 4) | lo);
                         } else {
                             // 2nd nibble is bad: ignore this byte, skip until next hex or newline
-                            while ptr < content.len() && content[ptr] != b'\n' && !content[ptr].is_ascii_hexdigit() {
+                            while ptr < content.len()
+                                && content[ptr] != b'\n'
+                                && !content[ptr].is_ascii_hexdigit()
+                            {
                                 ptr += 1;
                             }
                         }
@@ -117,7 +148,9 @@ impl Applet for XxdApplet {
         }
 
         if plain {
-            if content.is_empty() { return Ok(0); }
+            if content.is_empty() {
+                return Ok(0);
+            }
             let line_len = match cols {
                 Some(0) => content.len(),
                 Some(c) => c,
@@ -128,7 +161,9 @@ impl Applet for XxdApplet {
             while idx < content.len() {
                 let chunk_len = (content.len() - idx).min(line_len);
                 let chunk = &content[idx..idx + chunk_len];
-                for &b in chunk { write!(handle, "{:02x}", b)?; }
+                for &b in chunk {
+                    write!(handle, "{:02x}", b)?;
+                }
                 writeln!(handle)?;
                 idx += chunk_len;
             }
@@ -146,17 +181,25 @@ impl Applet for XxdApplet {
             let mut j = 0;
             while j < chunk_len {
                 write!(handle, "{:02x}", chunk[j])?;
-                if j + 1 < chunk_len { write!(handle, "{:02x}", chunk[j + 1])?; }
+                if j + 1 < chunk_len {
+                    write!(handle, "{:02x}", chunk[j + 1])?;
+                }
                 write!(handle, " ")?;
                 j += 2;
             }
             let pad_bytes = line_len - chunk_len;
-            let pad_groups = (pad_bytes + 1) / 2;
-            for _ in 0..pad_groups { write!(handle, "     ")?; }
+            let pad_groups = pad_bytes.div_ceil(2);
+            for _ in 0..pad_groups {
+                write!(handle, "     ")?;
+            }
 
             write!(handle, " ")?;
             for &b in chunk {
-                if b >= 32 && b < 127 { handle.write_all(&[b])?; } else { handle.write_all(b".")?; }
+                if (32..127).contains(&b) {
+                    handle.write_all(&[b])?;
+                } else {
+                    handle.write_all(b".")?;
+                }
             }
             writeln!(handle)?;
             idx += chunk_len;

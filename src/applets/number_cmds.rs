@@ -1,15 +1,19 @@
-use std::collections::{HashMap, HashSet, VecDeque};
-use std::ffi::OsString;
-use std::io::{self, BufRead, Read, Write};
-use std::os::unix::ffi::OsStrExt;
-use std::path::Path;
 use crate::core::fs::read_bytes_or_stdin;
 use crate::core::{Applet, Result};
+use std::collections::{HashMap, HashSet, VecDeque};
+use std::ffi::OsString;
+use std::io::{self, BufRead, Write};
+use std::os::unix::ffi::OsStrExt;
+use std::path::Path;
 
 pub struct TsortApplet;
 impl Applet for TsortApplet {
-    fn name(&self) -> &'static str { "tsort" }
-    fn description(&self) -> &'static str { "Topological sort" }
+    fn name(&self) -> &'static str {
+        "tsort"
+    }
+    fn description(&self) -> &'static str {
+        "Topological sort"
+    }
     fn run(&self, args: &[OsString]) -> Result<i32> {
         let file = if args.is_empty() || args[0].as_bytes() == b"-" {
             Path::new("-")
@@ -21,7 +25,7 @@ impl Applet for TsortApplet {
         let s = String::from_utf8_lossy(&content);
         let tokens: Vec<&str> = s.split_whitespace().collect();
 
-        if tokens.len() % 2 != 0 {
+        if !tokens.len().is_multiple_of(2) {
             eprintln!("tsort: odd number of tokens");
             return Ok(1);
         }
@@ -89,8 +93,12 @@ impl Applet for TsortApplet {
 
 pub struct SeqApplet;
 impl Applet for SeqApplet {
-    fn name(&self) -> &'static str { "seq" }
-    fn description(&self) -> &'static str { "Print numbers from FIRST to LAST" }
+    fn name(&self) -> &'static str {
+        "seq"
+    }
+    fn description(&self) -> &'static str {
+        "Print numbers from FIRST to LAST"
+    }
     fn run(&self, args: &[OsString]) -> Result<i32> {
         let mut sep = "\n".to_string();
         let mut pad = false;
@@ -124,28 +132,43 @@ impl Applet for SeqApplet {
         let (first_str, step_str, last_str) = match pos_args.len() {
             1 => ("1".to_string(), "1".to_string(), pos_args[0].clone()),
             2 => (pos_args[0].clone(), "1".to_string(), pos_args[1].clone()),
-            3 => (pos_args[0].clone(), pos_args[1].clone(), pos_args[2].clone()),
+            3 => (
+                pos_args[0].clone(),
+                pos_args[1].clone(),
+                pos_args[2].clone(),
+            ),
             _ => unreachable!(),
         };
 
         let first: f64 = match first_str.parse() {
             Ok(v) => v,
-            Err(_) => { eprintln!("seq: invalid number: {}", first_str); return Ok(1); }
+            Err(_) => {
+                eprintln!("seq: invalid number: {}", first_str);
+                return Ok(1);
+            }
         };
         let step: f64 = match step_str.parse() {
             Ok(v) => v,
-            Err(_) => { eprintln!("seq: invalid number: {}", step_str); return Ok(1); }
+            Err(_) => {
+                eprintln!("seq: invalid number: {}", step_str);
+                return Ok(1);
+            }
         };
         let last: f64 = match last_str.parse() {
             Ok(v) => v,
-            Err(_) => { eprintln!("seq: invalid number: {}", last_str); return Ok(1); }
+            Err(_) => {
+                eprintln!("seq: invalid number: {}", last_str);
+                return Ok(1);
+            }
         };
 
         if step == 0.0 {
             let stdout = io::stdout();
             let mut handle = stdout.lock();
             loop {
-                if writeln!(handle, "{}", first_str).is_err() { break; }
+                if writeln!(handle, "{}", first_str).is_err() {
+                    break;
+                }
             }
             return Ok(0);
         }
@@ -195,8 +218,8 @@ impl Applet for SeqApplet {
             } else {
                 format!("{:.0}", v)
             };
-            let (is_neg, num_digits) = if formatted.starts_with('-') {
-                (true, &formatted[1..])
+            let (is_neg, num_digits) = if let Some(stripped) = formatted.strip_prefix('-') {
+                (true, stripped)
             } else {
                 (false, formatted.as_str())
             };
@@ -227,22 +250,26 @@ impl Applet for SeqApplet {
 
 pub struct FactorApplet;
 impl Applet for FactorApplet {
-    fn name(&self) -> &'static str { "factor" }
-    fn description(&self) -> &'static str { "Print prime factors" }
+    fn name(&self) -> &'static str {
+        "factor"
+    }
+    fn description(&self) -> &'static str {
+        "Print prime factors"
+    }
     fn run(&self, args: &[OsString]) -> Result<i32> {
         let inputs: Vec<String> = if args.is_empty() {
             let stdin = io::stdin();
             let mut words = Vec::new();
-            for line in stdin.lock().lines() {
-                if let Ok(l) = line {
-                    for w in l.split_whitespace() {
-                        words.push(w.to_string());
-                    }
+            for l in stdin.lock().lines().map_while(std::result::Result::ok) {
+                for w in l.split_whitespace() {
+                    words.push(w.to_string());
                 }
             }
             words
         } else {
-            args.iter().map(|s| s.to_string_lossy().to_string()).collect()
+            args.iter()
+                .map(|s| s.to_string_lossy().to_string())
+                .collect()
         };
 
         let stdout = io::stdout();
@@ -252,8 +279,12 @@ impl Applet for FactorApplet {
             let trimmed = arg.trim();
             let cleaned = trimmed.strip_prefix('+').unwrap_or(trimmed);
             match cleaned.parse::<u128>() {
-                Ok(0) => { writeln!(handle, "0:")?; }
-                Ok(1) => { writeln!(handle, "1:")?; }
+                Ok(0) => {
+                    writeln!(handle, "0:")?;
+                }
+                Ok(1) => {
+                    writeln!(handle, "1:")?;
+                }
                 Ok(n) => {
                     let factors = factorize(n);
                     let fact_strs: Vec<String> = factors.iter().map(|f| f.to_string()).collect();
@@ -272,7 +303,9 @@ fn mul_mod(mut a: u128, mut b: u128, m: u128) -> u128 {
     let mut res = 0;
     a %= m;
     while b > 0 {
-        if b % 2 == 1 { res = (res + a) % m; }
+        if b % 2 == 1 {
+            res = (res + a) % m;
+        }
         a = (a * 2) % m;
         b /= 2;
     }
@@ -283,7 +316,9 @@ fn pow_mod(mut base: u128, mut exp: u128, m: u128) -> u128 {
     let mut res = 1;
     base %= m;
     while exp > 0 {
-        if exp % 2 == 1 { res = mul_mod(res, base, m); }
+        if exp % 2 == 1 {
+            res = mul_mod(res, base, m);
+        }
         base = mul_mod(base, base, m);
         exp /= 2;
     }
@@ -291,25 +326,37 @@ fn pow_mod(mut base: u128, mut exp: u128, m: u128) -> u128 {
 }
 
 fn is_prime_mr(n: u128) -> bool {
-    if n < 2 { return false; }
-    if n == 2 || n == 3 || n == 5 || n == 7 { return true; }
-    if n % 2 == 0 || n % 3 == 0 || n % 5 == 0 || n % 7 == 0 { return false; }
+    if n < 2 {
+        return false;
+    }
+    if n == 2 || n == 3 || n == 5 || n == 7 {
+        return true;
+    }
+    if n.is_multiple_of(2) || n.is_multiple_of(3) || n.is_multiple_of(5) || n.is_multiple_of(7) {
+        return false;
+    }
 
     let mut d = n - 1;
     let mut s = 0;
-    while d % 2 == 0 {
+    while d.is_multiple_of(2) {
         d /= 2;
         s += 1;
     }
 
     let bases = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37];
     'outer: for &a in &bases {
-        if n <= a { break; }
+        if n <= a {
+            break;
+        }
         let mut x = pow_mod(a, d, n);
-        if x == 1 || x == n - 1 { continue; }
+        if x == 1 || x == n - 1 {
+            continue;
+        }
         for _ in 0..s - 1 {
             x = mul_mod(x, x, n);
-            if x == n - 1 { continue 'outer; }
+            if x == n - 1 {
+                continue 'outer;
+            }
         }
         return false;
     }
@@ -326,8 +373,12 @@ fn gcd(mut a: u128, mut b: u128) -> u128 {
 }
 
 fn pollard_rho(n: u128) -> u128 {
-    if n % 2 == 0 { return 2; }
-    if is_prime_mr(n) { return n; }
+    if n.is_multiple_of(2) {
+        return 2;
+    }
+    if is_prime_mr(n) {
+        return n;
+    }
 
     let mut c = 1u128;
     loop {
@@ -338,16 +389,20 @@ fn pollard_rho(n: u128) -> u128 {
         while d == 1 {
             x = f(x);
             y = f(f(y));
-            let diff = if x > y { x - y } else { y - x };
+            let diff = x.abs_diff(y);
             d = gcd(diff, n);
         }
-        if d != n { return d; }
+        if d != n {
+            return d;
+        }
         c += 1;
     }
 }
 
 fn factor_all(n: u128, factors: &mut Vec<u128>) {
-    if n == 1 { return; }
+    if n == 1 {
+        return;
+    }
     if is_prime_mr(n) {
         factors.push(n);
         return;
@@ -359,11 +414,25 @@ fn factor_all(n: u128, factors: &mut Vec<u128>) {
 
 pub fn factorize(mut n: u128) -> Vec<u128> {
     let mut factors = Vec::new();
-    while n % 2 == 0 { factors.push(2); n /= 2; }
-    while n % 3 == 0 { factors.push(3); n /= 3; }
-    while n % 5 == 0 { factors.push(5); n /= 5; }
-    while n % 7 == 0 { factors.push(7); n /= 7; }
-    if n > 1 { factor_all(n, &mut factors); }
+    while n.is_multiple_of(2) {
+        factors.push(2);
+        n /= 2;
+    }
+    while n.is_multiple_of(3) {
+        factors.push(3);
+        n /= 3;
+    }
+    while n.is_multiple_of(5) {
+        factors.push(5);
+        n /= 5;
+    }
+    while n.is_multiple_of(7) {
+        factors.push(7);
+        n /= 7;
+    }
+    if n > 1 {
+        factor_all(n, &mut factors);
+    }
     factors.sort();
     factors
 }

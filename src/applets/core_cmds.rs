@@ -1,30 +1,45 @@
+use crate::core::{Applet, Result};
 use std::env;
 use std::ffi::OsString;
 use std::io::{self, Write};
 use std::os::unix::ffi::OsStrExt;
-use std::path::Path;
 use std::thread;
 use std::time::Duration;
-use crate::core::{Applet, Result};
 
 pub struct TrueApplet;
 impl Applet for TrueApplet {
-    fn name(&self) -> &'static str { "true" }
-    fn description(&self) -> &'static str { "Return an exit code of success" }
-    fn run(&self, _args: &[OsString]) -> Result<i32> { Ok(0) }
+    fn name(&self) -> &'static str {
+        "true"
+    }
+    fn description(&self) -> &'static str {
+        "Return an exit code of success"
+    }
+    fn run(&self, _args: &[OsString]) -> Result<i32> {
+        Ok(0)
+    }
 }
 
 pub struct FalseApplet;
 impl Applet for FalseApplet {
-    fn name(&self) -> &'static str { "false" }
-    fn description(&self) -> &'static str { "Return an exit code of a failure" }
-    fn run(&self, _args: &[OsString]) -> Result<i32> { Ok(1) }
+    fn name(&self) -> &'static str {
+        "false"
+    }
+    fn description(&self) -> &'static str {
+        "Return an exit code of a failure"
+    }
+    fn run(&self, _args: &[OsString]) -> Result<i32> {
+        Ok(1)
+    }
 }
 
 pub struct PwdApplet;
 impl Applet for PwdApplet {
-    fn name(&self) -> &'static str { "pwd" }
-    fn description(&self) -> &'static str { "Print the current working directory" }
+    fn name(&self) -> &'static str {
+        "pwd"
+    }
+    fn description(&self) -> &'static str {
+        "Print the current working directory"
+    }
     fn run(&self, _args: &[OsString]) -> Result<i32> {
         let dir = env::current_dir()?;
         let stdout = io::stdout();
@@ -37,8 +52,12 @@ impl Applet for PwdApplet {
 
 pub struct EchoApplet;
 impl Applet for EchoApplet {
-    fn name(&self) -> &'static str { "echo" }
-    fn description(&self) -> &'static str { "Display a line of text" }
+    fn name(&self) -> &'static str {
+        "echo"
+    }
+    fn description(&self) -> &'static str {
+        "Display a line of text"
+    }
     fn run(&self, args: &[OsString]) -> Result<i32> {
         let mut no_newline = false;
         let mut interpret_escapes = false;
@@ -83,27 +102,56 @@ impl Applet for EchoApplet {
                     if bytes[i] == b'\\' && i + 1 < bytes.len() {
                         i += 1;
                         match bytes[i] {
-                            b'a' => { handle.write_all(b"\x07")?; }
-                            b'b' => { handle.write_all(b"\x08")?; }
-                            b'c' => { stop = true; break; }
-                            b'e' | b'E' => { handle.write_all(b"\x1b")?; }
-                            b'f' => { handle.write_all(b"\x0c")?; }
-                            b'n' => { handle.write_all(b"\n")?; }
-                            b'r' => { handle.write_all(b"\r")?; }
-                            b't' => { handle.write_all(b"\t")?; }
-                            b'v' => { handle.write_all(b"\x0b")?; }
-                            b'\\' => { handle.write_all(b"\\")?; }
+                            b'a' => {
+                                handle.write_all(b"\x07")?;
+                            }
+                            b'b' => {
+                                handle.write_all(b"\x08")?;
+                            }
+                            b'c' => {
+                                stop = true;
+                                break;
+                            }
+                            b'e' | b'E' => {
+                                handle.write_all(b"\x1b")?;
+                            }
+                            b'f' => {
+                                handle.write_all(b"\x0c")?;
+                            }
+                            b'n' => {
+                                handle.write_all(b"\n")?;
+                            }
+                            b'r' => {
+                                handle.write_all(b"\r")?;
+                            }
+                            b't' => {
+                                handle.write_all(b"\t")?;
+                            }
+                            b'v' => {
+                                handle.write_all(b"\x0b")?;
+                            }
+                            b'\\' => {
+                                handle.write_all(b"\\")?;
+                            }
                             b'0'..=b'7' => {
                                 let mut val: u32 = (bytes[i] - b'0') as u32;
                                 let mut count = 1;
                                 if val == 0 {
-                                    while count < 4 && i + 1 < bytes.len() && bytes[i + 1] >= b'0' && bytes[i + 1] <= b'7' {
+                                    while count < 4
+                                        && i + 1 < bytes.len()
+                                        && bytes[i + 1] >= b'0'
+                                        && bytes[i + 1] <= b'7'
+                                    {
                                         i += 1;
                                         val = (val << 3) + (bytes[i] - b'0') as u32;
                                         count += 1;
                                     }
                                 } else {
-                                    while count < 3 && i + 1 < bytes.len() && bytes[i + 1] >= b'0' && bytes[i + 1] <= b'7' {
+                                    while count < 3
+                                        && i + 1 < bytes.len()
+                                        && bytes[i + 1] >= b'0'
+                                        && bytes[i + 1] <= b'7'
+                                    {
                                         i += 1;
                                         val = (val << 3) + (bytes[i] - b'0') as u32;
                                         count += 1;
@@ -114,14 +162,17 @@ impl Applet for EchoApplet {
                             b'x' => {
                                 let mut val = 0u32;
                                 let mut found = false;
-                                while i + 1 < bytes.len() && (bytes[i + 1] as char).is_ascii_hexdigit() {
+                                while i + 1 < bytes.len()
+                                    && (bytes[i + 1] as char).is_ascii_hexdigit()
+                                {
                                     i += 1;
-                                    val = (val << 4) + match bytes[i] {
-                                        b'0'..=b'9' => (bytes[i] - b'0') as u32,
-                                        b'a'..=b'f' => (bytes[i] - b'a' + 10) as u32,
-                                        b'A'..=b'F' => (bytes[i] - b'A' + 10) as u32,
-                                        _ => 0,
-                                    };
+                                    val = (val << 4)
+                                        + match bytes[i] {
+                                            b'0'..=b'9' => (bytes[i] - b'0') as u32,
+                                            b'a'..=b'f' => (bytes[i] - b'a' + 10) as u32,
+                                            b'A'..=b'F' => (bytes[i] - b'A' + 10) as u32,
+                                            _ => 0,
+                                        };
                                     found = true;
                                 }
                                 if found {
@@ -157,8 +208,12 @@ impl Applet for EchoApplet {
 
 pub struct PrintenvApplet;
 impl Applet for PrintenvApplet {
-    fn name(&self) -> &'static str { "printenv" }
-    fn description(&self) -> &'static str { "Print all or part of environment" }
+    fn name(&self) -> &'static str {
+        "printenv"
+    }
+    fn description(&self) -> &'static str {
+        "Print all or part of environment"
+    }
     fn run(&self, args: &[OsString]) -> Result<i32> {
         let stdout = io::stdout();
         let mut handle = stdout.lock();
@@ -188,8 +243,12 @@ impl Applet for PrintenvApplet {
 
 pub struct SleepApplet;
 impl Applet for SleepApplet {
-    fn name(&self) -> &'static str { "sleep" }
-    fn description(&self) -> &'static str { "Delay for a specified amount of time" }
+    fn name(&self) -> &'static str {
+        "sleep"
+    }
+    fn description(&self) -> &'static str {
+        "Delay for a specified amount of time"
+    }
     fn run(&self, args: &[OsString]) -> Result<i32> {
         if args.is_empty() {
             eprintln!("sleep: missing operand");
@@ -198,14 +257,14 @@ impl Applet for SleepApplet {
         let mut total_secs: f64 = 0.0;
         for arg in args {
             let s = arg.to_string_lossy();
-            let (val_str, unit) = if s.ends_with('s') {
-                (&s[..s.len()-1], 1.0)
-            } else if s.ends_with('m') {
-                (&s[..s.len()-1], 60.0)
-            } else if s.ends_with('h') {
-                (&s[..s.len()-1], 3600.0)
-            } else if s.ends_with('d') {
-                (&s[..s.len()-1], 86400.0)
+            let (val_str, unit) = if let Some(stripped) = s.strip_suffix('s') {
+                (stripped, 1.0)
+            } else if let Some(stripped) = s.strip_suffix('m') {
+                (stripped, 60.0)
+            } else if let Some(stripped) = s.strip_suffix('h') {
+                (stripped, 3600.0)
+            } else if let Some(stripped) = s.strip_suffix('d') {
+                (stripped, 86400.0)
             } else {
                 (s.as_ref(), 1.0)
             };
@@ -224,15 +283,21 @@ impl Applet for SleepApplet {
 
 pub struct YesApplet;
 impl Applet for YesApplet {
-    fn name(&self) -> &'static str { "yes" }
-    fn description(&self) -> &'static str { "Output a string repeatedly until killed" }
+    fn name(&self) -> &'static str {
+        "yes"
+    }
+    fn description(&self) -> &'static str {
+        "Output a string repeatedly until killed"
+    }
     fn run(&self, args: &[OsString]) -> Result<i32> {
         let msg = if args.is_empty() {
             b"y".to_vec()
         } else {
             let mut out = Vec::new();
             for (i, a) in args.iter().enumerate() {
-                if i > 0 { out.push(b' '); }
+                if i > 0 {
+                    out.push(b' ');
+                }
                 out.extend_from_slice(a.as_bytes());
             }
             out
@@ -250,8 +315,12 @@ impl Applet for YesApplet {
 
 pub struct WhoamiApplet;
 impl Applet for WhoamiApplet {
-    fn name(&self) -> &'static str { "whoami" }
-    fn description(&self) -> &'static str { "Print effective user name" }
+    fn name(&self) -> &'static str {
+        "whoami"
+    }
+    fn description(&self) -> &'static str {
+        "Print effective user name"
+    }
     fn run(&self, _args: &[OsString]) -> Result<i32> {
         if let Some(user) = crate::core::platform::get_current_username() {
             println!("{}", user);
@@ -265,8 +334,12 @@ impl Applet for WhoamiApplet {
 
 pub struct ArchApplet;
 impl Applet for ArchApplet {
-    fn name(&self) -> &'static str { "arch" }
-    fn description(&self) -> &'static str { "Print machine architecture" }
+    fn name(&self) -> &'static str {
+        "arch"
+    }
+    fn description(&self) -> &'static str {
+        "Print machine architecture"
+    }
     fn run(&self, _args: &[OsString]) -> Result<i32> {
         println!("{}", crate::core::platform::get_machine_arch());
         Ok(0)
@@ -275,10 +348,16 @@ impl Applet for ArchApplet {
 
 pub struct NprocApplet;
 impl Applet for NprocApplet {
-    fn name(&self) -> &'static str { "nproc" }
-    fn description(&self) -> &'static str { "Print the number of processing units available" }
+    fn name(&self) -> &'static str {
+        "nproc"
+    }
+    fn description(&self) -> &'static str {
+        "Print the number of processing units available"
+    }
     fn run(&self, _args: &[OsString]) -> Result<i32> {
-        let cpus = thread::available_parallelism().map(|n| n.get()).unwrap_or(1);
+        let cpus = thread::available_parallelism()
+            .map(|n| n.get())
+            .unwrap_or(1);
         println!("{}", cpus);
         Ok(0)
     }
@@ -286,8 +365,12 @@ impl Applet for NprocApplet {
 
 pub struct SyncApplet;
 impl Applet for SyncApplet {
-    fn name(&self) -> &'static str { "sync" }
-    fn description(&self) -> &'static str { "Force changed blocks to disk" }
+    fn name(&self) -> &'static str {
+        "sync"
+    }
+    fn description(&self) -> &'static str {
+        "Force changed blocks to disk"
+    }
     fn run(&self, _args: &[OsString]) -> Result<i32> {
         crate::core::platform::sync_disks();
         Ok(0)
@@ -296,8 +379,12 @@ impl Applet for SyncApplet {
 
 pub struct ClearApplet;
 impl Applet for ClearApplet {
-    fn name(&self) -> &'static str { "clear" }
-    fn description(&self) -> &'static str { "Clear the terminal screen" }
+    fn name(&self) -> &'static str {
+        "clear"
+    }
+    fn description(&self) -> &'static str {
+        "Clear the terminal screen"
+    }
     fn run(&self, _args: &[OsString]) -> Result<i32> {
         print!("\x1b[H\x1b[2J\x1b[3J");
         let _ = io::stdout().flush();
@@ -307,8 +394,12 @@ impl Applet for ClearApplet {
 
 pub struct ResetApplet;
 impl Applet for ResetApplet {
-    fn name(&self) -> &'static str { "reset" }
-    fn description(&self) -> &'static str { "Reset the terminal" }
+    fn name(&self) -> &'static str {
+        "reset"
+    }
+    fn description(&self) -> &'static str {
+        "Reset the terminal"
+    }
     fn run(&self, _args: &[OsString]) -> Result<i32> {
         print!("\x1bc");
         let _ = io::stdout().flush();

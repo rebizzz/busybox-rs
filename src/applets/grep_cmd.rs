@@ -1,42 +1,60 @@
+use crate::core::{Applet, Result};
 use std::collections::VecDeque;
 use std::ffi::{CStr, CString, OsStr, OsString};
 use std::fs::File;
 use std::io::{self, BufRead, BufReader, Write};
 use std::os::unix::ffi::OsStrExt;
 use std::path::{Path, PathBuf};
-use crate::core::{Applet, Result};
 
 pub struct GrepApplet;
 impl Applet for GrepApplet {
-    fn name(&self) -> &'static str { "grep" }
-    fn description(&self) -> &'static str { "Search for PATTERN in FILEs" }
+    fn name(&self) -> &'static str {
+        "grep"
+    }
+    fn description(&self) -> &'static str {
+        "Search for PATTERN in FILEs"
+    }
     fn run(&self, args: &[OsString]) -> Result<i32> {
-        let mut cfg = GrepConfig::default();
-        cfg.applet_name = "grep";
+        let cfg = GrepConfig {
+            applet_name: "grep",
+            ..Default::default()
+        };
         run_grep(cfg, args)
     }
 }
 
 pub struct EgrepApplet;
 impl Applet for EgrepApplet {
-    fn name(&self) -> &'static str { "egrep" }
-    fn description(&self) -> &'static str { "Alias to grep -E" }
+    fn name(&self) -> &'static str {
+        "egrep"
+    }
+    fn description(&self) -> &'static str {
+        "Alias to grep -E"
+    }
     fn run(&self, args: &[OsString]) -> Result<i32> {
-        let mut cfg = GrepConfig::default();
-        cfg.applet_name = "egrep";
-        cfg.extended_regex = true;
+        let cfg = GrepConfig {
+            applet_name: "egrep",
+            extended_regex: true,
+            ..Default::default()
+        };
         run_grep(cfg, args)
     }
 }
 
 pub struct FgrepApplet;
 impl Applet for FgrepApplet {
-    fn name(&self) -> &'static str { "fgrep" }
-    fn description(&self) -> &'static str { "Alias to grep -F" }
+    fn name(&self) -> &'static str {
+        "fgrep"
+    }
+    fn description(&self) -> &'static str {
+        "Alias to grep -F"
+    }
     fn run(&self, args: &[OsString]) -> Result<i32> {
-        let mut cfg = GrepConfig::default();
-        cfg.applet_name = "fgrep";
-        cfg.fixed_strings = true;
+        let cfg = GrepConfig {
+            applet_name: "fgrep",
+            fixed_strings: true,
+            ..Default::default()
+        };
         run_grep(cfg, args)
     }
 }
@@ -84,7 +102,12 @@ impl PosixRegex {
         if ret != 0 {
             let mut errbuf = [0u8; 256];
             unsafe {
-                libc::regerror(ret, &preg, errbuf.as_mut_ptr() as *mut libc::c_char, errbuf.len());
+                libc::regerror(
+                    ret,
+                    &preg,
+                    errbuf.as_mut_ptr() as *mut libc::c_char,
+                    errbuf.len(),
+                );
             }
             let err_str = unsafe { CStr::from_ptr(errbuf.as_ptr() as *const libc::c_char) }
                 .to_string_lossy()
@@ -120,9 +143,7 @@ impl PatternMatcher {
             PatternMatcher::Fixed(pat) => {
                 match_fixed(pat, line, ignore_case, whole_line, whole_word)
             }
-            PatternMatcher::Regex(re) => {
-                match_regex(re, line, whole_line, whole_word)
-            }
+            PatternMatcher::Regex(re) => match_regex(re, line, whole_line, whole_word),
         }
     }
 }
@@ -350,9 +371,7 @@ fn find_all_matches(
 
                 let ptr = unsafe { line_bytes.as_ptr().add(search_start) } as *const libc::c_char;
                 let mut pmatch: libc::regmatch_t = unsafe { std::mem::zeroed() };
-                let ret = unsafe {
-                    libc::regexec(&re.preg, ptr, 1, &mut pmatch, libc::REG_NOTBOL)
-                };
+                let ret = unsafe { libc::regexec(&re.preg, ptr, 1, &mut pmatch, libc::REG_NOTBOL) };
                 if ret != 0 {
                     break;
                 }
@@ -396,11 +415,7 @@ fn print_line(
     Ok(())
 }
 
-fn process_dir_entries<F>(
-    dir: &Path,
-    dereference: bool,
-    action: &mut F,
-) -> io::Result<()>
+fn process_dir_entries<F>(dir: &Path, dereference: bool, action: &mut F) -> io::Result<()>
 where
     F: FnMut(&Path) -> io::Result<()>,
 {
@@ -514,7 +529,10 @@ fn run_grep(mut cfg: GrepConfig, args: &[OsString]) -> Result<i32> {
                         } else {
                             i += 1;
                             if i >= args.len() {
-                                eprintln!("{}: option requires an argument -- 'e'", cfg.applet_name);
+                                eprintln!(
+                                    "{}: option requires an argument -- 'e'",
+                                    cfg.applet_name
+                                );
                                 return Ok(2);
                             }
                             args[i].as_bytes().to_vec()
@@ -529,7 +547,10 @@ fn run_grep(mut cfg: GrepConfig, args: &[OsString]) -> Result<i32> {
                         } else {
                             i += 1;
                             if i >= args.len() {
-                                eprintln!("{}: option requires an argument -- 'f'", cfg.applet_name);
+                                eprintln!(
+                                    "{}: option requires an argument -- 'f'",
+                                    cfg.applet_name
+                                );
                                 return Ok(2);
                             }
                             args[i].clone()
@@ -539,62 +560,80 @@ fn run_grep(mut cfg: GrepConfig, args: &[OsString]) -> Result<i32> {
                     }
                     b'm' => {
                         let val = if j + 1 < bytes.len() {
-                            let rem = &bytes[j + 1..];
-                            rem
+                            &bytes[j + 1..]
                         } else {
                             i += 1;
                             if i >= args.len() {
-                                eprintln!("{}: option requires an argument -- 'm'", cfg.applet_name);
+                                eprintln!(
+                                    "{}: option requires an argument -- 'm'",
+                                    cfg.applet_name
+                                );
                                 return Ok(2);
                             }
                             args[i].as_bytes()
                         };
-                        cfg.max_matches = std::str::from_utf8(val).ok().and_then(|s| s.parse().ok());
+                        cfg.max_matches =
+                            std::str::from_utf8(val).ok().and_then(|s| s.parse().ok());
                         break;
                     }
                     b'A' => {
                         let val = if j + 1 < bytes.len() {
-                            let rem = &bytes[j + 1..];
-                            rem
+                            &bytes[j + 1..]
                         } else {
                             i += 1;
                             if i >= args.len() {
-                                eprintln!("{}: option requires an argument -- 'A'", cfg.applet_name);
+                                eprintln!(
+                                    "{}: option requires an argument -- 'A'",
+                                    cfg.applet_name
+                                );
                                 return Ok(2);
                             }
                             args[i].as_bytes()
                         };
-                        cfg.after_context = std::str::from_utf8(val).ok().and_then(|s| s.parse().ok()).unwrap_or(0);
+                        cfg.after_context = std::str::from_utf8(val)
+                            .ok()
+                            .and_then(|s| s.parse().ok())
+                            .unwrap_or(0);
                         break;
                     }
                     b'B' => {
                         let val = if j + 1 < bytes.len() {
-                            let rem = &bytes[j + 1..];
-                            rem
+                            &bytes[j + 1..]
                         } else {
                             i += 1;
                             if i >= args.len() {
-                                eprintln!("{}: option requires an argument -- 'B'", cfg.applet_name);
+                                eprintln!(
+                                    "{}: option requires an argument -- 'B'",
+                                    cfg.applet_name
+                                );
                                 return Ok(2);
                             }
                             args[i].as_bytes()
                         };
-                        cfg.before_context = std::str::from_utf8(val).ok().and_then(|s| s.parse().ok()).unwrap_or(0);
+                        cfg.before_context = std::str::from_utf8(val)
+                            .ok()
+                            .and_then(|s| s.parse().ok())
+                            .unwrap_or(0);
                         break;
                     }
                     b'C' => {
                         let val = if j + 1 < bytes.len() {
-                            let rem = &bytes[j + 1..];
-                            rem
+                            &bytes[j + 1..]
                         } else {
                             i += 1;
                             if i >= args.len() {
-                                eprintln!("{}: option requires an argument -- 'C'", cfg.applet_name);
+                                eprintln!(
+                                    "{}: option requires an argument -- 'C'",
+                                    cfg.applet_name
+                                );
                                 return Ok(2);
                             }
                             args[i].as_bytes()
                         };
-                        let c = std::str::from_utf8(val).ok().and_then(|s| s.parse().ok()).unwrap_or(0);
+                        let c = std::str::from_utf8(val)
+                            .ok()
+                            .and_then(|s| s.parse().ok())
+                            .unwrap_or(0);
                         cfg.before_context = c;
                         cfg.after_context = c;
                         break;
@@ -677,7 +716,11 @@ fn run_grep(mut cfg: GrepConfig, args: &[OsString]) -> Result<i32> {
     // Handle -f EMPTY_FILE
     let mut invert_search = cfg.invert_match;
     if fopt_was_specified && raw_patterns.is_empty() {
-        let dummy = if cfg.whole_line { b".*".to_vec() } else { b"".to_vec() };
+        let dummy = if cfg.whole_line {
+            b".*".to_vec()
+        } else {
+            b"".to_vec()
+        };
         raw_patterns.push(dummy);
         invert_search = !invert_search;
     }
@@ -691,7 +734,12 @@ fn run_grep(mut cfg: GrepConfig, args: &[OsString]) -> Result<i32> {
             match PosixRegex::compile(rp, cfg.extended_regex, cfg.ignore_case) {
                 Ok(re) => compiled_patterns.push(PatternMatcher::Regex(re)),
                 Err(e) => {
-                    eprintln!("{}: bad regex '{}': {}", cfg.applet_name, String::from_utf8_lossy(rp), e);
+                    eprintln!(
+                        "{}: bad regex '{}': {}",
+                        cfg.applet_name,
+                        String::from_utf8_lossy(rp),
+                        e
+                    );
                     return Ok(2);
                 }
             }
@@ -717,11 +765,15 @@ fn run_grep(mut cfg: GrepConfig, args: &[OsString]) -> Result<i32> {
         }
 
         let is_dir = if cfg.dereference {
-            std::fs::metadata(file_path).map(|m| m.is_dir()).unwrap_or(false)
+            std::fs::metadata(file_path)
+                .map(|m| m.is_dir())
+                .unwrap_or(false)
         } else {
             // For -r, check symlink vs dir at top level:
             // Top level symlink to dir IS followed in -r
-            std::fs::metadata(file_path).map(|m| m.is_dir()).unwrap_or(false)
+            std::fs::metadata(file_path)
+                .map(|m| m.is_dir())
+                .unwrap_or(false)
         };
 
         if cfg.recursive && is_dir {
@@ -752,7 +804,13 @@ fn run_grep(mut cfg: GrepConfig, args: &[OsString]) -> Result<i32> {
 
         let print_fn = match cfg.with_filename {
             Some(b) => b,
-            None => if is_from_dir { true } else { default_print_filename },
+            None => {
+                if is_from_dir {
+                    true
+                } else {
+                    default_print_filename
+                }
+            }
         };
 
         let reader: Box<dyn BufRead> = if is_stdin {
@@ -851,12 +909,9 @@ fn grep_one_file(
         let mut first_match_range = None;
 
         for (idx, pm) in patterns.iter().enumerate() {
-            if let Some(range) = pm.find_match(
-                &line_buf,
-                cfg.ignore_case,
-                cfg.whole_line,
-                cfg.whole_word,
-            ) {
+            if let Some(range) =
+                pm.find_match(&line_buf, cfg.ignore_case, cfg.whole_line, cfg.whole_word)
+            {
                 matched_pattern_idx = Some(idx);
                 first_match_range = Some(range);
                 break;
@@ -914,7 +969,9 @@ fn grep_one_file(
                 if cfg.only_matching {
                     // With -ov GNU/BusyBox grep prints nothing
                     if !cfg.invert_match {
-                        if let (Some(pat_idx), Some(range)) = (matched_pattern_idx, first_match_range) {
+                        if let (Some(pat_idx), Some(range)) =
+                            (matched_pattern_idx, first_match_range)
+                        {
                             let all_m = find_all_matches(
                                 &patterns[pat_idx],
                                 &line_buf,

@@ -1,15 +1,19 @@
+use crate::core::fs::read_bytes_or_stdin;
+use crate::core::{Applet, Result};
 use std::ffi::OsString;
 use std::io::{self, Write};
 use std::os::unix::ffi::OsStrExt;
 use std::os::unix::fs::PermissionsExt;
 use std::path::Path;
-use crate::core::fs::read_bytes_or_stdin;
-use crate::core::{Applet, Result};
 
 pub struct UuencodeApplet;
 impl Applet for UuencodeApplet {
-    fn name(&self) -> &'static str { "uuencode" }
-    fn description(&self) -> &'static str { "Encode a file into email friendly format" }
+    fn name(&self) -> &'static str {
+        "uuencode"
+    }
+    fn description(&self) -> &'static str {
+        "Encode a file into email friendly format"
+    }
     fn run(&self, args: &[OsString]) -> Result<i32> {
         let mut base64_mode = false;
         let mut pos_args = Vec::new();
@@ -106,8 +110,16 @@ fn base64_encode(data: &[u8]) -> String {
 
         out.push(B64_CHARS[idx0] as char);
         out.push(B64_CHARS[idx1] as char);
-        if i + 1 < data.len() { out.push(B64_CHARS[idx2] as char); } else { out.push('='); }
-        if i + 2 < data.len() { out.push(B64_CHARS[idx3] as char); } else { out.push('='); }
+        if i + 1 < data.len() {
+            out.push(B64_CHARS[idx2] as char);
+        } else {
+            out.push('=');
+        }
+        if i + 2 < data.len() {
+            out.push(B64_CHARS[idx3] as char);
+        } else {
+            out.push('=');
+        }
         i += 3;
     }
     out
@@ -115,5 +127,9 @@ fn base64_encode(data: &[u8]) -> String {
 
 fn uu_char(b: u8) -> u8 {
     let v = b & 0x3f;
-    if v == 0 { b'`' } else { v + 32 }
+    if v == 0 {
+        b'`'
+    } else {
+        v + 32
+    }
 }

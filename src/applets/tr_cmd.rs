@@ -1,12 +1,16 @@
-use std::ffi::OsString;
-use std::io::{self, BufRead, Read, Write};
-use std::os::unix::ffi::OsStrExt;
 use crate::core::{Applet, Result};
+use std::ffi::OsString;
+use std::io::{self, Read, Write};
+use std::os::unix::ffi::OsStrExt;
 
 pub struct TrApplet;
 impl Applet for TrApplet {
-    fn name(&self) -> &'static str { "tr" }
-    fn description(&self) -> &'static str { "Translate, squeeze, and/or delete characters" }
+    fn name(&self) -> &'static str {
+        "tr"
+    }
+    fn description(&self) -> &'static str {
+        "Translate, squeeze, and/or delete characters"
+    }
     fn run(&self, args: &[OsString]) -> Result<i32> {
         let mut delete_mode = false;
         let mut complement = false;
@@ -35,7 +39,11 @@ impl Applet for TrApplet {
         }
 
         let set1 = parse_tr_set(&sets[0]);
-        let set2 = if sets.len() > 1 { parse_tr_set(&sets[1]) } else { Vec::new() };
+        let set2 = if sets.len() > 1 {
+            parse_tr_set(&sets[1])
+        } else {
+            Vec::new()
+        };
 
         let stdin = io::stdin();
         let mut stdin_handle = stdin.lock();
@@ -44,14 +52,32 @@ impl Applet for TrApplet {
 
         let mut map = [0u8; 256];
         let mut in_set1 = [false; 256];
-        for &b in &set1 { in_set1[b as usize] = true; }
+        for &b in &set1 {
+            in_set1[b as usize] = true;
+        }
 
         if complement {
-            for i in 0..256 { in_set1[i] = !in_set1[i]; }
+            for val in &mut in_set1 {
+                *val = !*val;
+            }
+        }
+
+        let mut in_squeeze = [false; 256];
+        if squeeze {
+            let squeeze_set = if sets.len() > 1 && !delete_mode {
+                &set2
+            } else {
+                &set1
+            };
+            for &b in squeeze_set {
+                in_squeeze[b as usize] = true;
+            }
         }
 
         if !delete_mode {
-            for i in 0..256 { map[i] = i as u8; }
+            for (i, val) in map.iter_mut().enumerate() {
+                *val = i as u8;
+            }
             if complement {
                 let last_b = set2.last().copied().unwrap_or(0);
                 let mut s2_idx = 0;
@@ -78,6 +104,7 @@ impl Applet for TrApplet {
 
         let mut buf = [0u8; 8192];
         let mut out_buf = Vec::new();
+        let mut last_char: Option<u8> = None;
         loop {
             let n = match stdin_handle.read(&mut buf) {
                 Ok(0) => break,
@@ -86,10 +113,22 @@ impl Applet for TrApplet {
             };
 
             for &b in &buf[..n] {
-                if delete_mode {
-                    if !in_set1[b as usize] { out_buf.push(b); }
+                let out_char = if delete_mode {
+                    if in_set1[b as usize] {
+                        None
+                    } else {
+                        Some(b)
+                    }
                 } else {
-                    out_buf.push(map[b as usize]);
+                    Some(map[b as usize])
+                };
+
+                if let Some(ch) = out_char {
+                    if squeeze && in_squeeze[ch as usize] && last_char == Some(ch) {
+                        continue;
+                    }
+                    last_char = Some(ch);
+                    out_buf.push(ch);
                 }
             }
             stdout_handle.write_all(&out_buf)?;
@@ -106,27 +145,43 @@ pub fn parse_tr_set(s: &str) -> Vec<u8> {
     while i < bytes.len() {
         if bytes[i] == b'[' {
             if s[i..].starts_with("[:digit:]") {
-                for b in b'0'..=b'9' { out.push(b); }
+                for b in b'0'..=b'9' {
+                    out.push(b);
+                }
                 i += 9;
                 continue;
             } else if s[i..].starts_with("[:lower:]") {
-                for b in b'a'..=b'z' { out.push(b); }
+                for b in b'a'..=b'z' {
+                    out.push(b);
+                }
                 i += 9;
                 continue;
             } else if s[i..].starts_with("[:upper:]") {
-                for b in b'A'..=b'Z' { out.push(b); }
+                for b in b'A'..=b'Z' {
+                    out.push(b);
+                }
                 i += 9;
                 continue;
             } else if s[i..].starts_with("[:alpha:]") {
-                for b in b'A'..=b'Z' { out.push(b); }
-                for b in b'a'..=b'z' { out.push(b); }
+                for b in b'A'..=b'Z' {
+                    out.push(b);
+                }
+                for b in b'a'..=b'z' {
+                    out.push(b);
+                }
                 i += 9;
                 continue;
             } else if s[i..].starts_with("[:alnum:]") {
                 // Notice BusyBox order: 0-9, then A-Z, then a-z
-                for b in b'0'..=b'9' { out.push(b); }
-                for b in b'A'..=b'Z' { out.push(b); }
-                for b in b'a'..=b'z' { out.push(b); }
+                for b in b'0'..=b'9' {
+                    out.push(b);
+                }
+                for b in b'A'..=b'Z' {
+                    out.push(b);
+                }
+                for b in b'a'..=b'z' {
+                    out.push(b);
+                }
                 i += 9;
                 continue;
             } else if s[i..].starts_with("[:space:]") {
@@ -146,7 +201,9 @@ pub fn parse_tr_set(s: &str) -> Vec<u8> {
                 i += 9;
                 continue;
             } else if s[i..].starts_with("[:xdigit:]") {
-                for b in b'0'..=b'9' { out.push(b); }
+                for b in b'0'..=b'9' {
+                    out.push(b);
+                }
                 for b in b'A'..=b'F' {
                     out.push(b);
                 }
@@ -157,28 +214,41 @@ pub fn parse_tr_set(s: &str) -> Vec<u8> {
                 continue;
             } else if s[i..].starts_with("[:punct:]") {
                 for b in 0u8..=127u8 {
-                    if (b >= 33 && b <= 126) && !b.is_ascii_alphanumeric() && !b.is_ascii_whitespace() {
+                    if (33..=126).contains(&b)
+                        && !b.is_ascii_alphanumeric()
+                        && !b.is_ascii_whitespace()
+                    {
                         out.push(b);
                     }
                 }
                 i += 9;
                 continue;
             } else if s[i..].starts_with("[:cntrl:]") {
-                for b in 0u8..=31u8 { out.push(b); }
+                for b in 0u8..=31u8 {
+                    out.push(b);
+                }
                 out.push(127);
                 i += 9;
                 continue;
-            } else if s[i..].starts_with("[=") && s[i..].len() >= 5 && s[i..].ends_with("=]") || (s[i..].len() >= 5 && &s[i..i+2] == "[=" && &s[i+3..i+5] == "=]") {
+            } else if s[i..].starts_with("[=") && s[i..].len() >= 5 && s[i..].ends_with("=]")
+                || (s[i..].len() >= 5 && &s[i..i + 2] == "[=" && &s[i + 3..i + 5] == "=]")
+            {
                 out.push(bytes[i + 2]);
                 i += 5;
                 continue;
             }
         }
 
-        if i + 2 < bytes.len() && bytes[i + 1] == b'-' && bytes[i] <= bytes[i + 2] && bytes[i] != b'\\' {
+        if i + 2 < bytes.len()
+            && bytes[i + 1] == b'-'
+            && bytes[i] <= bytes[i + 2]
+            && bytes[i] != b'\\'
+        {
             let start = bytes[i];
             let end = bytes[i + 2];
-            for b in start..=end { out.push(b); }
+            for b in start..=end {
+                out.push(b);
+            }
             i += 3;
             continue;
         }

@@ -9,6 +9,14 @@ license = "MIT"
 [dependencies]
 libc = "0.2"
 
+[lib]
+name = "busybox"
+path = "src/lib.rs"
+
+[[bin]]
+name = "busybox"
+path = "src/main.rs"
+
 [features]
 default = [
     # Phase 1: Core Essentials

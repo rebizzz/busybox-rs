@@ -1,25 +1,25 @@
 #![allow(non_upper_case_globals)]
 
+use crate::core::{Applet, BbError, Result};
 use std::ffi::OsString;
 use std::io::{self, BufRead, Write};
 use std::os::unix::ffi::OsStrExt;
 use std::path::{Path, PathBuf};
-use crate::core::{Applet, BbError, Result};
 
-pub const FLAG_n: u32 = 1 << 0;       /* Numeric sort */
-pub const FLAG_g: u32 = 1 << 1;       /* General numerical sort using strtod() */
-pub const FLAG_h: u32 = 1 << 2;       /* Sort using strtod(), plus KMGT suffixes */
-pub const FLAG_M: u32 = 1 << 3;       /* Sort month */
-pub const FLAG_V: u32 = 1 << 4;       /* Sort version */
-pub const FLAG_u: u32 = 1 << 5;       /* Unique */
-pub const FLAG_c: u32 = 1 << 6;       /* Check */
-pub const FLAG_s: u32 = 1 << 7;       /* Stable sort */
-pub const FLAG_z: u32 = 1 << 8;       /* NUL terminated lines */
-pub const FLAG_b: u32 = 1 << 9;       /* Ignore leading blanks */
-pub const FLAG_r: u32 = 1 << 10;      /* Reverse */
-pub const FLAG_d: u32 = 1 << 11;      /* Ignore !(isalnum()|isspace()) */
-pub const FLAG_f: u32 = 1 << 12;      /* Force uppercase */
-pub const FLAG_i: u32 = 1 << 13;      /* Ignore !isprint() */
+pub const FLAG_n: u32 = 1 << 0; /* Numeric sort */
+pub const FLAG_g: u32 = 1 << 1; /* General numerical sort using strtod() */
+pub const FLAG_h: u32 = 1 << 2; /* Sort using strtod(), plus KMGT suffixes */
+pub const FLAG_M: u32 = 1 << 3; /* Sort month */
+pub const FLAG_V: u32 = 1 << 4; /* Sort version */
+pub const FLAG_u: u32 = 1 << 5; /* Unique */
+pub const FLAG_c: u32 = 1 << 6; /* Check */
+pub const FLAG_s: u32 = 1 << 7; /* Stable sort */
+pub const FLAG_z: u32 = 1 << 8; /* NUL terminated lines */
+pub const FLAG_b: u32 = 1 << 9; /* Ignore leading blanks */
+pub const FLAG_r: u32 = 1 << 10; /* Reverse */
+pub const FLAG_d: u32 = 1 << 11; /* Ignore !(isalnum()|isspace()) */
+pub const FLAG_f: u32 = 1 << 12; /* Force uppercase */
+pub const FLAG_i: u32 = 1 << 13; /* Ignore !isprint() */
 pub const FLAG_bb: u32 = 0x8000_0000; /* Ignore trailing blanks */
 pub const FLAG_no_tie_break: u32 = 0x4000_0000;
 
@@ -112,12 +112,24 @@ fn compare_g_or_h(x: &[u8], y: &[u8], is_h: bool) -> i32 {
 
     if dx.is_infinite() {
         if dx < 0.0 {
-            if dy.is_infinite() && dy < 0.0 { 0 } else { -1 }
+            if dy.is_infinite() && dy < 0.0 {
+                0
+            } else {
+                -1
+            }
         } else {
-            if dy.is_infinite() && dy > 0.0 { 0 } else { 1 }
+            if dy.is_infinite() && dy > 0.0 {
+                0
+            } else {
+                1
+            }
         }
     } else if dy.is_infinite() {
-        if dy < 0.0 { 1 } else { -1 }
+        if dy < 0.0 {
+            1
+        } else {
+            -1
+        }
     } else if dx > dy {
         1
     } else if dx < dy {
@@ -335,7 +347,11 @@ fn compare_lines(
     let mut retval = 0;
 
     for key in keys {
-        flags = if key.flags != 0 { key.flags } else { global_flags };
+        flags = if key.flags != 0 {
+            key.flags
+        } else {
+            global_flags
+        };
         let x = get_key(a_line, key, flags, key_sep);
         let y = get_key(b_line, key, flags, key_sep);
 
@@ -369,7 +385,10 @@ fn compare_lines(
 fn parse_key_spec(spec: &str) -> std::result::Result<SortKey, &'static str> {
     let bytes = spec.as_bytes();
     let mut idx = 0;
-    let mut key = SortKey { range: [0; 4], flags: 0 };
+    let mut key = SortKey {
+        range: [0; 4],
+        flags: 0,
+    };
     let mut part = 0;
 
     while idx < bytes.len() {
@@ -380,7 +399,8 @@ fn parse_key_spec(spec: &str) -> std::result::Result<SortKey, &'static str> {
         if idx == start_digit {
             return Err("bad field specification");
         }
-        let num_str = std::str::from_utf8(&bytes[start_digit..idx]).map_err(|_| "bad field specification")?;
+        let num_str =
+            std::str::from_utf8(&bytes[start_digit..idx]).map_err(|_| "bad field specification")?;
         let field_num: usize = num_str.parse().map_err(|_| "bad field specification")?;
         if field_num == 0 {
             return Err("bad field specification");
@@ -396,7 +416,8 @@ fn parse_key_spec(spec: &str) -> std::result::Result<SortKey, &'static str> {
             if idx == start_char_digit {
                 return Err("bad field specification");
             }
-            let char_str = std::str::from_utf8(&bytes[start_char_digit..idx]).map_err(|_| "bad field specification")?;
+            let char_str = std::str::from_utf8(&bytes[start_char_digit..idx])
+                .map_err(|_| "bad field specification")?;
             let char_num: usize = char_str.parse().map_err(|_| "bad field specification")?;
             if char_num == 0 {
                 return Err("bad field specification");
@@ -580,19 +601,45 @@ impl Applet for SortApplet {
         }
 
         let mut global_flags: u32 = 0;
-        if flag_n { global_flags |= FLAG_n; }
-        if flag_g { global_flags |= FLAG_g; }
-        if flag_h { global_flags |= FLAG_h; }
-        if flag_m_month { global_flags |= FLAG_M; }
-        if flag_v { global_flags |= FLAG_V; }
-        if flag_u { global_flags |= FLAG_u; }
-        if flag_c { global_flags |= FLAG_c; }
-        if flag_s { global_flags |= FLAG_s; }
-        if flag_z { global_flags |= FLAG_z; }
-        if flag_r { global_flags |= FLAG_r; }
-        if flag_d { global_flags |= FLAG_d; }
-        if flag_f { global_flags |= FLAG_f; }
-        if flag_i { global_flags |= FLAG_i; }
+        if flag_n {
+            global_flags |= FLAG_n;
+        }
+        if flag_g {
+            global_flags |= FLAG_g;
+        }
+        if flag_h {
+            global_flags |= FLAG_h;
+        }
+        if flag_m_month {
+            global_flags |= FLAG_M;
+        }
+        if flag_v {
+            global_flags |= FLAG_V;
+        }
+        if flag_u {
+            global_flags |= FLAG_u;
+        }
+        if flag_c {
+            global_flags |= FLAG_c;
+        }
+        if flag_s {
+            global_flags |= FLAG_s;
+        }
+        if flag_z {
+            global_flags |= FLAG_z;
+        }
+        if flag_r {
+            global_flags |= FLAG_r;
+        }
+        if flag_d {
+            global_flags |= FLAG_d;
+        }
+        if flag_f {
+            global_flags |= FLAG_f;
+        }
+        if flag_i {
+            global_flags |= FLAG_i;
+        }
         if flag_b {
             global_flags |= FLAG_b | FLAG_bb;
         }
@@ -687,10 +734,7 @@ impl Applet for SortApplet {
             return Ok(0);
         }
 
-        let mut indexed_lines: Vec<(usize, Vec<u8>)> = lines
-            .into_iter()
-            .enumerate()
-            .collect();
+        let mut indexed_lines: Vec<(usize, Vec<u8>)> = lines.into_iter().enumerate().collect();
 
         indexed_lines.sort_by(|(idx_a, line_a), (idx_b, line_b)| {
             compare_lines(

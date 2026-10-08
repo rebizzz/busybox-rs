@@ -1,14 +1,18 @@
-use std::ffi::OsString;
-use std::io::{self, Read, Write};
-use std::os::unix::ffi::OsStrExt;
-use std::path::Path;
 use crate::core::fs::read_bytes_or_stdin;
 use crate::core::{Applet, Result};
+use std::ffi::OsString;
+use std::io::{self, Write};
+use std::os::unix::ffi::OsStrExt;
+use std::path::Path;
 
 pub struct FoldApplet;
 impl Applet for FoldApplet {
-    fn name(&self) -> &'static str { "fold" }
-    fn description(&self) -> &'static str { "Wrap each input line to fit in specified width" }
+    fn name(&self) -> &'static str {
+        "fold"
+    }
+    fn description(&self) -> &'static str {
+        "Wrap each input line to fit in specified width"
+    }
     fn run(&self, args: &[OsString]) -> Result<i32> {
         let mut width: usize = 80;
         let mut break_spaces = false;
@@ -31,7 +35,10 @@ impl Applet for FoldApplet {
             } else if bytes.starts_with(b"-sw") {
                 break_spaces = true;
                 width = arg.to_string_lossy()[3..].parse().unwrap_or(80);
-            } else if bytes.starts_with(b"-") && bytes.len() > 1 && bytes[1..].iter().all(|b| b.is_ascii_digit()) {
+            } else if bytes.starts_with(b"-")
+                && bytes.len() > 1
+                && bytes[1..].iter().all(|b| b.is_ascii_digit())
+            {
                 width = arg.to_string_lossy()[1..].parse().unwrap_or(80);
             } else {
                 files.push(Path::new(arg));
@@ -71,7 +78,7 @@ impl Applet for FoldApplet {
                 if c == b'\t' {
                     column = column + 8 - (column % 8);
                 } else if c == b'\x08' {
-                    if column > 0 { column -= 1; }
+                    column = column.saturating_sub(1);
                 } else if c == b'\r' {
                     column = 0;
                 } else if (c & 0xc0) != 0x80 {
@@ -105,7 +112,7 @@ impl Applet for FoldApplet {
                             if b == b'\t' {
                                 column = column + 8 - (column % 8);
                             } else if b == b'\x08' {
-                                if column > 0 { column -= 1; }
+                                column = column.saturating_sub(1);
                             } else if b == b'\r' {
                                 column = 0;
                             } else if (b & 0xc0) != 0x80 {

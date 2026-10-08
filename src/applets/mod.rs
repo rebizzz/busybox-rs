@@ -1,23 +1,87 @@
+#[cfg(any(
+    feature = "arch",
+    feature = "clear",
+    feature = "echo",
+    feature = "false",
+    feature = "nproc",
+    feature = "printenv",
+    feature = "pwd",
+    feature = "reset",
+    feature = "sleep",
+    feature = "sync",
+    feature = "true",
+    feature = "whoami",
+    feature = "yes"
+))]
 pub mod core_cmds;
-pub mod fs_cmds;
-pub mod text_cmds;
+
+#[cfg(feature = "cut")]
 pub mod cut_cmd;
-pub mod number_cmds;
-pub mod stream_cmds;
+
+#[cfg(feature = "uuencode")]
 pub mod encode_cmds;
-pub mod shell_cmds;
-pub mod tr_cmd;
-pub mod rev_cmd;
+
+#[cfg(feature = "fold")]
 pub mod fold_cmd;
-pub mod tab_cmds;
-pub mod uudecode_cmd;
-pub mod xxd_cmd;
+
+#[cfg(any(
+    feature = "basename",
+    feature = "cp",
+    feature = "dirname",
+    feature = "link",
+    feature = "ls",
+    feature = "mkdir",
+    feature = "mv",
+    feature = "rm",
+    feature = "rmdir",
+    feature = "touch",
+    feature = "unlink",
+    feature = "which"
+))]
+pub mod fs_cmds;
+
+#[cfg(any(feature = "grep", feature = "egrep", feature = "fgrep"))]
 pub mod grep_cmd;
+
+#[cfg(any(feature = "factor", feature = "seq", feature = "tsort"))]
+pub mod number_cmds;
+
+#[cfg(feature = "rev")]
+pub mod rev_cmd;
+
+#[cfg(any(feature = "sh", feature = "xargs"))]
+pub mod shell_cmds;
+
+#[cfg(feature = "sort")]
 pub mod sort_cmd;
 
-use std::sync::Arc;
-use crate::core::Applet;
+#[cfg(any(
+    feature = "comm",
+    feature = "strings",
+    feature = "tee",
+    feature = "uniq"
+))]
+pub mod stream_cmds;
 
+#[cfg(any(feature = "expand", feature = "unexpand"))]
+pub mod tab_cmds;
+
+#[cfg(any(feature = "cat", feature = "head", feature = "tail", feature = "wc"))]
+pub mod text_cmds;
+
+#[cfg(feature = "tr")]
+pub mod tr_cmd;
+
+#[cfg(feature = "uudecode")]
+pub mod uudecode_cmd;
+
+#[cfg(feature = "xxd")]
+pub mod xxd_cmd;
+
+use crate::core::Applet;
+use std::sync::Arc;
+
+#[allow(clippy::vec_init_then_push)]
 pub fn get_applets() -> Vec<Arc<dyn Applet>> {
     let mut applets: Vec<Arc<dyn Applet>> = Vec::new();
 

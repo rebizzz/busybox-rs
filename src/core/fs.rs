@@ -18,11 +18,18 @@ pub fn open_or_stdin(path: &Path) -> std::result::Result<Box<dyn Read>, BbError>
             Ok(f) => Ok(Box::new(f)),
             Err(e) => {
                 if e.kind() == io::ErrorKind::NotFound {
-                    Err(BbError::NotFound { path: path.to_path_buf() })
+                    Err(BbError::NotFound {
+                        path: path.to_path_buf(),
+                    })
                 } else if e.kind() == io::ErrorKind::PermissionDenied {
-                    Err(BbError::PermissionDenied { path: path.to_path_buf() })
+                    Err(BbError::PermissionDenied {
+                        path: path.to_path_buf(),
+                    })
                 } else {
-                    Err(BbError::Io { path: Some(path.to_path_buf()), source: e })
+                    Err(BbError::Io {
+                        path: Some(path.to_path_buf()),
+                        source: e,
+                    })
                 }
             }
         }
@@ -40,7 +47,6 @@ pub fn read_bytes_or_stdin(path: &Path) -> std::result::Result<Vec<u8>, BbError>
 }
 
 /// Options controlling file and directory copying.
-#[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct CopyOptions {
     pub preserve_status: bool,
@@ -55,9 +61,7 @@ pub struct CopyOptions {
     pub preserve_hardlinks: bool,
     pub update: bool,
     pub verbose: bool,
-    pub parents: bool,
     pub remove_destination: bool,
-    pub no_target_directory: bool,
 }
 
 impl Default for CopyOptions {
@@ -75,9 +79,7 @@ impl Default for CopyOptions {
             preserve_hardlinks: false,
             update: false,
             verbose: false,
-            parents: false,
             remove_destination: false,
-            no_target_directory: false,
         }
     }
 }
@@ -137,6 +139,7 @@ pub fn clean_parents_path(path: &Path) -> &Path {
     Path::new(std::ffi::OsStr::from_bytes(&bytes[start..]))
 }
 
+#[allow(clippy::result_unit_err)]
 pub fn copy_file_entry(
     src: &Path,
     dst: &Path,
@@ -152,7 +155,12 @@ pub fn copy_file_entry(
     let src_stat = match get_stat(src, follow_symlinks) {
         Ok(st) => st,
         Err(e) => {
-            eprintln!("{}: can't stat '{}': {}", context.applet_name, src.display(), e);
+            eprintln!(
+                "{}: can't stat '{}': {}",
+                context.applet_name,
+                src.display(),
+                e
+            );
             return Err(());
         }
     };
@@ -161,13 +169,21 @@ pub fn copy_file_entry(
 
     if is_dir {
         if !context.options.recursive {
-            eprintln!("{}: omitting directory '{}'", context.applet_name, src.display());
+            eprintln!(
+                "{}: omitting directory '{}'",
+                context.applet_name,
+                src.display()
+            );
             return Err(());
         }
 
         let src_key = (src_stat.st_dev as u64, src_stat.st_ino as u64);
         if context.created_dirs.contains(&src_key) {
-            eprintln!("{}: recursion detected, omitting directory '{}'", context.applet_name, src.display());
+            eprintln!(
+                "{}: recursion detected, omitting directory '{}'",
+                context.applet_name,
+                src.display()
+            );
             return Err(());
         }
 
@@ -176,11 +192,20 @@ pub fn copy_file_entry(
 
         if let Ok(ref dst_stat) = dst_stat_res {
             if src_stat.st_dev == dst_stat.st_dev && src_stat.st_ino == dst_stat.st_ino {
-                eprintln!("{}: '{}' and '{}' are the same file", context.applet_name, src.display(), dst.display());
+                eprintln!(
+                    "{}: '{}' and '{}' are the same file",
+                    context.applet_name,
+                    src.display(),
+                    dst.display()
+                );
                 return Err(());
             }
             if (dst_stat.st_mode & libc::S_IFMT) != libc::S_IFDIR {
-                eprintln!("{}: target '{}' is not a directory", context.applet_name, dst.display());
+                eprintln!(
+                    "{}: target '{}' is not a directory",
+                    context.applet_name,
+                    dst.display()
+                );
                 return Err(());
             }
         } else {
@@ -200,18 +225,30 @@ pub fn copy_file_entry(
             let res = unsafe { libc::mkdir(c_dst.as_ptr(), mode) };
             unsafe { libc::umask(saved_umask) };
             if res < 0 {
-                eprintln!("{}: can't create directory '{}': {}", context.applet_name, dst.display(), io::Error::last_os_error());
+                eprintln!(
+                    "{}: can't create directory '{}': {}",
+                    context.applet_name,
+                    dst.display(),
+                    io::Error::last_os_error()
+                );
                 return Err(());
             }
             if let Ok(new_dst_stat) = get_stat(dst, false) {
-                context.created_dirs.insert((new_dst_stat.st_dev as u64, new_dst_stat.st_ino as u64));
+                context
+                    .created_dirs
+                    .insert((new_dst_stat.st_dev, new_dst_stat.st_ino));
             }
         }
 
         let entries = match fs::read_dir(src) {
             Ok(e) => e,
             Err(e) => {
-                eprintln!("{}: can't read directory '{}': {}", context.applet_name, src.display(), e);
+                eprintln!(
+                    "{}: can't read directory '{}': {}",
+                    context.applet_name,
+                    src.display(),
+                    e
+                );
                 return Err(());
             }
         };
@@ -243,22 +280,37 @@ pub fn copy_file_entry(
             if !context.options.preserve_status {
                 let saved_umask = unsafe { libc::umask(0) };
                 unsafe { libc::umask(saved_umask) };
-                let _ = unsafe { libc::chmod(c_dst.as_ptr(), (src_stat.st_mode & 0o7777) & !saved_umask) };
+                let _ = unsafe {
+                    libc::chmod(c_dst.as_ptr(), (src_stat.st_mode & 0o7777) & !saved_umask)
+                };
             } else {
                 let _ = unsafe { libc::chown(c_dst.as_ptr(), src_stat.st_uid, src_stat.st_gid) };
                 let _ = unsafe { libc::chmod(c_dst.as_ptr(), src_stat.st_mode & 0o7777) };
                 let times = [
-                    libc::timespec { tv_sec: src_stat.st_atime, tv_nsec: src_stat.st_atime_nsec },
-                    libc::timespec { tv_sec: src_stat.st_mtime, tv_nsec: src_stat.st_mtime_nsec },
+                    libc::timespec {
+                        tv_sec: src_stat.st_atime,
+                        tv_nsec: src_stat.st_atime_nsec,
+                    },
+                    libc::timespec {
+                        tv_sec: src_stat.st_mtime,
+                        tv_nsec: src_stat.st_mtime_nsec,
+                    },
                 ];
-                let _ = unsafe { libc::utimensat(libc::AT_FDCWD, c_dst.as_ptr(), times.as_ptr(), 0) };
+                let _ =
+                    unsafe { libc::utimensat(libc::AT_FDCWD, c_dst.as_ptr(), times.as_ptr(), 0) };
             }
         } else if context.options.preserve_status {
             let _ = unsafe { libc::chown(c_dst.as_ptr(), src_stat.st_uid, src_stat.st_gid) };
             let _ = unsafe { libc::chmod(c_dst.as_ptr(), src_stat.st_mode & 0o7777) };
             let times = [
-                libc::timespec { tv_sec: src_stat.st_atime, tv_nsec: src_stat.st_atime_nsec },
-                libc::timespec { tv_sec: src_stat.st_mtime, tv_nsec: src_stat.st_mtime_nsec },
+                libc::timespec {
+                    tv_sec: src_stat.st_atime,
+                    tv_nsec: src_stat.st_atime_nsec,
+                },
+                libc::timespec {
+                    tv_sec: src_stat.st_mtime,
+                    tv_nsec: src_stat.st_mtime_nsec,
+                },
             ];
             let _ = unsafe { libc::utimensat(libc::AT_FDCWD, c_dst.as_ptr(), times.as_ptr(), 0) };
         }
@@ -278,7 +330,12 @@ pub fn copy_file_entry(
 
     if let Ok(ref dst_stat) = dst_stat_res {
         if src_stat.st_dev == dst_stat.st_dev && src_stat.st_ino == dst_stat.st_ino {
-            eprintln!("{}: '{}' and '{}' are the same file", context.applet_name, src.display(), dst.display());
+            eprintln!(
+                "{}: '{}' and '{}' are the same file",
+                context.applet_name,
+                src.display(),
+                dst.display()
+            );
             return Err(());
         }
         if context.options.no_clobber {
@@ -290,7 +347,9 @@ pub fn copy_file_entry(
         if context.options.interactive {
             eprint!("{}: overwrite '{}'? ", context.applet_name, dst.display());
             let mut resp = String::new();
-            if io::stdin().read_line(&mut resp).is_err() || !(resp.starts_with('y') || resp.starts_with('Y')) {
+            if io::stdin().read_line(&mut resp).is_err()
+                || !(resp.starts_with('y') || resp.starts_with('Y'))
+            {
                 return Ok(());
             }
         }
@@ -335,11 +394,21 @@ pub fn copy_file_entry(
             if context.options.force {
                 let _ = fs::remove_file(dst);
                 if let Err(e2) = std::os::unix::fs::symlink(src, dst) {
-                    eprintln!("{}: can't create symlink '{}': {}", context.applet_name, dst.display(), e2);
+                    eprintln!(
+                        "{}: can't create symlink '{}': {}",
+                        context.applet_name,
+                        dst.display(),
+                        e2
+                    );
                     return Err(());
                 }
             } else {
-                eprintln!("{}: can't create symlink '{}': {}", context.applet_name, dst.display(), e);
+                eprintln!(
+                    "{}: can't create symlink '{}': {}",
+                    context.applet_name,
+                    dst.display(),
+                    e
+                );
                 return Err(());
             }
         }
@@ -357,11 +426,21 @@ pub fn copy_file_entry(
             if context.options.force {
                 let _ = fs::remove_file(dst);
                 if let Err(e2) = fs::hard_link(src, dst) {
-                    eprintln!("{}: can't create link '{}': {}", context.applet_name, dst.display(), e2);
+                    eprintln!(
+                        "{}: can't create link '{}': {}",
+                        context.applet_name,
+                        dst.display(),
+                        e2
+                    );
                     return Err(());
                 }
             } else {
-                eprintln!("{}: can't create link '{}': {}", context.applet_name, dst.display(), e);
+                eprintln!(
+                    "{}: can't create link '{}': {}",
+                    context.applet_name,
+                    dst.display(),
+                    e
+                );
                 return Err(());
             }
         }
@@ -375,7 +454,12 @@ pub fn copy_file_entry(
         let link_target = match fs::read_link(src) {
             Ok(t) => t,
             Err(e) => {
-                eprintln!("{}: can't readlink '{}': {}", context.applet_name, src.display(), e);
+                eprintln!(
+                    "{}: can't readlink '{}': {}",
+                    context.applet_name,
+                    src.display(),
+                    e
+                );
                 return Err(());
             }
         };
@@ -383,7 +467,12 @@ pub fn copy_file_entry(
             let _ = fs::remove_file(dst);
         }
         if let Err(e) = std::os::unix::fs::symlink(&link_target, dst) {
-            eprintln!("{}: can't create symlink '{}': {}", context.applet_name, dst.display(), e);
+            eprintln!(
+                "{}: can't create symlink '{}': {}",
+                context.applet_name,
+                dst.display(),
+                e
+            );
             return Err(());
         }
         let c_dst = match CString::new(dst.as_os_str().as_bytes()) {
@@ -391,10 +480,15 @@ pub fn copy_file_entry(
             Err(_) => return Err(()),
         };
         if context.options.preserve_status {
-            unsafe { libc::lchown(c_dst.as_ptr(), src_stat.st_uid, src_stat.st_gid); }
+            unsafe {
+                libc::lchown(c_dst.as_ptr(), src_stat.st_uid, src_stat.st_gid);
+            }
         }
         if context.options.preserve_hardlinks && !follow_symlinks {
-            context.hard_links.insert((src_stat.st_dev as u64, src_stat.st_ino as u64), dst.to_path_buf());
+            context.hard_links.insert(
+                (src_stat.st_dev as u64, src_stat.st_ino as u64),
+                dst.to_path_buf(),
+            );
         }
         if context.options.verbose {
             println!("'{}' -> '{}'", src.display(), dst.display());
@@ -417,7 +511,12 @@ pub fn copy_file_entry(
         };
         let ret = unsafe { libc::mknod(c_dst.as_ptr(), src_stat.st_mode, src_stat.st_rdev) };
         if ret < 0 {
-            eprintln!("{}: can't create special file '{}': {}", context.applet_name, dst.display(), io::Error::last_os_error());
+            eprintln!(
+                "{}: can't create special file '{}': {}",
+                context.applet_name,
+                dst.display(),
+                io::Error::last_os_error()
+            );
             return Err(());
         }
         if context.options.preserve_status {
@@ -425,14 +524,23 @@ pub fn copy_file_entry(
                 let _ = libc::chown(c_dst.as_ptr(), src_stat.st_uid, src_stat.st_gid);
                 let _ = libc::chmod(c_dst.as_ptr(), src_stat.st_mode & 0o7777);
                 let times = [
-                    libc::timespec { tv_sec: src_stat.st_atime, tv_nsec: src_stat.st_atime_nsec },
-                    libc::timespec { tv_sec: src_stat.st_mtime, tv_nsec: src_stat.st_mtime_nsec },
+                    libc::timespec {
+                        tv_sec: src_stat.st_atime,
+                        tv_nsec: src_stat.st_atime_nsec,
+                    },
+                    libc::timespec {
+                        tv_sec: src_stat.st_mtime,
+                        tv_nsec: src_stat.st_mtime_nsec,
+                    },
                 ];
                 let _ = libc::utimensat(libc::AT_FDCWD, c_dst.as_ptr(), times.as_ptr(), 0);
             }
         }
         if context.options.preserve_hardlinks && !follow_symlinks {
-            context.hard_links.insert((src_stat.st_dev as u64, src_stat.st_ino as u64), dst.to_path_buf());
+            context.hard_links.insert(
+                (src_stat.st_dev as u64, src_stat.st_ino as u64),
+                dst.to_path_buf(),
+            );
         }
         if context.options.verbose {
             println!("'{}' -> '{}'", src.display(), dst.display());
@@ -443,7 +551,12 @@ pub fn copy_file_entry(
     let mut src_file = match File::open(src) {
         Ok(f) => f,
         Err(e) => {
-            eprintln!("{}: can't open '{}': {}", context.applet_name, src.display(), e);
+            eprintln!(
+                "{}: can't open '{}': {}",
+                context.applet_name,
+                src.display(),
+                e
+            );
             return Err(());
         }
     };
@@ -456,7 +569,11 @@ pub fn copy_file_entry(
     };
 
     let mut open_opts = OpenOptions::new();
-    open_opts.write(true).create(true).truncate(true).mode(new_mode);
+    open_opts
+        .write(true)
+        .create(true)
+        .truncate(true)
+        .mode(new_mode);
 
     let mut dst_file = match open_opts.open(dst) {
         Ok(f) => f,
@@ -466,12 +583,22 @@ pub fn copy_file_entry(
                 match open_opts.open(dst) {
                     Ok(f) => f,
                     Err(e2) => {
-                        eprintln!("{}: can't create '{}': {}", context.applet_name, dst.display(), e2);
+                        eprintln!(
+                            "{}: can't create '{}': {}",
+                            context.applet_name,
+                            dst.display(),
+                            e2
+                        );
                         return Err(());
                     }
                 }
             } else {
-                eprintln!("{}: can't create '{}': {}", context.applet_name, dst.display(), e);
+                eprintln!(
+                    "{}: can't create '{}': {}",
+                    context.applet_name,
+                    dst.display(),
+                    e
+                );
                 return Err(());
             }
         }
@@ -484,14 +611,24 @@ pub fn copy_file_entry(
             Ok(0) => break,
             Ok(n) => {
                 if let Err(e) = dst_file.write_all(&buf[..n]) {
-                    eprintln!("{}: error writing to '{}': {}", context.applet_name, dst.display(), e);
+                    eprintln!(
+                        "{}: error writing to '{}': {}",
+                        context.applet_name,
+                        dst.display(),
+                        e
+                    );
                     write_failed = true;
                     break;
                 }
             }
             Err(e) if e.kind() == io::ErrorKind::Interrupted => continue,
             Err(e) => {
-                eprintln!("{}: error reading from '{}': {}", context.applet_name, src.display(), e);
+                eprintln!(
+                    "{}: error reading from '{}': {}",
+                    context.applet_name,
+                    src.display(),
+                    e
+                );
                 write_failed = true;
                 break;
             }
@@ -509,22 +646,29 @@ pub fn copy_file_entry(
         Err(_) => return Err(()),
     };
 
-    if is_reg {
-        if context.options.preserve_status {
-            unsafe {
-                let _ = libc::chown(c_dst.as_ptr(), src_stat.st_uid, src_stat.st_gid);
-                let _ = libc::chmod(c_dst.as_ptr(), src_stat.st_mode & 0o7777);
-                let times = [
-                    libc::timespec { tv_sec: src_stat.st_atime, tv_nsec: src_stat.st_atime_nsec },
-                    libc::timespec { tv_sec: src_stat.st_mtime, tv_nsec: src_stat.st_mtime_nsec },
-                ];
-                let _ = libc::utimensat(libc::AT_FDCWD, c_dst.as_ptr(), times.as_ptr(), 0);
-            }
+    if is_reg && context.options.preserve_status {
+        unsafe {
+            let _ = libc::chown(c_dst.as_ptr(), src_stat.st_uid, src_stat.st_gid);
+            let _ = libc::chmod(c_dst.as_ptr(), src_stat.st_mode & 0o7777);
+            let times = [
+                libc::timespec {
+                    tv_sec: src_stat.st_atime,
+                    tv_nsec: src_stat.st_atime_nsec,
+                },
+                libc::timespec {
+                    tv_sec: src_stat.st_mtime,
+                    tv_nsec: src_stat.st_mtime_nsec,
+                },
+            ];
+            let _ = libc::utimensat(libc::AT_FDCWD, c_dst.as_ptr(), times.as_ptr(), 0);
         }
     }
 
     if context.options.preserve_hardlinks && !follow_symlinks {
-        context.hard_links.insert((src_stat.st_dev as u64, src_stat.st_ino as u64), dst.to_path_buf());
+        context.hard_links.insert(
+            (src_stat.st_dev as u64, src_stat.st_ino as u64),
+            dst.to_path_buf(),
+        );
     }
 
     if context.options.verbose {
@@ -545,10 +689,8 @@ pub fn copy_recursive(src: &Path, dst: &Path) -> std::result::Result<(), BbError
         ..Default::default()
     };
     let mut context = CopyContext::new(options, "cp");
-    copy_file_entry(src, dst, false, &mut context).map_err(|_| {
-        BbError::Io {
-            path: Some(src.to_path_buf()),
-            source: io::Error::new(io::ErrorKind::Other, "copy failed"),
-        }
+    copy_file_entry(src, dst, false, &mut context).map_err(|_| BbError::Io {
+        path: Some(src.to_path_buf()),
+        source: io::Error::other("copy failed"),
     })
 }

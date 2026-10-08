@@ -1,14 +1,18 @@
-use std::ffi::OsString;
-use std::io::{self, Read, Write};
-use std::os::unix::ffi::OsStrExt;
-use std::path::Path;
 use crate::core::fs::read_bytes_or_stdin;
 use crate::core::{Applet, Result};
+use std::ffi::OsString;
+use std::io::{self, Write};
+use std::os::unix::ffi::OsStrExt;
+use std::path::Path;
 
 pub struct CutApplet;
 impl Applet for CutApplet {
-    fn name(&self) -> &'static str { "cut" }
-    fn description(&self) -> &'static str { "Print selected fields from FILEs to stdout" }
+    fn name(&self) -> &'static str {
+        "cut"
+    }
+    fn description(&self) -> &'static str {
+        "Print selected fields from FILEs to stdout"
+    }
     fn run(&self, args: &[OsString]) -> Result<i32> {
         let mut delim_opt: Option<Vec<u8>> = None;
         let mut odelim_opt: Option<Vec<u8>> = None;
@@ -27,12 +31,10 @@ impl Applet for CutApplet {
                 odelim_opt = Some(bytes[b"--output-delimiter=".len()..].to_vec());
                 i += 1;
                 continue;
-            } else if bytes == b"--output-delimiter" {
-                if i + 1 < args.len() {
-                    odelim_opt = Some(args[i + 1].as_bytes().to_vec());
-                    i += 2;
-                    continue;
-                }
+            } else if bytes == b"--output-delimiter" && i + 1 < args.len() {
+                odelim_opt = Some(args[i + 1].as_bytes().to_vec());
+                i += 2;
+                continue;
             }
 
             if bytes.starts_with(b"-") && bytes.len() > 1 && bytes != b"-" {
@@ -40,9 +42,17 @@ impl Applet for CutApplet {
                 while arg_idx < bytes.len() {
                     let opt_char = bytes[arg_idx] as char;
                     match opt_char {
-                        's' => { suppress = true; arg_idx += 1; }
-                        'D' => { no_sort = true; arg_idx += 1; }
-                        'n' => { arg_idx += 1; }
+                        's' => {
+                            suppress = true;
+                            arg_idx += 1;
+                        }
+                        'D' => {
+                            no_sort = true;
+                            arg_idx += 1;
+                        }
+                        'n' => {
+                            arg_idx += 1;
+                        }
                         'd' => {
                             let val = if arg_idx + 1 < bytes.len() {
                                 bytes[arg_idx + 1..].to_vec()
@@ -80,7 +90,9 @@ impl Applet for CutApplet {
                             list_opt = Some(val);
                             break;
                         }
-                        _ => { arg_idx += 1; }
+                        _ => {
+                            arg_idx += 1;
+                        }
                     }
                 }
             } else {
@@ -102,20 +114,32 @@ impl Applet for CutApplet {
 
         let mut ranges: Vec<(usize, usize)> = Vec::new();
         for part in list_str.split(',') {
-            if part.is_empty() { continue; }
+            if part.is_empty() {
+                continue;
+            }
             if let Some(idx) = part.find('-') {
                 let start_str = &part[..idx];
                 let end_str = &part[idx + 1..];
-                let start: usize = if start_str.is_empty() { 1 } else {
+                let start: usize = if start_str.is_empty() {
+                    1
+                } else {
                     match start_str.parse() {
                         Ok(v) if v > 0 => v,
-                        _ => { eprintln!("cut: invalid range"); return Ok(1); }
+                        _ => {
+                            eprintln!("cut: invalid range");
+                            return Ok(1);
+                        }
                     }
                 };
-                let end: usize = if end_str.is_empty() { usize::MAX } else {
+                let end: usize = if end_str.is_empty() {
+                    usize::MAX
+                } else {
                     match end_str.parse() {
                         Ok(v) if v > 0 => v,
-                        _ => { eprintln!("cut: invalid range"); return Ok(1); }
+                        _ => {
+                            eprintln!("cut: invalid range");
+                            return Ok(1);
+                        }
                     }
                 };
                 if start > end {
@@ -126,7 +150,10 @@ impl Applet for CutApplet {
             } else {
                 match part.parse::<usize>() {
                     Ok(v) if v > 0 => ranges.push((v, v)),
-                    _ => { eprintln!("cut: invalid range"); return Ok(1); }
+                    _ => {
+                        eprintln!("cut: invalid range");
+                        return Ok(1);
+                    }
                 }
             }
         }
@@ -140,7 +167,11 @@ impl Applet for CutApplet {
         }
 
         let is_regex = m == 'F';
-        let default_delim = if is_regex { b" ".to_vec() } else { b"\t".to_vec() };
+        let default_delim = if is_regex {
+            b" ".to_vec()
+        } else {
+            b"\t".to_vec()
+        };
         let delim = delim_opt.unwrap_or(default_delim);
 
         let odelim = if let Some(od) = odelim_opt {
@@ -202,7 +233,11 @@ impl Applet for CutApplet {
 
                     for &(start, end) in &ranges {
                         let mut spos = start.saturating_sub(1);
-                        let endpos = if end == usize::MAX { usize::MAX } else { end - 1 };
+                        let endpos = if end == usize::MAX {
+                            usize::MAX
+                        } else {
+                            end - 1
+                        };
                         while spos < linelen {
                             if !printed[spos] {
                                 printed[spos] = true;
@@ -225,7 +260,9 @@ impl Applet for CutApplet {
                 } else {
                     // Field cutting (f or F)
                     if delim.is_empty() {
-                        if suppress { continue; }
+                        if suppress {
+                            continue;
+                        }
                         handle.write_all(&line)?;
                         handle.write_all(b"\n")?;
                         continue;
@@ -240,7 +277,9 @@ impl Applet for CutApplet {
                         };
 
                         if !has_delim {
-                            if suppress { continue; }
+                            if suppress {
+                                continue;
+                            }
                             if no_sort {
                                 let has1 = ranges.iter().any(|&(st, en)| st <= 1 && 1 <= en);
                                 if has1 {
@@ -309,7 +348,9 @@ impl Applet for CutApplet {
                         let delim_byte = delim[0];
                         let has_delim = line.contains(&delim_byte);
                         if !has_delim {
-                            if suppress { continue; }
+                            if suppress {
+                                continue;
+                            }
                             handle.write_all(&line)?;
                             handle.write_all(b"\n")?;
                             continue;
@@ -322,15 +363,17 @@ impl Applet for CutApplet {
                         for &(start, end) in &ranges {
                             let s = start.saturating_sub(1);
                             let e = end.min(num_fields);
-                            for idx in s..e {
-                                if idx < num_fields { in_fields[idx] = true; }
+                            if s < e {
+                                in_fields[s..e].fill(true);
                             }
                         }
 
                         let mut first = true;
                         for (idx, &is_sel) in in_fields.iter().enumerate() {
                             if is_sel {
-                                if !first { handle.write_all(&odelim)?; }
+                                if !first {
+                                    handle.write_all(&odelim)?;
+                                }
                                 first = false;
                                 handle.write_all(fields[idx])?;
                             }

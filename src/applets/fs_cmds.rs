@@ -1,19 +1,23 @@
+use crate::core::fs::{
+    clean_parents_path, copy_file_entry, copy_recursive, get_stat, last_path_component,
+    CopyContext, CopyOptions,
+};
+use crate::core::{Applet, Result};
 use std::env;
 use std::ffi::OsString;
 use std::fs::{self, OpenOptions};
 use std::io::{self, Write};
 use std::os::unix::ffi::OsStrExt;
 use std::path::{Path, PathBuf};
-use crate::core::fs::{
-    clean_parents_path, copy_file_entry, copy_recursive, get_stat, last_path_component,
-    CopyContext, CopyOptions,
-};
-use crate::core::{Applet, Result};
 
 pub struct LsApplet;
 impl Applet for LsApplet {
-    fn name(&self) -> &'static str { "ls" }
-    fn description(&self) -> &'static str { "List directory contents" }
+    fn name(&self) -> &'static str {
+        "ls"
+    }
+    fn description(&self) -> &'static str {
+        "List directory contents"
+    }
     fn run(&self, args: &[OsString]) -> Result<i32> {
         let mut show_all = false;
         let mut paths = Vec::new();
@@ -22,7 +26,9 @@ impl Applet for LsApplet {
             let bytes = arg.as_bytes();
             if bytes.starts_with(b"-") && bytes.len() > 1 && bytes != b"-" {
                 for &b in &bytes[1..] {
-                    if b == b'a' { show_all = true; }
+                    if b == b'a' {
+                        show_all = true;
+                    }
                 }
             } else {
                 paths.push(Path::new(arg));
@@ -41,7 +47,9 @@ impl Applet for LsApplet {
 
         for (i, p) in paths.iter().enumerate() {
             if multiple {
-                if i > 0 { handle.write_all(b"\n")?; }
+                if i > 0 {
+                    handle.write_all(b"\n")?;
+                }
                 handle.write_all(p.as_os_str().as_bytes())?;
                 handle.write_all(b":\n")?;
             }
@@ -51,14 +59,12 @@ impl Applet for LsApplet {
                     let mut entries = Vec::new();
                     match fs::read_dir(p) {
                         Ok(dir) => {
-                            for entry in dir {
-                                if let Ok(e) = entry {
-                                    let name = e.file_name();
-                                    if !show_all && name.as_bytes().starts_with(b".") {
-                                        continue;
-                                    }
-                                    entries.push(name);
+                            for e in dir.flatten() {
+                                let name = e.file_name();
+                                if !show_all && name.as_bytes().starts_with(b".") {
+                                    continue;
                                 }
+                                entries.push(name);
                             }
                             entries.sort();
                             for entry in entries {
@@ -88,8 +94,12 @@ impl Applet for LsApplet {
 
 pub struct CpApplet;
 impl Applet for CpApplet {
-    fn name(&self) -> &'static str { "cp" }
-    fn description(&self) -> &'static str { "Copy SOURCE to DEST" }
+    fn name(&self) -> &'static str {
+        "cp"
+    }
+    fn description(&self) -> &'static str {
+        "Copy SOURCE to DEST"
+    }
     fn run(&self, args: &[OsString]) -> Result<i32> {
         let mut set_a = false;
         let mut set_d = false;
@@ -177,7 +187,10 @@ impl Applet for CpApplet {
                         set_d = true;
                     }
                 } else {
-                    eprintln!("cp: unrecognized option '--{}'", String::from_utf8_lossy(opt));
+                    eprintln!(
+                        "cp: unrecognized option '--{}'",
+                        String::from_utf8_lossy(opt)
+                    );
                     return Ok(1);
                 }
             } else if bytes.starts_with(b"-") && bytes.len() > 1 {
@@ -242,7 +255,8 @@ impl Applet for CpApplet {
                         b't' => {
                             if idx < bytes.len() {
                                 let val = &bytes[idx..];
-                                target_directory = Some(PathBuf::from(std::ffi::OsStr::from_bytes(val)));
+                                target_directory =
+                                    Some(PathBuf::from(std::ffi::OsStr::from_bytes(val)));
                                 break;
                             } else if let Some(next_arg) = iter.next() {
                                 target_directory = Some(PathBuf::from(next_arg));
@@ -263,11 +277,7 @@ impl Applet for CpApplet {
             }
         }
 
-        let dereference = if set_l {
-            true
-        } else {
-            !set_d
-        };
+        let dereference = if set_l { true } else { !set_d };
         let dereference_cmdline = set_h;
         let preserve_hardlinks = set_d || set_a || !dereference;
 
@@ -284,9 +294,7 @@ impl Applet for CpApplet {
             preserve_hardlinks,
             update,
             verbose,
-            parents,
             remove_destination,
-            no_target_directory,
         };
 
         let (sources, dest) = if let Some(ref target_dir) = target_directory {
@@ -301,10 +309,16 @@ impl Applet for CpApplet {
                 return Ok(1);
             }
             if positional.len() < 2 {
-                eprintln!("cp: missing destination file operand after '{}'", positional[0].display());
+                eprintln!(
+                    "cp: missing destination file operand after '{}'",
+                    positional[0].display()
+                );
                 return Ok(1);
             }
-            (&positional[..positional.len() - 1], *positional.last().unwrap())
+            (
+                &positional[..positional.len() - 1],
+                *positional.last().unwrap(),
+            )
         };
 
         let dest_is_dir = match get_stat(dest, true) {
@@ -355,8 +369,12 @@ impl Applet for CpApplet {
 
 pub struct MvApplet;
 impl Applet for MvApplet {
-    fn name(&self) -> &'static str { "mv" }
-    fn description(&self) -> &'static str { "Rename SOURCE to DEST, or move SOURCE(s) to DIRECTORY" }
+    fn name(&self) -> &'static str {
+        "mv"
+    }
+    fn description(&self) -> &'static str {
+        "Rename SOURCE to DEST, or move SOURCE(s) to DIRECTORY"
+    }
     fn run(&self, args: &[OsString]) -> Result<i32> {
         let mut targets = Vec::new();
         for arg in args {
@@ -404,8 +422,12 @@ impl Applet for MvApplet {
 
 pub struct RmApplet;
 impl Applet for RmApplet {
-    fn name(&self) -> &'static str { "rm" }
-    fn description(&self) -> &'static str { "Remove (unlink) the FILE(s)" }
+    fn name(&self) -> &'static str {
+        "rm"
+    }
+    fn description(&self) -> &'static str {
+        "Remove (unlink) the FILE(s)"
+    }
     fn run(&self, args: &[OsString]) -> Result<i32> {
         let mut recursive = false;
         let mut force = false;
@@ -451,8 +473,12 @@ impl Applet for RmApplet {
 
 pub struct MkdirApplet;
 impl Applet for MkdirApplet {
-    fn name(&self) -> &'static str { "mkdir" }
-    fn description(&self) -> &'static str { "Create the DIRECTORY(ies)" }
+    fn name(&self) -> &'static str {
+        "mkdir"
+    }
+    fn description(&self) -> &'static str {
+        "Create the DIRECTORY(ies)"
+    }
     fn run(&self, args: &[OsString]) -> Result<i32> {
         let mut parents = false;
         let mut dirs = Vec::new();
@@ -461,7 +487,9 @@ impl Applet for MkdirApplet {
             let bytes = arg.as_bytes();
             if bytes.starts_with(b"-") && bytes.len() > 1 {
                 for &b in &bytes[1..] {
-                    if b == b'p' { parents = true; }
+                    if b == b'p' {
+                        parents = true;
+                    }
                 }
             } else {
                 dirs.push(Path::new(arg));
@@ -491,8 +519,12 @@ impl Applet for MkdirApplet {
 
 pub struct RmdirApplet;
 impl Applet for RmdirApplet {
-    fn name(&self) -> &'static str { "rmdir" }
-    fn description(&self) -> &'static str { "Remove EMPTY DIRECTORY(ies)" }
+    fn name(&self) -> &'static str {
+        "rmdir"
+    }
+    fn description(&self) -> &'static str {
+        "Remove EMPTY DIRECTORY(ies)"
+    }
     fn run(&self, args: &[OsString]) -> Result<i32> {
         let mut dirs = Vec::new();
         for arg in args {
@@ -514,8 +546,12 @@ impl Applet for RmdirApplet {
 
 pub struct TouchApplet;
 impl Applet for TouchApplet {
-    fn name(&self) -> &'static str { "touch" }
-    fn description(&self) -> &'static str { "Update the access and modification times of each FILE to the current time" }
+    fn name(&self) -> &'static str {
+        "touch"
+    }
+    fn description(&self) -> &'static str {
+        "Update the access and modification times of each FILE to the current time"
+    }
     fn run(&self, args: &[OsString]) -> Result<i32> {
         let mut files = Vec::new();
         for arg in args {
@@ -526,7 +562,12 @@ impl Applet for TouchApplet {
 
         let mut exit_code = 0;
         for f in files {
-            match OpenOptions::new().create(true).write(true).open(f) {
+            match OpenOptions::new()
+                .create(true)
+                .write(true)
+                .truncate(false)
+                .open(f)
+            {
                 Ok(_) => {}
                 Err(e) => {
                     eprintln!("touch: cannot touch '{}': {}", f.display(), e);
@@ -540,8 +581,12 @@ impl Applet for TouchApplet {
 
 pub struct LinkApplet;
 impl Applet for LinkApplet {
-    fn name(&self) -> &'static str { "link" }
-    fn description(&self) -> &'static str { "Create a link to FILE with the name LINK_NAME" }
+    fn name(&self) -> &'static str {
+        "link"
+    }
+    fn description(&self) -> &'static str {
+        "Create a link to FILE with the name LINK_NAME"
+    }
     fn run(&self, args: &[OsString]) -> Result<i32> {
         if args.len() != 2 {
             eprintln!("link: expected 2 arguments");
@@ -554,8 +599,12 @@ impl Applet for LinkApplet {
 
 pub struct UnlinkApplet;
 impl Applet for UnlinkApplet {
-    fn name(&self) -> &'static str { "unlink" }
-    fn description(&self) -> &'static str { "Call the unlink function to remove the specified FILE" }
+    fn name(&self) -> &'static str {
+        "unlink"
+    }
+    fn description(&self) -> &'static str {
+        "Call the unlink function to remove the specified FILE"
+    }
     fn run(&self, args: &[OsString]) -> Result<i32> {
         if args.len() != 1 {
             eprintln!("unlink: expected 1 argument");
@@ -568,8 +617,12 @@ impl Applet for UnlinkApplet {
 
 pub struct DirnameApplet;
 impl Applet for DirnameApplet {
-    fn name(&self) -> &'static str { "dirname" }
-    fn description(&self) -> &'static str { "Strip last component from file name" }
+    fn name(&self) -> &'static str {
+        "dirname"
+    }
+    fn description(&self) -> &'static str {
+        "Strip last component from file name"
+    }
     fn run(&self, args: &[OsString]) -> Result<i32> {
         if args.is_empty() {
             eprintln!("dirname: missing operand");
@@ -613,8 +666,12 @@ impl Applet for DirnameApplet {
 
 pub struct BasenameApplet;
 impl Applet for BasenameApplet {
-    fn name(&self) -> &'static str { "basename" }
-    fn description(&self) -> &'static str { "Strip directory and suffix from filenames" }
+    fn name(&self) -> &'static str {
+        "basename"
+    }
+    fn description(&self) -> &'static str {
+        "Strip directory and suffix from filenames"
+    }
     fn run(&self, args: &[OsString]) -> Result<i32> {
         if args.is_empty() {
             eprintln!("basename: missing operand");
@@ -654,10 +711,16 @@ impl Applet for BasenameApplet {
 
 pub struct WhichApplet;
 impl Applet for WhichApplet {
-    fn name(&self) -> &'static str { "which" }
-    fn description(&self) -> &'static str { "Locate a command" }
+    fn name(&self) -> &'static str {
+        "which"
+    }
+    fn description(&self) -> &'static str {
+        "Locate a command"
+    }
     fn run(&self, args: &[OsString]) -> Result<i32> {
-        if args.is_empty() { return Ok(1); }
+        if args.is_empty() {
+            return Ok(1);
+        }
         let path_var = env::var_os("PATH").unwrap_or_default();
         let paths: Vec<&[u8]> = path_var.as_bytes().split(|&b| b == b':').collect();
         let mut ret = 0;
@@ -690,7 +753,9 @@ impl Applet for WhichApplet {
                     }
                 }
             }
-            if !found { ret = 1; }
+            if !found {
+                ret = 1;
+            }
         }
         Ok(ret)
     }

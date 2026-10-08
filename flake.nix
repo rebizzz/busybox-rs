@@ -31,6 +31,7 @@
             which
             bash
             gcc
+            gh
           ];
         };
       }

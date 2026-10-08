@@ -1,14 +1,18 @@
+use crate::core::fs::read_bytes_or_stdin;
+use crate::core::{Applet, Result};
 use std::ffi::OsString;
 use std::io::{self, Write};
 use std::os::unix::ffi::OsStrExt;
 use std::path::Path;
-use crate::core::fs::read_bytes_or_stdin;
-use crate::core::{Applet, Result};
 
 pub struct ExpandApplet;
 impl Applet for ExpandApplet {
-    fn name(&self) -> &'static str { "expand" }
-    fn description(&self) -> &'static str { "Convert tabs to spaces" }
+    fn name(&self) -> &'static str {
+        "expand"
+    }
+    fn description(&self) -> &'static str {
+        "Convert tabs to spaces"
+    }
     fn run(&self, args: &[OsString]) -> Result<i32> {
         let mut tab_size: usize = 8;
         let mut opt_initial = false;
@@ -87,8 +91,12 @@ impl Applet for ExpandApplet {
 
 pub struct UnexpandApplet;
 impl Applet for UnexpandApplet {
-    fn name(&self) -> &'static str { "unexpand" }
-    fn description(&self) -> &'static str { "Convert spaces to tabs" }
+    fn name(&self) -> &'static str {
+        "unexpand"
+    }
+    fn description(&self) -> &'static str {
+        "Convert spaces to tabs"
+    }
     fn run(&self, args: &[OsString]) -> Result<i32> {
         let mut tab_size: usize = 8;
         let mut opt_all = false;
@@ -114,8 +122,11 @@ impl Applet for UnexpandApplet {
                 opt_all = true;
             } else if bytes.starts_with(b"-") && bytes.len() > 1 {
                 for &b in &bytes[1..] {
-                    if b == b'a' { opt_all = true; }
-                    else if b == b'f' { opt_all = false; }
+                    if b == b'a' {
+                        opt_all = true;
+                    } else if b == b'f' {
+                        opt_all = false;
+                    }
                 }
             } else {
                 files.push(Path::new(arg));
@@ -188,7 +199,10 @@ impl Applet for UnexpandApplet {
                     }
 
                     let mut nspan = 0;
-                    while ptr + nspan < line.len() && line[ptr + nspan] != b' ' && line[ptr + nspan] != b'\t' {
+                    while ptr + nspan < line.len()
+                        && line[ptr + nspan] != b' '
+                        && line[ptr + nspan] != b'\t'
+                    {
                         nspan += 1;
                     }
 

@@ -1,13 +1,17 @@
+use crate::core::{Applet, Result};
 use std::ffi::OsString;
 use std::io::{self, BufRead, Read};
 use std::os::unix::ffi::OsStrExt;
-use std::process::{Command, Stdio};
-use crate::core::{Applet, Result};
+use std::process::Command;
 
 pub struct XargsApplet;
 impl Applet for XargsApplet {
-    fn name(&self) -> &'static str { "xargs" }
-    fn description(&self) -> &'static str { "Build and execute command lines from standard input" }
+    fn name(&self) -> &'static str {
+        "xargs"
+    }
+    fn description(&self) -> &'static str {
+        "Build and execute command lines from standard input"
+    }
     fn run(&self, args: &[OsString]) -> Result<i32> {
         let mut null_delim = false;
         let mut max_args: Option<usize> = None;
@@ -46,8 +50,12 @@ impl Applet for XargsApplet {
         if null_delim {
             let mut buf = Vec::new();
             while let Ok(n) = stdin_handle.read_until(0, &mut buf) {
-                if n == 0 { break; }
-                if buf.last() == Some(&0) { buf.pop(); }
+                if n == 0 {
+                    break;
+                }
+                if buf.last() == Some(&0) {
+                    buf.pop();
+                }
                 if !buf.is_empty() {
                     use std::os::unix::ffi::OsStringExt;
                     input_items.push(OsString::from_vec(std::mem::take(&mut buf)));
@@ -97,8 +105,12 @@ impl Applet for XargsApplet {
 
 pub struct ShApplet;
 impl Applet for ShApplet {
-    fn name(&self) -> &'static str { "sh" }
-    fn description(&self) -> &'static str { "Command language interpreter (shell)" }
+    fn name(&self) -> &'static str {
+        "sh"
+    }
+    fn description(&self) -> &'static str {
+        "Command language interpreter (shell)"
+    }
     fn run(&self, args: &[OsString]) -> Result<i32> {
         let mut command_str: Option<String> = None;
         let mut script_file: Option<OsString> = None;

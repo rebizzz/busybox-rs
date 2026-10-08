@@ -1,19 +1,22 @@
-use std::ffi::OsString;
-use std::io::{self, Write};
-use std::os::unix::ffi::OsStrExt;
-use std::path::Path;
 use crate::core::fs::read_bytes_or_stdin;
 use crate::core::{Applet, Result};
+use std::ffi::OsString;
+use std::io::{self, Write};
+use std::path::Path;
 
 pub struct RevApplet;
 impl Applet for RevApplet {
-    fn name(&self) -> &'static str { "rev" }
-    fn description(&self) -> &'static str { "Reverse lines characterwise" }
+    fn name(&self) -> &'static str {
+        "rev"
+    }
+    fn description(&self) -> &'static str {
+        "Reverse lines characterwise"
+    }
     fn run(&self, args: &[OsString]) -> Result<i32> {
         let files = if args.is_empty() {
             vec![Path::new("-")]
         } else {
-            args.iter().map(|s| Path::new(s)).collect()
+            args.iter().map(Path::new).collect()
         };
 
         let stdout = io::stdout();
@@ -27,11 +30,12 @@ impl Applet for RevApplet {
                 if content[i] == b'\n' {
                     let line = &content[start..i];
                     // Standard C rev processes line with fgets/mbstowcs, which treats NUL as end of string
-                    let (str_bytes, has_newline) = if let Some(nul_pos) = line.iter().position(|&b| b == 0) {
-                        (&line[..nul_pos], false)
-                    } else {
-                        (line, true)
-                    };
+                    let (str_bytes, has_newline) =
+                        if let Some(nul_pos) = line.iter().position(|&b| b == 0) {
+                            (&line[..nul_pos], false)
+                        } else {
+                            (line, true)
+                        };
                     let s = String::from_utf8_lossy(str_bytes);
                     let rev_s: String = s.chars().rev().collect();
                     handle.write_all(rev_s.as_bytes())?;
