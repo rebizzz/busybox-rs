@@ -12,7 +12,7 @@ fn run_double_lbracket(args: &[std::ffi::OsString]) -> crate::core::Result<i32> 
 
 #[cfg(feature = "acpid")]
 fn run_acpid(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::modutils::modules::AcpidApplet.run(args)
+    crate::applets::modutils::acpid::AcpidApplet.run(args)
 }
 
 #[cfg(feature = "add_shell")]
@@ -287,7 +287,7 @@ fn run_deluser(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "depmod")]
 fn run_depmod(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::modutils::modules::DepmodApplet.run(args)
+    crate::applets::modutils::depmod::DepmodApplet.run(args)
 }
 
 #[cfg(feature = "devmem")]
@@ -707,7 +707,7 @@ fn run_init(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "insmod")]
 fn run_insmod(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::modutils::modules::InsmodApplet.run(args)
+    crate::applets::modutils::insmod::InsmodApplet.run(args)
 }
 
 #[cfg(feature = "install")]
@@ -852,7 +852,7 @@ fn run_loadkmap(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "logger")]
 fn run_logger(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::modutils::modules::LoggerApplet.run(args)
+    crate::applets::modutils::logger::LoggerApplet.run(args)
 }
 
 #[cfg(feature = "login")]
@@ -907,12 +907,12 @@ fn run_lsblk(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "lsmod")]
 fn run_lsmod(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::modutils::modules::LsmodApplet.run(args)
+    crate::applets::modutils::lsmod::LsmodApplet.run(args)
 }
 
 #[cfg(feature = "lsof")]
 fn run_lsof(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::modutils::modules::LsofApplet.run(args)
+    crate::applets::modutils::lsof::LsofApplet.run(args)
 }
 
 #[cfg(feature = "lspci")]
@@ -922,7 +922,7 @@ fn run_lspci(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "lsscsi")]
 fn run_lsscsi(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::modutils::modules::LsscsiApplet.run(args)
+    crate::applets::modutils::lsscsi::LsscsiApplet.run(args)
 }
 
 #[cfg(feature = "lsusb")]
@@ -982,7 +982,7 @@ fn run_microcom(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "mim")]
 fn run_mim(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::modutils::modules::MimApplet.run(args)
+    crate::applets::modutils::mim::MimApplet.run(args)
 }
 
 #[cfg(feature = "mkdir")]
@@ -1042,12 +1042,12 @@ fn run_mktemp(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "modinfo")]
 fn run_modinfo(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::modutils::modules::ModinfoApplet.run(args)
+    crate::applets::modutils::modinfo::ModinfoApplet.run(args)
 }
 
 #[cfg(feature = "modprobe")]
 fn run_modprobe(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::modutils::modules::ModprobeApplet.run(args)
+    crate::applets::modutils::modprobe::ModprobeApplet.run(args)
 }
 
 #[cfg(feature = "more")]
@@ -1362,7 +1362,7 @@ fn run_rmdir(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "rmmod")]
 fn run_rmmod(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::modutils::modules::RmmodApplet.run(args)
+    crate::applets::modutils::rmmod::RmmodApplet.run(args)
 }
 
 #[cfg(feature = "route")]
@@ -1762,7 +1762,7 @@ fn run_traceroute6(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "tree")]
 fn run_tree(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::modutils::modules::TreeApplet.run(args)
+    crate::applets::modutils::tree::TreeApplet.run(args)
 }
 
 #[cfg(feature = "true")]
