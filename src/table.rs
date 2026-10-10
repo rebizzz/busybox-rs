@@ -42,12 +42,12 @@ fn run_arch(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "arp")]
 fn run_arp(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::networking::config::ArpApplet.run(args)
+    crate::applets::networking::arp::ArpApplet.run(args)
 }
 
 #[cfg(feature = "arping")]
 fn run_arping(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::networking::config::ArpingApplet.run(args)
+    crate::applets::networking::arping::ArpingApplet.run(args)
 }
 
 #[cfg(feature = "ascii")]
@@ -112,7 +112,7 @@ fn run_bootchartd(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "brctl")]
 fn run_brctl(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::networking::config::BrctlApplet.run(args)
+    crate::applets::networking::brctl::BrctlApplet.run(args)
 }
 
 #[cfg(feature = "bunzip2")]
@@ -142,7 +142,7 @@ fn run_cat(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "chat")]
 fn run_chat(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::networking::tools::ChatApplet.run(args)
+    crate::applets::networking::chat::ChatApplet.run(args)
 }
 
 #[cfg(feature = "chattr")]
@@ -212,7 +212,7 @@ fn run_comm(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "conspy")]
 fn run_conspy(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::networking::tools::ConspyApplet.run(args)
+    crate::applets::networking::conspy::ConspyApplet.run(args)
 }
 
 #[cfg(feature = "cp")]
@@ -302,7 +302,7 @@ fn run_df(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "dhcprelay")]
 fn run_dhcprelay(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::networking::servers::DhcprelayApplet.run(args)
+    crate::applets::networking::dhcprelay::DhcprelayApplet.run(args)
 }
 
 #[cfg(feature = "diff")]
@@ -322,12 +322,12 @@ fn run_dmesg(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "dnsd")]
 fn run_dnsd(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::networking::servers::DnsdApplet.run(args)
+    crate::applets::networking::dnsd::DnsdApplet.run(args)
 }
 
 #[cfg(feature = "dnsdomainname")]
 fn run_dnsdomainname(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::networking::tools::DnsdomainnameApplet.run(args)
+    crate::applets::networking::dnsdomainname::DnsdomainnameApplet.run(args)
 }
 
 #[cfg(feature = "dos2unix")]
@@ -397,7 +397,7 @@ fn run_envuidgid(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "ether_wake")]
 fn run_ether_wake(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::networking::config::EtherWakeApplet.run(args)
+    crate::applets::networking::ether_wake::EtherWakeApplet.run(args)
 }
 
 #[cfg(feature = "expand")]
@@ -417,7 +417,7 @@ fn run_factor(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "fakeidentd")]
 fn run_fakeidentd(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::networking::servers::FakeidentdApplet.run(args)
+    crate::applets::networking::fakeidentd::FakeidentdApplet.run(args)
 }
 
 #[cfg(feature = "fallocate")]
@@ -532,17 +532,17 @@ fn run_fsync(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "ftpd")]
 fn run_ftpd(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::networking::servers::FtpdApplet.run(args)
+    crate::applets::networking::ftpd::FtpdApplet.run(args)
 }
 
 #[cfg(feature = "ftpget")]
 fn run_ftpget(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::networking::servers::FtpgetApplet.run(args)
+    crate::applets::networking::ftpget::FtpgetApplet.run(args)
 }
 
 #[cfg(feature = "ftpput")]
 fn run_ftpput(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::networking::servers::FtpputApplet.run(args)
+    crate::applets::networking::ftpput::FtpputApplet.run(args)
 }
 
 #[cfg(feature = "fuser")]
@@ -627,7 +627,7 @@ fn run_hostname(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "httpd")]
 fn run_httpd(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::networking::servers::HttpdApplet.run(args)
+    crate::applets::networking::httpd::HttpdApplet.run(args)
 }
 
 #[cfg(feature = "hush")]
@@ -672,32 +672,32 @@ fn run_id(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "ifconfig")]
 fn run_ifconfig(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::networking::config::IfconfigApplet.run(args)
+    crate::applets::networking::ifconfig::IfconfigApplet.run(args)
 }
 
 #[cfg(feature = "ifdown")]
 fn run_ifdown(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::networking::config::IfdownApplet.run(args)
+    crate::applets::networking::ifdown::IfdownApplet.run(args)
 }
 
 #[cfg(feature = "ifenslave")]
 fn run_ifenslave(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::networking::config::IfenslaveApplet.run(args)
+    crate::applets::networking::ifenslave::IfenslaveApplet.run(args)
 }
 
 #[cfg(feature = "ifplugd")]
 fn run_ifplugd(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::networking::config::IfplugdApplet.run(args)
+    crate::applets::networking::ifplugd::IfplugdApplet.run(args)
 }
 
 #[cfg(feature = "ifup")]
 fn run_ifup(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::networking::config::IfupApplet.run(args)
+    crate::applets::networking::ifup::IfupApplet.run(args)
 }
 
 #[cfg(feature = "inetd")]
 fn run_inetd(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::networking::servers::InetdApplet.run(args)
+    crate::applets::networking::inetd::InetdApplet.run(args)
 }
 
 #[cfg(feature = "init")]
@@ -727,17 +727,17 @@ fn run_iostat(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "ip")]
 fn run_ip(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::networking::config::IpApplet.run(args)
+    crate::applets::networking::ip::IpApplet.run(args)
 }
 
 #[cfg(feature = "ipaddr")]
 fn run_ipaddr(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::networking::config::IpaddrApplet.run(args)
+    crate::applets::networking::ipaddr::IpaddrApplet.run(args)
 }
 
 #[cfg(feature = "ipcalc")]
 fn run_ipcalc(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::networking::tools::IpcalcApplet.run(args)
+    crate::applets::networking::ipcalc::IpcalcApplet.run(args)
 }
 
 #[cfg(feature = "ipcrm")]
@@ -752,27 +752,27 @@ fn run_ipcs(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "iplink")]
 fn run_iplink(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::networking::config::IplinkApplet.run(args)
+    crate::applets::networking::iplink::IplinkApplet.run(args)
 }
 
 #[cfg(feature = "ipneigh")]
 fn run_ipneigh(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::networking::config::IpneighApplet.run(args)
+    crate::applets::networking::ipneigh::IpneighApplet.run(args)
 }
 
 #[cfg(feature = "iproute")]
 fn run_iproute(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::networking::config::IprouteApplet.run(args)
+    crate::applets::networking::iproute::IprouteApplet.run(args)
 }
 
 #[cfg(feature = "iprule")]
 fn run_iprule(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::networking::config::IpruleApplet.run(args)
+    crate::applets::networking::iprule::IpruleApplet.run(args)
 }
 
 #[cfg(feature = "iptunnel")]
 fn run_iptunnel(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::networking::config::IptunnelApplet.run(args)
+    crate::applets::networking::iptunnel::IptunnelApplet.run(args)
 }
 
 #[cfg(feature = "join")]
@@ -977,7 +977,7 @@ fn run_mesg(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "microcom")]
 fn run_microcom(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::networking::tools::MicrocomApplet.run(args)
+    crate::applets::networking::microcom::MicrocomApplet.run(args)
 }
 
 #[cfg(feature = "mim")]
@@ -1082,7 +1082,7 @@ fn run_mv(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "nameif")]
 fn run_nameif(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::networking::config::NameifApplet.run(args)
+    crate::applets::networking::nameif::NameifApplet.run(args)
 }
 
 #[cfg(feature = "nanddump")]
@@ -1102,12 +1102,12 @@ fn run_nbd_client(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "nc")]
 fn run_nc(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::networking::sockets::NcApplet.run(args)
+    crate::applets::networking::nc::NcApplet.run(args)
 }
 
 #[cfg(feature = "netstat")]
 fn run_netstat(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::networking::config::NetstatApplet.run(args)
+    crate::applets::networking::netstat::NetstatApplet.run(args)
 }
 
 #[cfg(feature = "nice")]
@@ -1147,12 +1147,12 @@ fn run_nsenter(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "nslookup")]
 fn run_nslookup(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::networking::sockets::NslookupApplet.run(args)
+    crate::applets::networking::nslookup::NslookupApplet.run(args)
 }
 
 #[cfg(feature = "ntpd")]
 fn run_ntpd(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::networking::tools::NtpdApplet.run(args)
+    crate::applets::networking::ntpd::NtpdApplet.run(args)
 }
 
 #[cfg(feature = "od")]
@@ -1197,12 +1197,12 @@ fn run_pidof(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "ping")]
 fn run_ping(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::networking::sockets::PingApplet.run(args)
+    crate::applets::networking::ping::PingApplet.run(args)
 }
 
 #[cfg(feature = "ping6")]
 fn run_ping6(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::networking::sockets::Ping6Applet.run(args)
+    crate::applets::networking::ping6::Ping6Applet.run(args)
 }
 
 #[cfg(feature = "pipe_progress")]
@@ -1227,7 +1227,7 @@ fn run_pmap(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "popmaildir")]
 fn run_popmaildir(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::networking::tools::PopmaildirApplet.run(args)
+    crate::applets::networking::popmaildir::PopmaildirApplet.run(args)
 }
 
 #[cfg(feature = "poweroff")]
@@ -1257,7 +1257,7 @@ fn run_ps(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "pscan")]
 fn run_pscan(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::networking::tools::PscanApplet.run(args)
+    crate::applets::networking::pscan::PscanApplet.run(args)
 }
 
 #[cfg(feature = "pstree")]
@@ -1282,7 +1282,7 @@ fn run_raidautorun(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "rdate")]
 fn run_rdate(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::networking::tools::RdateApplet.run(args)
+    crate::applets::networking::rdate::RdateApplet.run(args)
 }
 
 #[cfg(feature = "rdev")]
@@ -1337,7 +1337,7 @@ fn run_reset(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "resize")]
 fn run_resize(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::networking::tools::ResizeApplet.run(args)
+    crate::applets::networking::resize::ResizeApplet.run(args)
 }
 
 #[cfg(feature = "resume")]
@@ -1367,7 +1367,7 @@ fn run_rmmod(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "route")]
 fn run_route(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::networking::config::RouteApplet.run(args)
+    crate::applets::networking::route::RouteApplet.run(args)
 }
 
 #[cfg(feature = "rpm")]
@@ -1437,7 +1437,7 @@ fn run_seedrng(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "sendmail")]
 fn run_sendmail(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::networking::tools::SendmailApplet.run(args)
+    crate::applets::networking::sendmail::SendmailApplet.run(args)
 }
 
 #[cfg(feature = "seq")]
@@ -1452,7 +1452,7 @@ fn run_setarch(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "setconsole")]
 fn run_setconsole(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::networking::tools::SetconsoleApplet.run(args)
+    crate::applets::networking::setconsole::SetconsoleApplet.run(args)
 }
 
 #[cfg(feature = "setfattr")]
@@ -1542,7 +1542,7 @@ fn run_shuf(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "slattach")]
 fn run_slattach(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::networking::config::SlattachApplet.run(args)
+    crate::applets::networking::slattach::SlattachApplet.run(args)
 }
 
 #[cfg(feature = "sleep")]
@@ -1572,12 +1572,12 @@ fn run_split(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "ssl_client")]
 fn run_ssl_client(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::networking::sockets::SslClientApplet.run(args)
+    crate::applets::networking::ssl_client::SslClientApplet.run(args)
 }
 
 #[cfg(feature = "ssl_server")]
 fn run_ssl_server(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::networking::sockets::SslServerApplet.run(args)
+    crate::applets::networking::ssl_server::SslServerApplet.run(args)
 }
 
 #[cfg(feature = "start_stop_daemon")]
@@ -1692,7 +1692,7 @@ fn run_taskset(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "tcpsvd")]
 fn run_tcpsvd(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::networking::sockets::TcpsvdApplet.run(args)
+    crate::applets::networking::tcpsvd::TcpsvdApplet.run(args)
 }
 
 #[cfg(feature = "tee")]
@@ -1702,12 +1702,12 @@ fn run_tee(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "telnet")]
 fn run_telnet(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::networking::servers::TelnetApplet.run(args)
+    crate::applets::networking::telnet::TelnetApplet.run(args)
 }
 
 #[cfg(feature = "telnetd")]
 fn run_telnetd(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::networking::servers::TelnetdApplet.run(args)
+    crate::applets::networking::telnetd::TelnetdApplet.run(args)
 }
 
 #[cfg(feature = "test")]
@@ -1717,12 +1717,12 @@ fn run_test(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "tftp")]
 fn run_tftp(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::networking::servers::TftpApplet.run(args)
+    crate::applets::networking::tftp::TftpApplet.run(args)
 }
 
 #[cfg(feature = "tftpd")]
 fn run_tftpd(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::networking::servers::TftpdApplet.run(args)
+    crate::applets::networking::tftpd::TftpdApplet.run(args)
 }
 
 #[cfg(feature = "time")]
@@ -1752,12 +1752,12 @@ fn run_tr(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "traceroute")]
 fn run_traceroute(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::networking::sockets::TracerouteApplet.run(args)
+    crate::applets::networking::traceroute::TracerouteApplet.run(args)
 }
 
 #[cfg(feature = "traceroute6")]
 fn run_traceroute6(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::networking::sockets::Traceroute6Applet.run(args)
+    crate::applets::networking::traceroute6::Traceroute6Applet.run(args)
 }
 
 #[cfg(feature = "tree")]
@@ -1797,7 +1797,7 @@ fn run_ttysize(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "tunctl")]
 fn run_tunctl(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::networking::config::TunctlApplet.run(args)
+    crate::applets::networking::tunctl::TunctlApplet.run(args)
 }
 
 #[cfg(feature = "ubiattach")]
@@ -1837,22 +1837,22 @@ fn run_ubiupdatevol(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "udhcpc")]
 fn run_udhcpc(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::networking::servers::UdhcpcApplet.run(args)
+    crate::applets::networking::udhcpc::UdhcpcApplet.run(args)
 }
 
 #[cfg(feature = "udhcpc6")]
 fn run_udhcpc6(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::networking::servers::Udhcpc6Applet.run(args)
+    crate::applets::networking::udhcpc6::Udhcpc6Applet.run(args)
 }
 
 #[cfg(feature = "udhcpd")]
 fn run_udhcpd(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::networking::servers::UdhcpdApplet.run(args)
+    crate::applets::networking::udhcpd::UdhcpdApplet.run(args)
 }
 
 #[cfg(feature = "udpsvd")]
 fn run_udpsvd(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::networking::sockets::UdpsvdApplet.run(args)
+    crate::applets::networking::udpsvd::UdpsvdApplet.run(args)
 }
 
 #[cfg(feature = "uevent")]
@@ -1942,7 +1942,7 @@ fn run_uuidgen(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "vconfig")]
 fn run_vconfig(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::networking::config::VconfigApplet.run(args)
+    crate::applets::networking::vconfig::VconfigApplet.run(args)
 }
 
 #[cfg(feature = "vi")]
@@ -1982,7 +1982,7 @@ fn run_watch(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "watchdog")]
 fn run_watchdog(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::networking::tools::WatchdogApplet.run(args)
+    crate::applets::networking::watchdog::WatchdogApplet.run(args)
 }
 
 #[cfg(feature = "wc")]
@@ -1992,7 +1992,7 @@ fn run_wc(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "wget")]
 fn run_wget(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::networking::tools::WgetApplet.run(args)
+    crate::applets::networking::wget::WgetApplet.run(args)
 }
 
 #[cfg(feature = "which")]
@@ -2012,7 +2012,7 @@ fn run_whoami(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "whois")]
 fn run_whois(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::networking::sockets::WhoisApplet.run(args)
+    crate::applets::networking::whois::WhoisApplet.run(args)
 }
 
 #[cfg(feature = "xargs")]
@@ -2047,7 +2047,7 @@ fn run_zcat(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "zcip")]
 fn run_zcip(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::networking::tools::ZcipApplet.run(args)
+    crate::applets::networking::zcip::ZcipApplet.run(args)
 }
 
 pub static APPLETS: &[AppletEntry] = &[
