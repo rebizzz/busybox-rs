@@ -1,13 +1,9 @@
 use super::common::*;
 use crate::core::{Applet, Result};
-use std::collections::HashMap;
-use std::ffi::{CStr, CString, OsString};
-use std::fs::{self, File};
-use std::io::{self, BufRead, Read, Write};
+use std::ffi::OsString;
+use std::fs::{self};
 use std::os::unix::ffi::OsStrExt;
-use std::os::unix::io::{AsRawFd, FromRawFd};
-use std::os::unix::net::UnixDatagram;
-use std::path::{Path, PathBuf};
+use std::path::Path;
 
 pub struct TreeApplet;
 
@@ -38,21 +34,28 @@ impl Applet for TreeApplet {
         let root = root_dir.unwrap_or_else(|| Path::new("."));
         let mut out = Vec::new();
         out.extend_from_slice(root.as_os_str().as_bytes());
-        out.push(b'\n');
 
         let mut dir_count = 0u64;
         let mut file_count = 0u64;
         let mut prefix = Vec::new();
 
-        traverse_tree(
-            root,
-            all_files,
-            dirs_only,
-            &mut prefix,
-            &mut dir_count,
-            &mut file_count,
-            &mut out,
-        );
+        match fs::read_dir(root) {
+            Err(_) => {
+                out.extend_from_slice(b" [error opening dir]\n");
+            }
+            Ok(_) => {
+                out.push(b'\n');
+                traverse_tree(
+                    root,
+                    all_files,
+                    dirs_only,
+                    &mut prefix,
+                    &mut dir_count,
+                    &mut file_count,
+                    &mut out,
+                );
+            }
+        }
 
         out.push(b'\n');
         put_num(&mut out, dir_count);
