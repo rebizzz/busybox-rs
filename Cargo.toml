@@ -24,6 +24,12 @@ default = [
     "head", "tail", "wc", "cut", "tr", "uniq", "comm", "fold", "rev", "tee", "strings", "expand", "unexpand", "sort", "grep", "egrep", "fgrep", "cmp",
     "seq", "tsort", "factor", "uuencode", "uudecode", "xxd", "sleep", "yes", "sync", "clear", "reset", "whoami", "arch", "nproc",
     "sh", "xargs",
+    "cal", "find",
+    "chmod", "chown", "chgrp", "ln", "stat", "du", "df",
+    "paste", "nl", "od", "dos2unix", "unix2dos",
+    "tar", "cpio", "gzip", "gunzip", "uncompress", "cksum",
+    "ps", "kill", "killall", "free", "uptime", "uname", "hostname", "id", "groups", "logname",
+    "mount", "umount", "dmesg", "lsblk", "flock", "test",
     "md5sum", "sha1sum", "sha256sum", "sha512sum", "sum",
 ]
 
@@ -93,6 +99,42 @@ nproc = []
 
 sh = []
 xargs = []
+cal = []
+find = []
+chmod = []
+chown = []
+chgrp = []
+ln = []
+stat = []
+du = []
+df = []
+paste = []
+nl = []
+od = []
+dos2unix = []
+unix2dos = []
+tar = []
+cpio = []
+gzip = []
+gunzip = []
+uncompress = []
+cksum = []
+ps = []
+kill = []
+killall = []
+free = []
+uptime = []
+uname = []
+hostname = []
+id = []
+groups = []
+logname = []
+mount = []
+umount = []
+dmesg = []
+lsblk = []
+flock = []
+test = []
 
 feature_verbose_usage = []
 

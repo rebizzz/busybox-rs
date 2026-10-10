@@ -96,6 +96,66 @@ pub mod uudecode_cmd;
 #[cfg(feature = "xxd")]
 pub mod xxd_cmd;
 
+#[cfg(feature = "cal")]
+pub mod cal_cmd;
+
+#[cfg(feature = "find")]
+pub mod find_cmd;
+
+#[cfg(any(
+    feature = "chmod",
+    feature = "chown",
+    feature = "chgrp",
+    feature = "ln",
+    feature = "stat",
+    feature = "du",
+    feature = "df"
+))]
+pub mod perm_cmds;
+
+#[cfg(any(
+    feature = "paste",
+    feature = "nl",
+    feature = "od",
+    feature = "dos2unix",
+    feature = "unix2dos"
+))]
+pub mod text2_cmds;
+
+#[cfg(any(
+    feature = "tar",
+    feature = "cpio",
+    feature = "gzip",
+    feature = "gunzip",
+    feature = "uncompress",
+    feature = "cksum"
+))]
+pub mod archival_cmds;
+
+#[cfg(any(
+    feature = "ps",
+    feature = "kill",
+    feature = "killall",
+    feature = "free",
+    feature = "uptime",
+    feature = "uname",
+    feature = "hostname",
+    feature = "id",
+    feature = "groups",
+    feature = "logname"
+))]
+pub mod sysinfo_cmds;
+
+#[cfg(any(
+    feature = "mount",
+    feature = "umount",
+    feature = "dmesg",
+    feature = "lsblk",
+    feature = "flock",
+    feature = "test"
+))]
+pub mod util_cmds;
+
 use crate::core::Applet;
 use std::sync::Arc;
 
@@ -223,6 +283,80 @@ pub fn get_applets() -> Vec<Arc<dyn Applet>> {
     applets.push(Arc::new(xxd_cmd::XxdApplet));
     #[cfg(feature = "yes")]
     applets.push(Arc::new(core_cmds::YesApplet));
+    #[cfg(feature = "cal")]
+    applets.push(Arc::new(cal_cmd::CalApplet));
+    #[cfg(feature = "find")]
+    applets.push(Arc::new(find_cmd::FindApplet));
+    #[cfg(feature = "chmod")]
+    applets.push(Arc::new(perm_cmds::ChmodApplet));
+    #[cfg(feature = "chown")]
+    applets.push(Arc::new(perm_cmds::ChownApplet));
+    #[cfg(feature = "chgrp")]
+    applets.push(Arc::new(perm_cmds::ChgrpApplet));
+    #[cfg(feature = "ln")]
+    applets.push(Arc::new(perm_cmds::LnApplet));
+    #[cfg(feature = "stat")]
+    applets.push(Arc::new(perm_cmds::StatApplet));
+    #[cfg(feature = "du")]
+    applets.push(Arc::new(perm_cmds::DuApplet));
+    #[cfg(feature = "df")]
+    applets.push(Arc::new(perm_cmds::DfApplet));
+    #[cfg(feature = "paste")]
+    applets.push(Arc::new(text2_cmds::PasteApplet));
+    #[cfg(feature = "nl")]
+    applets.push(Arc::new(text2_cmds::NlApplet));
+    #[cfg(feature = "od")]
+    applets.push(Arc::new(text2_cmds::OdApplet));
+    #[cfg(feature = "dos2unix")]
+    applets.push(Arc::new(text2_cmds::Dos2unixApplet));
+    #[cfg(feature = "unix2dos")]
+    applets.push(Arc::new(text2_cmds::Unix2dosApplet));
+    #[cfg(feature = "tar")]
+    applets.push(Arc::new(archival_cmds::TarApplet));
+    #[cfg(feature = "cpio")]
+    applets.push(Arc::new(archival_cmds::CpioApplet));
+    #[cfg(feature = "gzip")]
+    applets.push(Arc::new(archival_cmds::GzipApplet));
+    #[cfg(feature = "gunzip")]
+    applets.push(Arc::new(archival_cmds::GunzipApplet));
+    #[cfg(feature = "uncompress")]
+    applets.push(Arc::new(archival_cmds::UncompressAlias));
+    #[cfg(feature = "cksum")]
+    applets.push(Arc::new(archival_cmds::CksumApplet));
+    #[cfg(feature = "ps")]
+    applets.push(Arc::new(sysinfo_cmds::PsApplet));
+    #[cfg(feature = "kill")]
+    applets.push(Arc::new(sysinfo_cmds::KillApplet));
+    #[cfg(feature = "killall")]
+    applets.push(Arc::new(sysinfo_cmds::KillallApplet));
+    #[cfg(feature = "free")]
+    applets.push(Arc::new(sysinfo_cmds::FreeApplet));
+    #[cfg(feature = "uptime")]
+    applets.push(Arc::new(sysinfo_cmds::UptimeApplet));
+    #[cfg(feature = "uname")]
+    applets.push(Arc::new(sysinfo_cmds::UnameApplet));
+    #[cfg(feature = "hostname")]
+    applets.push(Arc::new(sysinfo_cmds::HostnameApplet));
+    #[cfg(feature = "id")]
+    applets.push(Arc::new(sysinfo_cmds::IdApplet));
+    #[cfg(feature = "groups")]
+    applets.push(Arc::new(sysinfo_cmds::GroupsApplet));
+    #[cfg(feature = "logname")]
+    applets.push(Arc::new(sysinfo_cmds::LognameApplet));
+    #[cfg(feature = "mount")]
+    applets.push(Arc::new(util_cmds::MountApplet));
+    #[cfg(feature = "umount")]
+    applets.push(Arc::new(util_cmds::UmountApplet));
+    #[cfg(feature = "dmesg")]
+    applets.push(Arc::new(util_cmds::DmesgApplet));
+    #[cfg(feature = "lsblk")]
+    applets.push(Arc::new(util_cmds::LsblkApplet));
+    #[cfg(feature = "flock")]
+    applets.push(Arc::new(util_cmds::FlockApplet));
+    #[cfg(feature = "test")]
+    applets.push(Arc::new(util_cmds::TestApplet));
+    #[cfg(feature = "test")]
+    applets.push(Arc::new(util_cmds::LBracketApplet));
 
     applets
 }
