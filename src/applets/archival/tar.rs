@@ -25,6 +25,7 @@ impl Applet for TarApplet {
         let mut i = 0;
         while i < args.len() {
             let b = args[i].as_bytes();
+            let is_opt_no_dash = !b.is_empty() && !b.starts_with(b"-") && i == 0;
             if b == b"-f" || b == b"--file" {
                 i += 1;
                 if i >= args.len() {
@@ -32,8 +33,9 @@ impl Applet for TarApplet {
                     return Ok(1);
                 }
                 archive = Some(PathBuf::from(&args[i]));
-            } else if b.starts_with(b"-") && b.len() > 1 && !b.starts_with(b"--") {
-                let mut j = 1;
+            } else if (b.starts_with(b"-") && b.len() > 1 && !b.starts_with(b"--")) || is_opt_no_dash {
+                let start_idx = if b.starts_with(b"-") { 1 } else { 0 };
+                let mut j = start_idx;
                 while j < b.len() {
                     match b[j] {
                         b'c' => mode = 1,
@@ -230,6 +232,7 @@ fn tar_list_or_extract(
     let wanted = |n: &str| filter.is_empty() || filter.iter().any(|f| f.to_string_lossy() == n);
     let mut hdr = [0u8; 512];
     let mut rc = 0;
+    let mut first_block = true;
     loop {
         let mut got = 0;
         while got < 512 {
@@ -239,8 +242,13 @@ fn tar_list_or_extract(
             }
         }
         if got == 0 {
+            if first_block {
+                eprintln!("tar: short read");
+                return Ok(1);
+            }
             break;
         }
+        first_block = false;
         if got < 512 {
             eprintln!("tar: truncated header");
             return Ok(1);
