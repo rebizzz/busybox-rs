@@ -60,6 +60,7 @@ impl Applet for RxApplet {
         let mut buf = [0u8; 1030];
         let mut expected: u8 = 1;
         let mut retries = 0u32;
+        let mut pending_block: Vec<u8> = Vec::new();
         loop {
             if retries > 25 {
                 eprintln!("rx: too many errors, aborting");
@@ -81,6 +82,20 @@ impl Applet for RxApplet {
             }
             match first[0] {
                 0x04 => {
+                    // EOT: remove padding ^Z from previous block if at least 3 trailing ^Z
+                    if pending_block.len() >= 3
+                        && pending_block[pending_block.len() - 1] == 0x1A
+                        && pending_block[pending_block.len() - 2] == 0x1A
+                        && pending_block[pending_block.len() - 3] == 0x1A
+                    {
+                        while pending_block.last() == Some(&0x1A) {
+                            pending_block.pop();
+                        }
+                    }
+                    if out.write_all(&pending_block).is_err() {
+                        eprintln!("rx: write error");
+                        return Ok(1);
+                    }
                     let _ = ctl.write_all(&[0x06]);
                     break;
                 }
@@ -89,6 +104,14 @@ impl Applet for RxApplet {
                     return Ok(1);
                 }
                 0x01 | 0x02 => {
+                    // Write previously received block before processing new one
+                    if !pending_block.is_empty() {
+                        if out.write_all(&pending_block).is_err() {
+                            eprintln!("rx: write error");
+                            return Ok(1);
+                        }
+                        pending_block.clear();
+                    }
                     let blklen = if first[0] == 0x01 { 128 } else { 1024 };
                     let need = blklen + 2 + if use_crc { 2 } else { 1 };
                     let mut got = 0;
@@ -132,10 +155,7 @@ impl Applet for RxApplet {
                         let _ = ctl.write_all(&[0x15]);
                         continue;
                     }
-                    if out.write_all(payload).is_err() {
-                        eprintln!("rx: write error");
-                        return Ok(1);
-                    }
+                    pending_block = payload.to_vec();
                     expected = expected.wrapping_add(1);
                     retries = 0;
                     let _ = ctl.write_all(&[0x06]);

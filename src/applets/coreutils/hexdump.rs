@@ -9,7 +9,7 @@ fn dump_lines(out: &mut impl Write, data: &[u8], base: u64, cols: usize, up: boo
     for c in data.chunks(cols.max(1)) {
         line.clear();
         let _ = write!(line, "{:08x}  ", off);
-        for &b in c {
+        for (i, &b) in c.iter().enumerate() {
             if up {
                 let _ = write!(line, "{:02X} ", b);
             } else {
@@ -19,9 +19,21 @@ fn dump_lines(out: &mut impl Write, data: &[u8], base: u64, cols: usize, up: boo
                     b' ',
                 ]);
             }
+            if i == 7 {
+                line.push(b' ');
+            }
+        }
+        if c.len() < cols {
+            for j in c.len()..cols {
+                line.extend_from_slice(b"   ");
+                if j == 7 {
+                    line.push(b' ');
+                }
+            }
         }
 
-        let _ = write!(line, " |");
+        line.push(b' ');
+        line.push(b'|');
         for &b in c {
             line.push(if (32..127).contains(&b) { b } else { b'.' });
         }
@@ -38,9 +50,18 @@ pub fn hd_main(name: &str, args: &[OsString], canonical_default: bool) -> Result
     let mut i = 0;
     while i < args.len() {
         let b = ab(&args[i]);
-        if b == b"-v" {
-            verb = true;
-        } else if b == b"-C" {
+        if b.starts_with(b"-") && !b.starts_with(b"--") && b.len() > 1 && !matches!(b[1], b'n' | b's') {
+            for &opt in &b[1..] {
+                match opt {
+                    b'v' => verb = true,
+                    b'C' => {}
+                    b'b' | b'c' | b'd' | b'o' | b'x' => {}
+                    _ => {
+                        eprintln!("{}: invalid option '-{}'", name, opt as char);
+                        return Ok(1);
+                    }
+                }
+            }
         } else if b == b"-n" {
             i += 1;
             if i >= args.len() {
