@@ -102,3 +102,101 @@ pub fn run_pager(is_less: bool, args: &[OsString]) -> Result<i32> {
 
     Ok(0)
 }
+
+// Hardware constants & structs
+
+pub const BLKROSET: libc::c_ulong = 0x125D;
+pub const BLKROGET: libc::c_ulong = 0x125E;
+pub const BLKRAGET: libc::c_ulong = 0x1263;
+pub const BLKRASET: libc::c_ulong = 0x1262;
+pub const BLKGETSIZE: libc::c_ulong = 0x1260;
+pub const BLKFLSBUF: libc::c_ulong = 0x1261;
+pub const BLKSSZGET: libc::c_ulong = 0x1268;
+pub const BLKGETSIZE64: libc::c_ulong = 0x80081272;
+pub const BLKDISCARD: libc::c_ulong = 0x1277;
+pub const FDFLUSH: libc::c_ulong = 0x024B;
+pub const FDFMTTRK: libc::c_ulong = 0x0248;
+
+#[repr(C)]
+pub struct FormatDescr {
+    pub device: libc::c_uint,
+    pub head: libc::c_uint,
+    pub track: libc::c_uint,
+}
+
+pub const I2C_SLAVE: libc::c_ulong = 0x0703;
+pub const I2C_SLAVE_FORCE: libc::c_ulong = 0x0706;
+pub const I2C_RDWR: libc::c_ulong = 0x0707;
+pub const I2C_SMBUS: libc::c_ulong = 0x0720;
+
+pub const I2C_SMBUS_READ: u8 = 1;
+pub const I2C_SMBUS_WRITE: u8 = 0;
+pub const I2C_SMBUS_QUICK: u32 = 0;
+pub const I2C_SMBUS_BYTE: u32 = 1;
+pub const I2C_SMBUS_BYTE_DATA: u32 = 2;
+
+pub const I2C_M_RD: u16 = 0x0001;
+
+#[repr(C)]
+pub union I2cSmbusData {
+    pub byte: u8,
+    pub word: u16,
+    pub block: [u8; 34],
+}
+
+#[repr(C)]
+pub struct I2cSmbusIoctlData {
+    pub read_write: u8,
+    pub command: u8,
+    pub size: u32,
+    pub data: *mut I2cSmbusData,
+}
+
+#[repr(C)]
+pub struct I2cMsg {
+    pub addr: u16,
+    pub flags: u16,
+    pub len: u16,
+    pub buf: *mut u8,
+}
+
+#[repr(C)]
+pub struct I2cRdwrIoctlData {
+    pub msgs: *mut I2cMsg,
+    pub nmsgs: u32,
+}
+
+pub fn parse_u32(s: &[u8]) -> Option<u32> {
+    if s.is_empty() {
+        return None;
+    }
+    if s.starts_with(b"0x") || s.starts_with(b"0X") {
+        return u32::from_str_radix(std::str::from_utf8(&s[2..]).ok()?, 16).ok();
+    }
+    let mut val = 0u32;
+    for &b in s {
+        if !b.is_ascii_digit() {
+            return None;
+        }
+        val = val.checked_mul(10)?.checked_add((b - b'0') as u32)?;
+    }
+    Some(val)
+}
+
+pub fn parse_u64(s: &[u8]) -> Option<u64> {
+    if s.is_empty() {
+        return None;
+    }
+    if s.starts_with(b"0x") || s.starts_with(b"0X") {
+        return u64::from_str_radix(std::str::from_utf8(&s[2..]).ok()?, 16).ok();
+    }
+    let mut val = 0u64;
+    for &b in s {
+        if !b.is_ascii_digit() {
+            return None;
+        }
+        val = val.checked_mul(10)?.checked_add((b - b'0') as u64)?;
+    }
+    Some(val)
+}
+

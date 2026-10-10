@@ -92,7 +92,7 @@ fn run_beep(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "blkdiscard")]
 fn run_blkdiscard(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::miscutils::hardware::BlkdiscardApplet.run(args)
+    crate::applets::miscutils::blkdiscard::BlkdiscardApplet.run(args)
 }
 
 #[cfg(feature = "blkid")]
@@ -102,7 +102,7 @@ fn run_blkid(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "blockdev")]
 fn run_blockdev(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::miscutils::hardware::BlockdevApplet.run(args)
+    crate::applets::miscutils::blockdev::BlockdevApplet.run(args)
 }
 
 #[cfg(feature = "bootchartd")]
@@ -292,7 +292,7 @@ fn run_depmod(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "devmem")]
 fn run_devmem(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::miscutils::hardware::DevmemApplet.run(args)
+    crate::applets::miscutils::devmem::DevmemApplet.run(args)
 }
 
 #[cfg(feature = "df")]
@@ -452,12 +452,12 @@ fn run_fbsplash(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "fdflush")]
 fn run_fdflush(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::miscutils::hardware::FdflushApplet.run(args)
+    crate::applets::miscutils::fdflush::FdflushApplet.run(args)
 }
 
 #[cfg(feature = "fdformat")]
 fn run_fdformat(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::miscutils::hardware::FdformatApplet.run(args)
+    crate::applets::miscutils::fdformat::FdformatApplet.run(args)
 }
 
 #[cfg(feature = "fdisk")]
@@ -502,7 +502,7 @@ fn run_free(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "freeramdisk")]
 fn run_freeramdisk(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::miscutils::hardware::FreeramdiskApplet.run(args)
+    crate::applets::miscutils::freeramdisk::FreeramdiskApplet.run(args)
 }
 
 #[cfg(feature = "fsck")]
@@ -527,7 +527,7 @@ fn run_fstrim(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "fsync")]
 fn run_fsync(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::miscutils::hardware::FsyncApplet.run(args)
+    crate::applets::miscutils::fsync::FsyncApplet.run(args)
 }
 
 #[cfg(feature = "ftpd")]
@@ -642,27 +642,27 @@ fn run_hwclock(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "i2cdetect")]
 fn run_i2cdetect(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::miscutils::hardware::I2cdetectApplet.run(args)
+    crate::applets::miscutils::i2cdetect::I2cdetectApplet.run(args)
 }
 
 #[cfg(feature = "i2cdump")]
 fn run_i2cdump(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::miscutils::hardware::I2cdumpApplet.run(args)
+    crate::applets::miscutils::i2cdump::I2cdumpApplet.run(args)
 }
 
 #[cfg(feature = "i2cget")]
 fn run_i2cget(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::miscutils::hardware::I2cgetApplet.run(args)
+    crate::applets::miscutils::i2cget::I2cgetApplet.run(args)
 }
 
 #[cfg(feature = "i2cset")]
 fn run_i2cset(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::miscutils::hardware::I2csetApplet.run(args)
+    crate::applets::miscutils::i2cset::I2csetApplet.run(args)
 }
 
 #[cfg(feature = "i2ctransfer")]
 fn run_i2ctransfer(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::miscutils::hardware::I2ctransferApplet.run(args)
+    crate::applets::miscutils::i2ctransfer::I2ctransferApplet.run(args)
 }
 
 #[cfg(feature = "id")]
@@ -917,7 +917,7 @@ fn run_lsof(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "lspci")]
 fn run_lspci(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::miscutils::hardware::LspciApplet.run(args)
+    crate::applets::miscutils::lspci::LspciApplet.run(args)
 }
 
 #[cfg(feature = "lsscsi")]
@@ -927,7 +927,7 @@ fn run_lsscsi(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "lsusb")]
 fn run_lsusb(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::miscutils::hardware::LsusbApplet.run(args)
+    crate::applets::miscutils::lsusb::LsusbApplet.run(args)
 }
 
 #[cfg(feature = "lzcat")]
@@ -1292,7 +1292,7 @@ fn run_rdev(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "readahead")]
 fn run_readahead(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::miscutils::hardware::ReadaheadApplet.run(args)
+    crate::applets::miscutils::readahead::ReadaheadApplet.run(args)
 }
 
 #[cfg(feature = "readlink")]
