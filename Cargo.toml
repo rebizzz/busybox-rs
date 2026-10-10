@@ -19,128 +19,835 @@ path = "src/main.rs"
 
 [features]
 default = [
-    "cat", "echo", "true", "false", "pwd", "printenv", "printf",
-    "ls", "cp", "mv", "rm", "mkdir", "rmdir", "touch", "link", "unlink", "dirname", "basename", "which", "readlink", "realpath",
-    "head", "tail", "wc", "cut", "tr", "uniq", "comm", "fold", "rev", "tee", "strings", "expand", "unexpand", "sort", "grep", "egrep", "fgrep", "cmp",
-    "seq", "tsort", "factor", "uuencode", "uudecode", "xxd", "sleep", "yes", "sync", "clear", "reset", "whoami", "arch", "nproc",
-    "sh", "xargs",
-    "cal", "find",
-    "chmod", "chown", "chgrp", "ln", "stat", "du", "df",
-    "paste", "nl", "od", "dos2unix", "unix2dos",
-    "tar", "cpio", "gzip", "gunzip", "uncompress", "cksum",
-    "ps", "kill", "killall", "free", "uptime", "uname", "hostname", "id", "groups", "logname",
-    "mount", "umount", "dmesg", "lsblk", "flock", "test",
-    "md5sum", "sha1sum", "sha256sum", "sha512sum", "sum",
+    "acpid",
+    "add_shell",
+    "addgroup",
+    "adduser",
+    "adjtimex",
+    "arch",
+    "arp",
+    "arping",
+    "ascii",
+    "ash",
+    "awk",
+    "base32",
+    "base64",
+    "basename",
+    "bc",
+    "beep",
+    "blkdiscard",
+    "blkid",
+    "blockdev",
+    "bootchartd",
+    "brctl",
+    "bunzip2",
+    "bzcat",
+    "bzip2",
+    "cal",
+    "cat",
+    "chat",
+    "chattr",
+    "chgrp",
+    "chmod",
+    "chown",
+    "chpasswd",
+    "chpst",
+    "chroot",
+    "chrt",
+    "chvt",
+    "cksum",
+    "clear",
+    "cmp",
+    "comm",
+    "conspy",
+    "cp",
+    "cpio",
+    "crc32",
+    "crond",
+    "crontab",
+    "cryptpw",
+    "cttyhack",
+    "cut",
+    "date",
+    "dc",
+    "dd",
+    "deallocvt",
+    "delgroup",
+    "deluser",
+    "depmod",
+    "devmem",
+    "df",
+    "dhcprelay",
+    "diff",
+    "dirname",
+    "dmesg",
+    "dnsd",
+    "dnsdomainname",
+    "dos2unix",
+    "dpkg",
+    "dpkg_deb",
+    "du",
+    "dumpkmap",
+    "dumpleases",
+    "echo",
+    "ed",
+    "egrep",
+    "eject",
+    "env",
+    "envdir",
+    "envuidgid",
+    "ether_wake",
+    "expand",
+    "expr",
+    "factor",
+    "fakeidentd",
+    "fallocate",
+    "false",
+    "fatattr",
+    "fatlabel",
+    "fbset",
+    "fbsplash",
+    "fdflush",
+    "fdformat",
+    "fdisk",
+    "fgconsole",
+    "fgrep",
+    "find",
+    "findfs",
+    "flock",
+    "fold",
+    "free",
+    "freeramdisk",
+    "fsck",
+    "fsck_minix",
+    "fsfreeze",
+    "fstrim",
+    "fsync",
+    "ftpd",
+    "ftpget",
+    "ftpput",
+    "fuser",
+    "getfattr",
+    "getopt",
+    "getty",
+    "grep",
+    "groups",
+    "gunzip",
+    "gzip",
+    "halt",
+    "hd",
+    "hdparm",
+    "head",
+    "hexdump",
+    "hexedit",
+    "hostid",
+    "hostname",
+    "httpd",
+    "hush",
+    "hwclock",
+    "i2cdetect",
+    "i2cdump",
+    "i2cget",
+    "i2cset",
+    "i2ctransfer",
+    "id",
+    "ifconfig",
+    "ifdown",
+    "ifenslave",
+    "ifplugd",
+    "ifup",
+    "inetd",
+    "init",
+    "insmod",
+    "install",
+    "ionice",
+    "iostat",
+    "ip",
+    "ipaddr",
+    "ipcalc",
+    "ipcrm",
+    "ipcs",
+    "iplink",
+    "ipneigh",
+    "iproute",
+    "iprule",
+    "iptunnel",
+    "join",
+    "kbd_mode",
+    "kill",
+    "killall",
+    "killall5",
+    "klogd",
+    "last",
+    "less",
+    "link",
+    "linux32",
+    "linux64",
+    "linuxrc",
+    "ln",
+    "loadfont",
+    "loadkmap",
+    "logger",
+    "login",
+    "logname",
+    "logread",
+    "losetup",
+    "lpd",
+    "lpq",
+    "lpr",
+    "ls",
+    "lsattr",
+    "lsblk",
+    "lsmod",
+    "lsof",
+    "lspci",
+    "lsscsi",
+    "lsusb",
+    "lzcat",
+    "lzma",
+    "lzop",
+    "makedevs",
+    "makemime",
+    "man",
+    "md5sum",
+    "mdev",
+    "mesg",
+    "microcom",
+    "mim",
+    "mkdir",
+    "mkdosfs",
+    "mke2fs",
+    "mkfifo",
+    "mkfs_ext2",
+    "mkfs_minix",
+    "mkfs_vfat",
+    "mknod",
+    "mkpasswd",
+    "mkswap",
+    "mktemp",
+    "modinfo",
+    "modprobe",
+    "more",
+    "mount",
+    "mountpoint",
+    "mpstat",
+    "mt",
+    "mv",
+    "nameif",
+    "nanddump",
+    "nandwrite",
+    "nbd_client",
+    "nc",
+    "netstat",
+    "nice",
+    "nl",
+    "nmeter",
+    "nohup",
+    "nologin",
+    "nproc",
+    "nsenter",
+    "nslookup",
+    "ntpd",
+    "od",
+    "openvt",
+    "partprobe",
+    "passwd",
+    "paste",
+    "patch",
+    "pgrep",
+    "pidof",
+    "ping",
+    "ping6",
+    "pipe_progress",
+    "pivot_root",
+    "pkill",
+    "pmap",
+    "popmaildir",
+    "poweroff",
+    "powertop",
+    "printenv",
+    "printf",
+    "ps",
+    "pscan",
+    "pstree",
+    "pwd",
+    "pwdx",
+    "raidautorun",
+    "rdate",
+    "rdev",
+    "readahead",
+    "readlink",
+    "readprofile",
+    "realpath",
+    "reboot",
+    "reformime",
+    "remove_shell",
+    "renice",
+    "reset",
+    "resize",
+    "resume",
+    "rev",
+    "rm",
+    "rmdir",
+    "rmmod",
+    "route",
+    "rpm",
+    "rpm2cpio",
+    "rtcwake",
+    "run_init",
+    "run_parts",
+    "runlevel",
+    "runsv",
+    "runsvdir",
+    "rx",
+    "script",
+    "scriptreplay",
+    "sed",
+    "seedrng",
+    "sendmail",
+    "seq",
+    "setarch",
+    "setconsole",
+    "setfattr",
+    "setfont",
+    "setkeycodes",
+    "setlogcons",
+    "setpriv",
+    "setserial",
+    "setsid",
+    "setuidgid",
+    "sh",
+    "sha1sum",
+    "sha256sum",
+    "sha384sum",
+    "sha3sum",
+    "sha512sum",
+    "showkey",
+    "shred",
+    "shuf",
+    "slattach",
+    "sleep",
+    "smemcap",
+    "softlimit",
+    "sort",
+    "split",
+    "ssl_client",
+    "ssl_server",
+    "start_stop_daemon",
+    "stat",
+    "strings",
+    "stty",
+    "su",
+    "sulogin",
+    "sum",
+    "sv",
+    "svc",
+    "svlogd",
+    "svok",
+    "swaplabel",
+    "swapoff",
+    "swapon",
+    "switch_root",
+    "sync",
+    "sysctl",
+    "syslogd",
+    "tac",
+    "tail",
+    "tar",
+    "taskset",
+    "tcpsvd",
+    "tee",
+    "telnet",
+    "telnetd",
+    "test",
+    "test_extended",
+    "tftp",
+    "tftpd",
+    "time",
+    "timeout",
+    "top",
+    "touch",
+    "tr",
+    "traceroute",
+    "traceroute6",
+    "tree",
+    "true",
+    "truncate",
+    "ts",
+    "tsort",
+    "tty",
+    "ttysize",
+    "tunctl",
+    "ubiattach",
+    "ubidetach",
+    "ubimkvol",
+    "ubirename",
+    "ubirmvol",
+    "ubirsvol",
+    "ubiupdatevol",
+    "udhcpc",
+    "udhcpc6",
+    "udhcpd",
+    "udpsvd",
+    "uevent",
+    "umount",
+    "uname",
+    "uncompress",
+    "unexpand",
+    "uniq",
+    "unix2dos",
+    "unlink",
+    "unlzma",
+    "unshare",
+    "unxz",
+    "unzip",
+    "uptime",
+    "users",
+    "usleep",
+    "uudecode",
+    "uuencode",
+    "uuidgen",
+    "vconfig",
+    "vi",
+    "vlock",
+    "vmstat",
+    "volname",
+    "w",
+    "wall",
+    "watch",
+    "watchdog",
+    "wc",
+    "wget",
+    "which",
+    "who",
+    "whoami",
+    "whois",
+    "xargs",
+    "xxd",
+    "xz",
+    "xzcat",
+    "yes",
+    "zcat",
+    "zcip",
 ]
 
 # Applet compile-time feature selection flags
-md5sum = []
-sha1sum = []
-sha256sum = []
-sha512sum = []
-sum = []
-
-cat = []
-echo = []
-true = []
-false = []
-pwd = []
-printenv = []
-printf = []
-
-ls = []
-cp = []
-mv = []
-rm = []
-mkdir = []
-rmdir = []
-touch = []
-link = []
-unlink = []
-dirname = []
-basename = []
-which = []
-readlink = []
-realpath = []
-
-cmp = []
-head = []
-tail = []
-wc = []
-cut = []
-tr = []
-uniq = []
-comm = []
-fold = []
-rev = []
-tee = []
-strings = []
-expand = []
-unexpand = []
-sort = []
-grep = []
-egrep = ["grep"]
-fgrep = ["grep"]
-
-seq = []
-tsort = []
-factor = []
-uuencode = []
-uudecode = []
-xxd = []
-sleep = []
-yes = []
-sync = []
-clear = []
-reset = []
-whoami = []
+acpid = []
+add_shell = []
+addgroup = []
+adduser = []
+adjtimex = []
 arch = []
-nproc = []
-
-sh = []
-xargs = []
+arp = []
+arping = []
+ascii = []
+ash = []
+awk = []
+base32 = []
+base64 = []
+basename = []
+bc = []
+beep = []
+blkdiscard = []
+blkid = []
+blockdev = []
+bootchartd = []
+brctl = []
+bunzip2 = []
+bzcat = []
+bzip2 = []
 cal = []
-find = []
+cat = []
+chat = []
+chattr = []
+chgrp = []
 chmod = []
 chown = []
-chgrp = []
-ln = []
-stat = []
-du = []
-df = []
-paste = []
-nl = []
-od = []
-dos2unix = []
-unix2dos = []
-tar = []
-cpio = []
-gzip = []
-gunzip = []
-uncompress = []
+chpasswd = []
+chpst = []
+chroot = []
+chrt = []
+chvt = []
 cksum = []
-ps = []
+clear = []
+cmp = []
+comm = []
+conspy = []
+cp = []
+cpio = []
+crc32 = []
+crond = []
+crontab = []
+cryptpw = []
+cttyhack = []
+cut = []
+date = []
+dc = []
+dd = []
+deallocvt = []
+delgroup = []
+deluser = []
+depmod = []
+devmem = []
+df = []
+dhcprelay = []
+diff = []
+dirname = []
+dmesg = []
+dnsd = []
+dnsdomainname = []
+dos2unix = []
+dpkg = []
+dpkg_deb = []
+du = []
+dumpkmap = []
+dumpleases = []
+echo = []
+ed = []
+egrep = []
+eject = []
+env = []
+envdir = []
+envuidgid = []
+ether_wake = []
+expand = []
+expr = []
+factor = []
+fakeidentd = []
+fallocate = []
+false = []
+fatattr = []
+fatlabel = []
+fbset = []
+fbsplash = []
+fdflush = []
+fdformat = []
+fdisk = []
+fgconsole = []
+fgrep = []
+find = []
+findfs = []
+flock = []
+fold = []
+free = []
+freeramdisk = []
+fsck = []
+fsck_minix = []
+fsfreeze = []
+fstrim = []
+fsync = []
+ftpd = []
+ftpget = []
+ftpput = []
+fuser = []
+getfattr = []
+getopt = []
+getty = []
+grep = []
+groups = []
+gunzip = []
+gzip = []
+halt = []
+hd = []
+hdparm = []
+head = []
+hexdump = []
+hexedit = []
+hostid = []
+hostname = []
+httpd = []
+hush = []
+hwclock = []
+i2cdetect = []
+i2cdump = []
+i2cget = []
+i2cset = []
+i2ctransfer = []
+id = []
+ifconfig = []
+ifdown = []
+ifenslave = []
+ifplugd = []
+ifup = []
+inetd = []
+init = []
+insmod = []
+install = []
+ionice = []
+iostat = []
+ip = []
+ipaddr = []
+ipcalc = []
+ipcrm = []
+ipcs = []
+iplink = []
+ipneigh = []
+iproute = []
+iprule = []
+iptunnel = []
+join = []
+kbd_mode = []
 kill = []
 killall = []
-free = []
-uptime = []
-uname = []
-hostname = []
-id = []
-groups = []
+killall5 = []
+klogd = []
+last = []
+less = []
+link = []
+linux32 = []
+linux64 = []
+linuxrc = []
+ln = []
+loadfont = []
+loadkmap = []
+logger = []
+login = []
 logname = []
-mount = []
-umount = []
-dmesg = []
+logread = []
+losetup = []
+lpd = []
+lpq = []
+lpr = []
+ls = []
+lsattr = []
 lsblk = []
-flock = []
+lsmod = []
+lsof = []
+lspci = []
+lsscsi = []
+lsusb = []
+lzcat = []
+lzma = []
+lzop = []
+makedevs = []
+makemime = []
+man = []
+md5sum = []
+mdev = []
+mesg = []
+microcom = []
+mim = []
+mkdir = []
+mkdosfs = []
+mke2fs = []
+mkfifo = []
+mkfs_ext2 = []
+mkfs_minix = []
+mkfs_vfat = []
+mknod = []
+mkpasswd = []
+mkswap = []
+mktemp = []
+modinfo = []
+modprobe = []
+more = []
+mount = []
+mountpoint = []
+mpstat = []
+mt = []
+mv = []
+nameif = []
+nanddump = []
+nandwrite = []
+nbd_client = []
+nc = []
+netstat = []
+nice = []
+nl = []
+nmeter = []
+nohup = []
+nologin = []
+nproc = []
+nsenter = []
+nslookup = []
+ntpd = []
+od = []
+openvt = []
+partprobe = []
+passwd = []
+paste = []
+patch = []
+pgrep = []
+pidof = []
+ping = []
+ping6 = []
+pipe_progress = []
+pivot_root = []
+pkill = []
+pmap = []
+popmaildir = []
+poweroff = []
+powertop = []
+printenv = []
+printf = []
+ps = []
+pscan = []
+pstree = []
+pwd = []
+pwdx = []
+raidautorun = []
+rdate = []
+rdev = []
+readahead = []
+readlink = []
+readprofile = []
+realpath = []
+reboot = []
+reformime = []
+remove_shell = []
+renice = []
+reset = []
+resize = []
+resume = []
+rev = []
+rm = []
+rmdir = []
+rmmod = []
+route = []
+rpm = []
+rpm2cpio = []
+rtcwake = []
+run_init = []
+run_parts = []
+runlevel = []
+runsv = []
+runsvdir = []
+rx = []
+script = []
+scriptreplay = []
+sed = []
+seedrng = []
+sendmail = []
+seq = []
+setarch = []
+setconsole = []
+setfattr = []
+setfont = []
+setkeycodes = []
+setlogcons = []
+setpriv = []
+setserial = []
+setsid = []
+setuidgid = []
+sh = []
+sha1sum = []
+sha256sum = []
+sha384sum = []
+sha3sum = []
+sha512sum = []
+showkey = []
+shred = []
+shuf = []
+slattach = []
+sleep = []
+smemcap = []
+softlimit = []
+sort = []
+split = []
+ssl_client = []
+ssl_server = []
+start_stop_daemon = []
+stat = []
+strings = []
+stty = []
+su = []
+sulogin = []
+sum = []
+sv = []
+svc = []
+svlogd = []
+svok = []
+swaplabel = []
+swapoff = []
+swapon = []
+switch_root = []
+sync = []
+sysctl = []
+syslogd = []
+tac = []
+tail = []
+tar = []
+taskset = []
+tcpsvd = []
+tee = []
+telnet = []
+telnetd = []
 test = []
+test_extended = []
+tftp = []
+tftpd = []
+time = []
+timeout = []
+top = []
+touch = []
+tr = []
+traceroute = []
+traceroute6 = []
+tree = []
+true = []
+truncate = []
+ts = []
+tsort = []
+tty = []
+ttysize = []
+tunctl = []
+ubiattach = []
+ubidetach = []
+ubimkvol = []
+ubirename = []
+ubirmvol = []
+ubirsvol = []
+ubiupdatevol = []
+udhcpc = []
+udhcpc6 = []
+udhcpd = []
+udpsvd = []
+uevent = []
+umount = []
+uname = []
+uncompress = []
+unexpand = []
+uniq = []
+unix2dos = []
+unlink = []
+unlzma = []
+unshare = []
+unxz = []
+unzip = []
+uptime = []
+users = []
+usleep = []
+uudecode = []
+uuencode = []
+uuidgen = []
+vconfig = []
+vi = []
+vlock = []
+vmstat = []
+volname = []
+w = []
+wall = []
+watch = []
+watchdog = []
+wc = []
+wget = []
+which = []
+who = []
+whoami = []
+whois = []
+xargs = []
+xxd = []
+xz = []
+xzcat = []
+yes = []
+zcat = []
+zcip = []
 
 feature_verbose_usage = []
 
 [profile.release]
-opt-level = "z"     # Optimize for size
-lto = true          # Enable link-time optimization
-codegen-units = 1   # Single codegen unit for better size reduction
-panic = "abort"     # Remove unwind tables
-strip = true        # Strip symbols
+opt-level = "z"
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true
