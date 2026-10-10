@@ -1,16 +1,13 @@
-use super::common::*;
 use crate::core::{Applet, Result};
-use std::ffi::{CStr, CString, OsString};
-use std::fs::{self, File, OpenOptions};
-use std::io::{self, BufRead, BufReader, Read, Write};
-use std::mem;
-use std::net::{IpAddr, Ipv4Addr, Ipv6Addr, SocketAddr, TcpListener, TcpStream, ToSocketAddrs, UdpSocket};
+use std::ffi::OsString;
+use std::fs::File;
+use std::io::{BufRead, BufReader};
+use std::net::TcpListener;
 use std::os::unix::ffi::OsStrExt;
 use std::os::unix::io::{AsRawFd, FromRawFd};
-use std::path::{Path, PathBuf};
+use std::path::Path;
 use std::process::{Command, Stdio};
-use std::thread;
-use std::time::{Duration, Instant, SystemTime, UNIX_EPOCH};
+use std::time::Duration;
 
 pub struct InetdApplet;
 

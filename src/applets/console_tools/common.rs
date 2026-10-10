@@ -1,11 +1,5 @@
-use std::os::unix::io::AsRawFd;
-use crate::core::{Applet, Result};
-use std::ffi::OsString;
 use std::fs::{File, OpenOptions};
 use std::io::{self, Read, Write};
-use std::os::unix::ffi::OsStrExt;
-use std::os::unix::fs::OpenOptionsExt;
-use std::path::Path;
 
 pub const PIO_FONT: libc::c_ulong = 0x4B61;
 pub const KDGKBENT: libc::c_ulong = 0x4B46;

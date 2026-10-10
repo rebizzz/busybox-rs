@@ -6,6 +6,14 @@ authors = ["Busybox-RS Contributors"]
 description = "The Swiss Army Knife of Embedded Linux — reimplemented in Rust"
 license = "GPL-2.0-only"
 
+[workspace]
+members = [
+    ".",
+    "crates/bb-sys",
+    "crates/bb-core",
+    "crates/bb-applets",
+]
+
 [dependencies]
 libc = "0.2"
 

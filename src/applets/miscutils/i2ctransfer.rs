@@ -1,12 +1,10 @@
 use super::common::*;
 use crate::core::{Applet, Result};
 use std::ffi::OsString;
-use std::fs::{self, File, OpenOptions};
+use std::fs::OpenOptions;
 use std::io::{self, Read, Write};
 use std::os::unix::ffi::OsStrExt;
-use std::os::unix::fs::OpenOptionsExt;
 use std::os::unix::io::AsRawFd;
-use std::path::Path;
 
 pub struct I2ctransferApplet;
 

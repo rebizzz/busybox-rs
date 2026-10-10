@@ -1,6 +1,6 @@
 use std::ffi::OsString;
 
-pub type Result<T> = std::result::Result<T, crate::core::errors::BbError>;
+pub type Result<T> = std::result::Result<T, crate::errors::BbError>;
 
 pub type AppletFn = fn(&[OsString]) -> Result<i32>;
 

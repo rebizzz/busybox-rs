@@ -14,6 +14,7 @@ pub enum BbError {
         path: Option<PathBuf>,
         source: io::Error,
     },
+    Msg(String),
 }
 
 impl fmt::Display for BbError {
@@ -30,6 +31,7 @@ impl fmt::Display for BbError {
                 source,
             } => write!(f, "{}: {}", p.display(), source),
             BbError::Io { path: None, source } => write!(f, "{}", source),
+            BbError::Msg(m) => write!(f, "{}", m),
         }
     }
 }

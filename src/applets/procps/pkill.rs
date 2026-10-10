@@ -1,11 +1,6 @@
 use super::common::*;
 use crate::core::{Applet, Result};
-use std::ffi::{CStr, CString, OsStr, OsString};
-use std::fs::File;
-use std::io::{Read, Write};
-use std::net::Ipv4Addr;
-use std::os::unix::ffi::{OsStrExt, OsStringExt};
-use std::path::Path;
+use std::ffi::OsString;
 
 pub struct PkillApplet;
 impl Applet for PkillApplet {

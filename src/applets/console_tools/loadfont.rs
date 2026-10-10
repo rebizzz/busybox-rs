@@ -1,10 +1,9 @@
 use std::os::unix::io::AsRawFd;
 use super::common::*;
 use crate::core::{Applet, Result};
-use std::ffi::{CString, OsString};
-use std::fs::{File, OpenOptions};
-use std::io::{self, Read, Write};
-use std::os::unix::ffi::OsStrExt;
+use std::ffi::OsString;
+use std::fs::File;
+use std::io::{self, Read};
 use std::path::Path;
 
 pub struct LoadfontApplet;

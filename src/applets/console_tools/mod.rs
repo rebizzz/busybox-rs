@@ -1,4 +1,3 @@
-use std::os::unix::io::AsRawFd;
 use crate::core::Applet;
 use std::sync::Arc;
 

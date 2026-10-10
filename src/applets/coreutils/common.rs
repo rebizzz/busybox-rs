@@ -1,6 +1,6 @@
 use crate::core::Result;
-use crate::core::digest::{BsdSum, Digest, Md5, Sha1, Sha256, Sha512, SysVSum};
-use crate::core::fs::{open_or_stdin, read_bytes_or_stdin};
+use crate::core::digest::{Digest, Md5, Sha1, Sha256, Sha512};
+use crate::core::fs::open_or_stdin;
 use std::ffi::{CStr, CString};
 use std::fs;
 use std::io::{self, BufRead, BufReader};

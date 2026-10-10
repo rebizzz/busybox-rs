@@ -1,0 +1,15 @@
+pub mod chvt;
+pub mod clear;
+pub mod deallocvt;
+pub mod dumpkmap;
+pub mod fgconsole;
+pub mod kbd_mode;
+pub mod loadfont;
+pub mod loadkmap;
+pub mod openvt;
+pub mod reset;
+pub mod resize;
+pub mod setconsole;
+pub mod setkeycodes;
+pub mod setlogcons;
+pub mod showkey;

@@ -1,10 +1,7 @@
-use crate::core::{Applet, Result};
-use std::ffi::{CStr, CString, OsStr, OsString};
+use std::ffi::OsString;
 use std::fs::File;
 use std::io::{Read, Write};
-use std::net::Ipv4Addr;
-use std::os::unix::ffi::{OsStrExt, OsStringExt};
-use std::path::Path;
+use std::os::unix::ffi::OsStrExt;
 
 unsafe extern "C" {
     pub fn gethostbyname(name: *const libc::c_char) -> *mut libc::hostent;

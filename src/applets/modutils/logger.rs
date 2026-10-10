@@ -1,13 +1,9 @@
-use super::common::*;
 use crate::core::{Applet, Result};
-use std::collections::HashMap;
-use std::ffi::{CStr, CString, OsString};
-use std::fs::{self, File};
-use std::io::{self, BufRead, Read, Write};
+use std::ffi::{CString, OsString};
+use std::io::{self, Read};
 use std::os::unix::ffi::OsStrExt;
-use std::os::unix::io::{AsRawFd, FromRawFd};
 use std::os::unix::net::UnixDatagram;
-use std::path::{Path, PathBuf};
+use std::path::Path;
 
 pub struct LoggerApplet;
 

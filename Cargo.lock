@@ -3,6 +3,30 @@
 version = 4
 
 [[package]]
+name = "bb-applets"
+version = "1.0.1"
+dependencies = [
+ "bb-core",
+ "bb-sys",
+ "busybox-rs",
+ "libc",
+]
+
+[[package]]
+name = "bb-core"
+version = "1.0.1"
+dependencies = [
+ "bb-sys",
+]
+
+[[package]]
+name = "bb-sys"
+version = "1.0.1"
+dependencies = [
+ "libc",
+]
+
+[[package]]
 name = "busybox-rs"
 version = "1.0.1"
 dependencies = [

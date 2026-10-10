@@ -1,8 +1,5 @@
-use crate::core::{Applet, Result};
-use std::ffi::{CStr, CString, OsString};
-use std::io::{self, BufRead, Read, Write};
-use std::path::{Path, PathBuf};
-use std::os::unix::ffi::OsStrExt;
+use std::ffi::CStr;
+use std::io::{self, Write};
 
 pub fn print_bytes(bytes: &[u8]) {
     let stdout = io::stdout();
