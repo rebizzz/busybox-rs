@@ -1,10 +1,10 @@
 [package]
-name = "busybox"
-version = "0.1.0"
-edition = "2021"
+name = "busybox-rs"
+version = "1.0.1"
+edition = "2024"
 authors = ["Busybox-RS Contributors"]
-description = "A memory-safe, modular, customizable reimplementation of BusyBox in Rust"
-license = "MIT"
+description = "The Swiss Army Knife of Embedded Linux — reimplemented in Rust"
+license = "GPL-2.0-only"
 
 [dependencies]
 libc = "0.2"
@@ -392,7 +392,6 @@ default = [
     "uevent",
     "umount",
     "uname",
-    "uncompress",
     "unexpand",
     "uniq",
     "unix2dos",
@@ -805,7 +804,6 @@ udpsvd = []
 uevent = []
 umount = []
 uname = []
-uncompress = []
 unexpand = []
 uniq = []
 unix2dos = []

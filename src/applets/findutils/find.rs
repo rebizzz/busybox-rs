@@ -46,7 +46,7 @@ struct FindContext<'a> {
 }
 
 fn fnmatch_match(pattern: &str, string: &str, case_fold: bool) -> bool {
-    extern "C" {
+    unsafe extern "C" {
         fn fnmatch(
             pattern: *const libc::c_char,
             string: *const libc::c_char,

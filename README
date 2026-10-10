@@ -1,73 +1,58 @@
+BusyBox-rs
+
 Please see the LICENSE file for details on copying and usage.
 Please refer to the INSTALL file for instructions on how to build.
 
-What is busybox:
+What is BusyBox-rs:
 
-  BusyBox combines tiny versions of many common UNIX utilities into a single
-  small executable.  It provides minimalist replacements for most of the
-  utilities you usually find in bzip2, coreutils, dhcp, diffutils, e2fsprogs,
-  file, findutils, gawk, grep, inetutils, less, modutils, net-tools, procps,
-  sed, shadow, sysklogd, sysvinit, tar, util-linux, and vim.  The utilities
-  in BusyBox often have fewer options than their full-featured cousins;
-  however, the options that are included provide the expected functionality
-  and behave very much like their larger counterparts.
+  BusyBox-rs is a modular reimplementation of BusyBox in Rust, combining
+  compact versions of common UNIX utilities into a single executable.
+  It provides replacements for coreutils, fileutils, findutils, editors,
+  and networking tools while aiming for behavior parity with upstream BusyBox.
 
-  BusyBox has been written with size-optimization and limited resources in
-  mind, both to produce small binaries and to reduce run-time memory usage.
-  Busybox is also extremely modular so you can easily include or exclude
-  commands (or features) at compile time.  This makes it easy to customize
-  embedded systems; to create a working system, just add /dev, /etc, and a
-  Linux kernel.  Busybox has also been used as a component of "thin client"
-  desktop systems, live-CD distributions, rescue disks, installers, and so on.
-
-  BusyBox provides a fairly complete POSIX environment for any small system,
-  both embedded environments and more full featured systems concerned about
-  space.  Busybox is slowly working towards implementing the full Single Unix
-  Specification V3 (http://www.opengroup.org/onlinepubs/009695399/).
+  Written with size-optimization and minimal dependencies in mind (only libc
+  at the low level), BusyBox-rs allows individual applets to be enabled or
+  disabled at compile time using Cargo features.
 
 ----------------
 
-Using busybox:
+Using BusyBox-rs:
 
-  BusyBox is extremely configurable.  This allows you to include only the
-  components and options you need, thereby reducing binary size.  Run 'make
-  config' or 'make menuconfig' to select the functionality that you wish to
-  enable.  (See 'make help' for more commands.)
+  The behavior of BusyBox-rs is determined by the name it is called under:
+  as "cp" it behaves like cp, as "sed" it behaves like sed, and so on.
+  Called directly as "busybox" it takes the applet name as the first argument:
 
-  The behavior of busybox is determined by the name it's called under: as
-  "cp" it behaves like cp, as "sed" it behaves like sed, and so on.  Called
-  as "busybox" it takes the second argument as the name of the applet to
-  run (I.E. "./busybox ls -l /proc").
+    busybox ls -la /proc
 
-  The "standalone shell" mode is an easy way to try out busybox; this is a
-  command shell that calls the built-in applets without needing them to be
-  installed in the path.
+  You can also create symlinks to the binary for each applet:
 
-  The build automatically generates symlinks to the BusyBox binary for all
-  compiled in commands with 'make install'.  This uses the CONFIG_PREFIX
-  environment variable to specify where to install.
+    ln -s busybox ls
+    ./ls -la /proc
 
 ----------------
 
-Portability & Architecture:
+Building BusyBox-rs with Rust & musl-libc:
 
-  BusyBox is developed and tested on Linux and Unix environments. It is
-  written in memory-safe, byte-oriented Rust, preserving arbitrary non-UTF-8
-  byte sequences across all standard I/O streams and file paths.
+  Requirements:
+    - Rust toolchain (Rust Edition 2024 supported)
+    - cargo
+    - target x86_64-unknown-linux-musl (for static standalone deployment)
 
-  Applets are fully selectable at compile time via Cargo features or the
-  Kbuild-compatible Makefile targets:
+  Standard release build:
+    make
 
-    make defconfig     # default feature configuration
-    make allnoconfig   # minimal stub configuration
-    make tinyconfig    # compact embedded profile
-    make check         # run upstream regression test suite
+  Static musl build (recommended for embedded deployment):
+    rustup target add x86_64-unknown-linux-musl
+    cargo build --release --target x86_64-unknown-linux-musl
 
-----------------
+  Configuration targets:
+    make defconfig      # Standard profile with all 410 supported applets
+    make tinyconfig     # Minimal embedded profile (echo, cat, ls, ash)
+    make allnoconfig    # Bare configuration
 
-Bugs:
+  Installation:
+    make install DESTDIR=/target/path CONFIG_PREFIX=/usr
 
-  If you find bugs, please submit a detailed bug report. A well-written bug
-  report should include a transcript of a shell session that demonstrates
-  the bad behavior and enables anyone else to duplicate the bug on their own
-  machine.
+  Testing:
+    make check          # Upstream regression testsuite execution
+    make bloatcheck     # Binary size and section inspection

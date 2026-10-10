@@ -1,4 +1,4 @@
-name: CI & BusyBox Upstream Compatibility
+name: CI
 
 on:
   push:
@@ -7,69 +7,39 @@ on:
     branches: [ main ]
 
 jobs:
-  static-checks:
-    name: Code Formatting & Static Analysis
+  lint:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Install Rust toolchain
-        uses: dtolnay/rust-toolchain@stable
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
         with:
           components: rustfmt, clippy
+      - run: cargo fmt --all --check
+      - run: cargo clippy --all-targets -- -D warnings
 
-      - name: Check formatting
-        run: cargo fmt --all --check
-
-      - name: Run Clippy
-        run: cargo clippy --all-targets -- -D warnings
-
-  build-and-test:
-    name: Build & Unit Tests
+  test:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - run: cargo build --release
+      - run: cargo test --release
+      - run: cargo build --release --no-default-features --features "echo,cat,ls,sh"
 
-      - name: Install Rust toolchain
-        uses: dtolnay/rust-toolchain@stable
-
-      - name: Build Default Config
-        run: cargo build --release
-
-      - name: Run Unit Tests
-        run: cargo test --release
-
-      - name: Test Compile-Time Feature Selectivity (Tiny Profile)
-        run: cargo build --release --no-default-features --features "echo,cat,ls,sh"
-
-  upstream-compat:
-    name: BusyBox Upstream Compatibility Suite
+  upstream-tests:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           path: busybox-rs
-
-      - name: Install Rust toolchain
-        uses: dtolnay/rust-toolchain@stable
-
-      - name: Build busybox-rs release binary
-        working-directory: busybox-rs
+      - uses: dtolnay/rust-toolchain@stable
+      - working-directory: busybox-rs
         run: cargo build --release
-
-      - name: Prepare test binary directory
-        run: |
+      - run: |
           mkdir -p test-bin
           cp busybox-rs/target/release/busybox test-bin/busybox
           cp busybox-rs/configs/defconfig test-bin/.config
-
-      - name: Clone upstream BusyBox
-        run: git clone --depth 1 https://git.busybox.net/busybox busybox-upstream
-
-      - name: Execute Upstream BusyBox Test Suite
-        working-directory: busybox-upstream/testsuite
+      - run: git clone --depth 1 https://git.busybox.net/busybox busybox-upstream
+      - working-directory: busybox-upstream/testsuite
         run: |
           bindir=$GITHUB_WORKSPACE/test-bin ./runtest echo dirname basename fold tsort comm factor expand unexpand uuencode cut rev xxd head uniq seq cp grep sort tail tr cat cmp readlink realpath md5sum sha1sum sha256sum sha512sum sum printf

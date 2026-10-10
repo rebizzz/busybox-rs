@@ -1,0 +1,4 @@
+disallowed-methods = [
+    { path = "std::mem::zeroed", reason = "Use MaybeUninit or safe default initialization instead of mem::zeroed" },
+]
+cognitive-complexity-threshold = 50

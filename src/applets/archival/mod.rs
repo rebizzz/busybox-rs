@@ -16,8 +16,6 @@ pub fn register(applets: &mut Vec<Arc<dyn Applet>>) {
     applets.push(Arc::new(archival::GzipApplet));
     #[cfg(feature = "gunzip")]
     applets.push(Arc::new(archival::GunzipApplet));
-    #[cfg(feature = "uncompress")]
-    applets.push(Arc::new(archival::UncompressAlias));
     #[cfg(feature = "bunzip2")]
     applets.push(Arc::new(archival::Bunzip2Applet));
     #[cfg(feature = "bzcat")]
