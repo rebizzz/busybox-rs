@@ -17,17 +17,17 @@ fn run_acpid(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "add_shell")]
 fn run_add_shell(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::loginutils::login::AddShellApplet.run(args)
+    crate::applets::loginutils::add_shell::AddShellApplet.run(args)
 }
 
 #[cfg(feature = "addgroup")]
 fn run_addgroup(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::loginutils::login::AddgroupApplet.run(args)
+    crate::applets::loginutils::addgroup::AddgroupApplet.run(args)
 }
 
 #[cfg(feature = "adduser")]
 fn run_adduser(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::loginutils::login::AdduserApplet.run(args)
+    crate::applets::loginutils::adduser::AdduserApplet.run(args)
 }
 
 #[cfg(feature = "adjtimex")]
@@ -107,7 +107,7 @@ fn run_blockdev(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "bootchartd")]
 fn run_bootchartd(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::init::init::BootchartdApplet.run(args)
+    crate::applets::init::bootchartd::BootchartdApplet.run(args)
 }
 
 #[cfg(feature = "brctl")]
@@ -167,7 +167,7 @@ fn run_chown(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "chpasswd")]
 fn run_chpasswd(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::loginutils::login::ChpasswdApplet.run(args)
+    crate::applets::loginutils::chpasswd::ChpasswdApplet.run(args)
 }
 
 #[cfg(feature = "chpst")]
@@ -232,17 +232,17 @@ fn run_crc32(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "crond")]
 fn run_crond(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::init::init::CrondApplet.run(args)
+    crate::applets::init::crond::CrondApplet.run(args)
 }
 
 #[cfg(feature = "crontab")]
 fn run_crontab(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::init::init::CrontabApplet.run(args)
+    crate::applets::init::crontab::CrontabApplet.run(args)
 }
 
 #[cfg(feature = "cryptpw")]
 fn run_cryptpw(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::loginutils::login::CryptpwApplet.run(args)
+    crate::applets::loginutils::cryptpw::CryptpwApplet.run(args)
 }
 
 #[cfg(feature = "cttyhack")]
@@ -277,12 +277,12 @@ fn run_deallocvt(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "delgroup")]
 fn run_delgroup(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::loginutils::login::DelgroupApplet.run(args)
+    crate::applets::loginutils::delgroup::DelgroupApplet.run(args)
 }
 
 #[cfg(feature = "deluser")]
 fn run_deluser(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::loginutils::login::DeluserApplet.run(args)
+    crate::applets::loginutils::deluser::DeluserApplet.run(args)
 }
 
 #[cfg(feature = "depmod")]
@@ -562,7 +562,7 @@ fn run_getopt(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "getty")]
 fn run_getty(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::init::init::GettyApplet.run(args)
+    crate::applets::init::getty::GettyApplet.run(args)
 }
 
 #[cfg(feature = "grep")]
@@ -587,7 +587,7 @@ fn run_gzip(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "halt")]
 fn run_halt(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::init::init::HaltApplet.run(args)
+    crate::applets::init::halt::HaltApplet.run(args)
 }
 
 #[cfg(feature = "hd")]
@@ -802,12 +802,12 @@ fn run_killall5(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "klogd")]
 fn run_klogd(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::init::init::KlogdApplet.run(args)
+    crate::applets::init::klogd::KlogdApplet.run(args)
 }
 
 #[cfg(feature = "last")]
 fn run_last(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::init::init::LastApplet.run(args)
+    crate::applets::init::last::LastApplet.run(args)
 }
 
 #[cfg(feature = "less")]
@@ -832,7 +832,7 @@ fn run_linux64(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "linuxrc")]
 fn run_linuxrc(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::init::init::LinuxrcApplet.run(args)
+    crate::applets::init::linuxrc::LinuxrcApplet.run(args)
 }
 
 #[cfg(feature = "ln")]
@@ -867,7 +867,7 @@ fn run_logname(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "logread")]
 fn run_logread(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::init::init::LogreadApplet.run(args)
+    crate::applets::init::logread::LogreadApplet.run(args)
 }
 
 #[cfg(feature = "losetup")]
@@ -972,7 +972,7 @@ fn run_mdev(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "mesg")]
 fn run_mesg(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::init::init::MesgApplet.run(args)
+    crate::applets::init::mesg::MesgApplet.run(args)
 }
 
 #[cfg(feature = "microcom")]
@@ -1027,7 +1027,7 @@ fn run_mknod(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "mkpasswd")]
 fn run_mkpasswd(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::loginutils::login::MkpasswdApplet.run(args)
+    crate::applets::loginutils::mkpasswd::MkpasswdApplet.run(args)
 }
 
 #[cfg(feature = "mkswap")]
@@ -1132,7 +1132,7 @@ fn run_nohup(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "nologin")]
 fn run_nologin(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::loginutils::login::NologinApplet.run(args)
+    crate::applets::loginutils::nologin::NologinApplet.run(args)
 }
 
 #[cfg(feature = "nproc")]
@@ -1172,7 +1172,7 @@ fn run_partprobe(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "passwd")]
 fn run_passwd(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::loginutils::login::PasswdApplet.run(args)
+    crate::applets::loginutils::passwd::PasswdApplet.run(args)
 }
 
 #[cfg(feature = "paste")]
@@ -1232,7 +1232,7 @@ fn run_popmaildir(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "poweroff")]
 fn run_poweroff(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::init::init::PoweroffApplet.run(args)
+    crate::applets::init::poweroff::PoweroffApplet.run(args)
 }
 
 #[cfg(feature = "powertop")]
@@ -1312,7 +1312,7 @@ fn run_realpath(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "reboot")]
 fn run_reboot(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::init::init::RebootApplet.run(args)
+    crate::applets::init::reboot::RebootApplet.run(args)
 }
 
 #[cfg(feature = "reformime")]
@@ -1322,7 +1322,7 @@ fn run_reformime(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "remove_shell")]
 fn run_remove_shell(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::loginutils::login::RemoveShellApplet.run(args)
+    crate::applets::loginutils::remove_shell::RemoveShellApplet.run(args)
 }
 
 #[cfg(feature = "renice")]
@@ -1397,7 +1397,7 @@ fn run_run_parts(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "runlevel")]
 fn run_runlevel(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::init::init::RunlevelApplet.run(args)
+    crate::applets::init::runlevel::RunlevelApplet.run(args)
 }
 
 #[cfg(feature = "runsv")]
@@ -1602,12 +1602,12 @@ fn run_stty(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "su")]
 fn run_su(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::loginutils::login::SuApplet.run(args)
+    crate::applets::loginutils::su::SuApplet.run(args)
 }
 
 #[cfg(feature = "sulogin")]
 fn run_sulogin(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::loginutils::login::SuloginApplet.run(args)
+    crate::applets::loginutils::sulogin::SuloginApplet.run(args)
 }
 
 #[cfg(feature = "sum")]
@@ -1667,7 +1667,7 @@ fn run_sysctl(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "syslogd")]
 fn run_syslogd(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::init::init::SyslogdApplet.run(args)
+    crate::applets::init::syslogd::SyslogdApplet.run(args)
 }
 
 #[cfg(feature = "tac")]
@@ -1952,7 +1952,7 @@ fn run_vi(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "vlock")]
 fn run_vlock(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::loginutils::login::VlockApplet.run(args)
+    crate::applets::loginutils::vlock::VlockApplet.run(args)
 }
 
 #[cfg(feature = "vmstat")]
@@ -1972,7 +1972,7 @@ fn run_w(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "wall")]
 fn run_wall(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::init::init::WallApplet.run(args)
+    crate::applets::init::wall::WallApplet.run(args)
 }
 
 #[cfg(feature = "watch")]

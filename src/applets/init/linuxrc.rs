@@ -7,15 +7,15 @@ use std::io::{self, Read, Write};
 use std::os::unix::ffi::{OsStrExt, OsStringExt};
 use std::os::unix::io::FromRawFd;
 
-pub struct InitApplet;
-impl Applet for InitApplet {
+pub struct LinuxrcApplet;
+impl Applet for LinuxrcApplet {
     fn name(&self) -> &'static str {
-        "init"
+        "linuxrc"
     }
     fn description(&self) -> &'static str {
-        "Init daemon / runlevel control (subset)"
+        "Init alias used as /linuxrc (subset)"
     }
     fn run(&self, args: &[OsString]) -> Result<i32> {
-        init_run("init", args)
+        init_run("linuxrc", args)
     }
 }

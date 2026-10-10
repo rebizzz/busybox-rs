@@ -7,15 +7,15 @@ use std::io::{self, Read, Write};
 use std::os::unix::ffi::{OsStrExt, OsStringExt};
 use std::os::unix::io::FromRawFd;
 
-pub struct InitApplet;
-impl Applet for InitApplet {
+pub struct PoweroffApplet;
+impl Applet for PoweroffApplet {
     fn name(&self) -> &'static str {
-        "init"
+        "poweroff"
     }
     fn description(&self) -> &'static str {
-        "Init daemon / runlevel control (subset)"
+        "Halt and power off the system"
     }
     fn run(&self, args: &[OsString]) -> Result<i32> {
-        init_run("init", args)
+        reboot_run("poweroff", libc::LINUX_REBOOT_CMD_POWER_OFF, false, args)
     }
 }
