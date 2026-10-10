@@ -87,7 +87,7 @@ fn run_bc(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "beep")]
 fn run_beep(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::console_tools::console::BeepApplet.run(args)
+    crate::applets::console_tools::beep::BeepApplet.run(args)
 }
 
 #[cfg(feature = "blkdiscard")]
@@ -187,7 +187,7 @@ fn run_chrt(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "chvt")]
 fn run_chvt(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::console_tools::console::ChvtApplet.run(args)
+    crate::applets::console_tools::chvt::ChvtApplet.run(args)
 }
 
 #[cfg(feature = "cksum")]
@@ -272,7 +272,7 @@ fn run_dd(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "deallocvt")]
 fn run_deallocvt(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::console_tools::console::DeallocvtApplet.run(args)
+    crate::applets::console_tools::deallocvt::DeallocvtApplet.run(args)
 }
 
 #[cfg(feature = "delgroup")]
@@ -352,7 +352,7 @@ fn run_du(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "dumpkmap")]
 fn run_dumpkmap(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::console_tools::console::DumpkmapApplet.run(args)
+    crate::applets::console_tools::dumpkmap::DumpkmapApplet.run(args)
 }
 
 #[cfg(feature = "dumpleases")]
@@ -377,7 +377,7 @@ fn run_egrep(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "eject")]
 fn run_eject(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::console_tools::console::EjectApplet.run(args)
+    crate::applets::console_tools::eject::EjectApplet.run(args)
 }
 
 #[cfg(feature = "env")]
@@ -442,12 +442,12 @@ fn run_fatlabel(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "fbset")]
 fn run_fbset(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::console_tools::console::FbsetApplet.run(args)
+    crate::applets::console_tools::fbset::FbsetApplet.run(args)
 }
 
 #[cfg(feature = "fbsplash")]
 fn run_fbsplash(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::console_tools::console::FbsplashApplet.run(args)
+    crate::applets::console_tools::fbsplash::FbsplashApplet.run(args)
 }
 
 #[cfg(feature = "fdflush")]
@@ -467,7 +467,7 @@ fn run_fdisk(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "fgconsole")]
 fn run_fgconsole(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::console_tools::console::FgconsoleApplet.run(args)
+    crate::applets::console_tools::fgconsole::FgconsoleApplet.run(args)
 }
 
 #[cfg(feature = "fgrep")]
@@ -597,7 +597,7 @@ fn run_hd(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "hdparm")]
 fn run_hdparm(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::console_tools::console::HdparmApplet.run(args)
+    crate::applets::console_tools::hdparm::HdparmApplet.run(args)
 }
 
 #[cfg(feature = "head")]
@@ -782,7 +782,7 @@ fn run_join(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "kbd_mode")]
 fn run_kbd_mode(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::console_tools::console::KbdModeApplet.run(args)
+    crate::applets::console_tools::kbd_mode::KbdModeApplet.run(args)
 }
 
 #[cfg(feature = "kill")]
@@ -842,12 +842,12 @@ fn run_ln(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "loadfont")]
 fn run_loadfont(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::console_tools::console::LoadfontApplet.run(args)
+    crate::applets::console_tools::loadfont::LoadfontApplet.run(args)
 }
 
 #[cfg(feature = "loadkmap")]
 fn run_loadkmap(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::console_tools::console::LoadkmapApplet.run(args)
+    crate::applets::console_tools::loadkmap::LoadkmapApplet.run(args)
 }
 
 #[cfg(feature = "logger")]
@@ -1462,12 +1462,12 @@ fn run_setfattr(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "setfont")]
 fn run_setfont(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::console_tools::console::SetfontApplet.run(args)
+    crate::applets::console_tools::setfont::SetfontApplet.run(args)
 }
 
 #[cfg(feature = "setkeycodes")]
 fn run_setkeycodes(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::console_tools::console::SetkeycodesApplet.run(args)
+    crate::applets::console_tools::setkeycodes::SetkeycodesApplet.run(args)
 }
 
 #[cfg(feature = "setlogcons")]
@@ -1527,7 +1527,7 @@ fn run_sha512sum(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "showkey")]
 fn run_showkey(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::console_tools::console::ShowkeyApplet.run(args)
+    crate::applets::console_tools::showkey::ShowkeyApplet.run(args)
 }
 
 #[cfg(feature = "shred")]
