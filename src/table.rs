@@ -177,12 +177,12 @@ fn run_chpst(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "chroot")]
 fn run_chroot(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::procps::procps::ChrootApplet.run(args)
+    crate::applets::procps::chroot::ChrootApplet.run(args)
 }
 
 #[cfg(feature = "chrt")]
 fn run_chrt(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::procps::procps::ChrtApplet.run(args)
+    crate::applets::procps::chrt::ChrtApplet.run(args)
 }
 
 #[cfg(feature = "chvt")]
@@ -247,7 +247,7 @@ fn run_cryptpw(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "cttyhack")]
 fn run_cttyhack(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::procps::procps::CttyhackApplet.run(args)
+    crate::applets::procps::cttyhack::CttyhackApplet.run(args)
 }
 
 #[cfg(feature = "cut")]
@@ -497,7 +497,7 @@ fn run_fold(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "free")]
 fn run_free(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::procps::sysinfo::FreeApplet.run(args)
+    crate::applets::procps::free::FreeApplet.run(args)
 }
 
 #[cfg(feature = "freeramdisk")]
@@ -572,7 +572,7 @@ fn run_grep(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "groups")]
 fn run_groups(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::procps::sysinfo::GroupsApplet.run(args)
+    crate::applets::procps::groups::GroupsApplet.run(args)
 }
 
 #[cfg(feature = "gunzip")]
@@ -622,7 +622,7 @@ fn run_hostid(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "hostname")]
 fn run_hostname(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::procps::sysinfo::HostnameApplet.run(args)
+    crate::applets::procps::hostname::HostnameApplet.run(args)
 }
 
 #[cfg(feature = "httpd")]
@@ -667,7 +667,7 @@ fn run_i2ctransfer(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "id")]
 fn run_id(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::procps::sysinfo::IdApplet.run(args)
+    crate::applets::procps::id::IdApplet.run(args)
 }
 
 #[cfg(feature = "ifconfig")]
@@ -717,7 +717,7 @@ fn run_install(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "ionice")]
 fn run_ionice(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::procps::procps::IoniceApplet.run(args)
+    crate::applets::procps::ionice::IoniceApplet.run(args)
 }
 
 #[cfg(feature = "iostat")]
@@ -787,17 +787,17 @@ fn run_kbd_mode(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "kill")]
 fn run_kill(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::procps::sysinfo::KillApplet.run(args)
+    crate::applets::procps::kill::KillApplet.run(args)
 }
 
 #[cfg(feature = "killall")]
 fn run_killall(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::procps::sysinfo::KillallApplet.run(args)
+    crate::applets::procps::killall::KillallApplet.run(args)
 }
 
 #[cfg(feature = "killall5")]
 fn run_killall5(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::procps::procps::Killall5Applet.run(args)
+    crate::applets::procps::killall5::Killall5Applet.run(args)
 }
 
 #[cfg(feature = "klogd")]
@@ -862,7 +862,7 @@ fn run_login(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "logname")]
 fn run_logname(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::procps::sysinfo::LognameApplet.run(args)
+    crate::applets::procps::logname::LognameApplet.run(args)
 }
 
 #[cfg(feature = "logread")]
@@ -1187,12 +1187,12 @@ fn run_patch(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "pgrep")]
 fn run_pgrep(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::procps::procps::PgrepApplet.run(args)
+    crate::applets::procps::pgrep::PgrepApplet.run(args)
 }
 
 #[cfg(feature = "pidof")]
 fn run_pidof(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::procps::procps::PidofApplet.run(args)
+    crate::applets::procps::pidof::PidofApplet.run(args)
 }
 
 #[cfg(feature = "ping")]
@@ -1217,12 +1217,12 @@ fn run_pivot_root(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "pkill")]
 fn run_pkill(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::procps::procps::PkillApplet.run(args)
+    crate::applets::procps::pkill::PkillApplet.run(args)
 }
 
 #[cfg(feature = "pmap")]
 fn run_pmap(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::procps::procps::PmapApplet.run(args)
+    crate::applets::procps::pmap::PmapApplet.run(args)
 }
 
 #[cfg(feature = "popmaildir")]
@@ -1252,7 +1252,7 @@ fn run_printf(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "ps")]
 fn run_ps(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::procps::sysinfo::PsApplet.run(args)
+    crate::applets::procps::ps::PsApplet.run(args)
 }
 
 #[cfg(feature = "pscan")]
@@ -1272,7 +1272,7 @@ fn run_pwd(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "pwdx")]
 fn run_pwdx(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::procps::procps::PwdxApplet.run(args)
+    crate::applets::procps::pwdx::PwdxApplet.run(args)
 }
 
 #[cfg(feature = "raidautorun")]
@@ -1327,7 +1327,7 @@ fn run_remove_shell(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "renice")]
 fn run_renice(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::procps::procps::ReniceApplet.run(args)
+    crate::applets::procps::renice::ReniceApplet.run(args)
 }
 
 #[cfg(feature = "reset")]
@@ -1487,7 +1487,7 @@ fn run_setserial(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "setsid")]
 fn run_setsid(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::procps::procps::SetsidApplet.run(args)
+    crate::applets::procps::setsid::SetsidApplet.run(args)
 }
 
 #[cfg(feature = "setuidgid")]
@@ -1582,7 +1582,7 @@ fn run_ssl_server(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "start_stop_daemon")]
 fn run_start_stop_daemon(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::procps::procps::StartStopDaemonApplet.run(args)
+    crate::applets::procps::start_stop_daemon::StartStopDaemonApplet.run(args)
 }
 
 #[cfg(feature = "stat")]
@@ -1687,7 +1687,7 @@ fn run_tar(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "taskset")]
 fn run_taskset(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::procps::procps::TasksetApplet.run(args)
+    crate::applets::procps::taskset::TasksetApplet.run(args)
 }
 
 #[cfg(feature = "tcpsvd")]
@@ -1737,7 +1737,7 @@ fn run_timeout(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "top")]
 fn run_top(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::procps::procps::TopApplet.run(args)
+    crate::applets::procps::top::TopApplet.run(args)
 }
 
 #[cfg(feature = "touch")]
@@ -1867,7 +1867,7 @@ fn run_umount(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "uname")]
 fn run_uname(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::procps::sysinfo::UnameApplet.run(args)
+    crate::applets::procps::uname::UnameApplet.run(args)
 }
 
 #[cfg(feature = "unexpand")]
@@ -1912,7 +1912,7 @@ fn run_unzip(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "uptime")]
 fn run_uptime(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::procps::sysinfo::UptimeApplet.run(args)
+    crate::applets::procps::uptime::UptimeApplet.run(args)
 }
 
 #[cfg(feature = "users")]
@@ -1957,7 +1957,7 @@ fn run_vlock(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "vmstat")]
 fn run_vmstat(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::procps::procps::VmstatApplet.run(args)
+    crate::applets::procps::vmstat::VmstatApplet.run(args)
 }
 
 #[cfg(feature = "volname")]
