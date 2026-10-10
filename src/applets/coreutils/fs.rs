@@ -546,18 +546,43 @@ impl Applet for RmdirApplet {
         "Remove EMPTY DIRECTORY(ies)"
     }
     fn run(&self, args: &[OsString]) -> Result<i32> {
+        let mut parents = false;
         let mut dirs = Vec::new();
         for arg in args {
-            if !arg.as_bytes().starts_with(b"-") {
+            let b = arg.as_bytes();
+            if b.starts_with(b"-") && b != b"-" {
+                if b == b"-p" || b == b"--parents" {
+                    parents = true;
+                } else if b.starts_with(b"-") {
+                    for &c in &b[1..] {
+                        if c == b'p' {
+                            parents = true;
+                        }
+                    }
+                }
+            } else {
                 dirs.push(Path::new(arg));
             }
         }
 
         let mut exit_code = 0;
         for d in dirs {
-            if let Err(e) = fs::remove_dir(d) {
-                eprintln!("rmdir: failed to remove '{}': {}", d.display(), e);
-                exit_code = 1;
+            let mut curr = d;
+            loop {
+                if let Err(e) = fs::remove_dir(curr) {
+                    eprintln!("rmdir: failed to remove '{}': {}", curr.display(), e);
+                    exit_code = 1;
+                    break;
+                }
+                if parents {
+                    if let Some(parent) = curr.parent() {
+                        if !parent.as_os_str().is_empty() && parent != Path::new(".") {
+                            curr = parent;
+                            continue;
+                        }
+                    }
+                }
+                break;
             }
         }
         Ok(exit_code)

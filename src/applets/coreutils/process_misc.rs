@@ -472,6 +472,7 @@ impl Applet for DdApplet {
         let mut count: Option<usize> = None;
         let mut seek = 0u64;
         let mut skip = 0u64;
+        let mut count_bytes = false;
 
         for arg in args {
             let b = arg.as_bytes();
@@ -487,6 +488,12 @@ impl Applet for DdApplet {
                 seek = parse_dd_num(&b[5..]).unwrap_or(0) as u64;
             } else if b.starts_with(b"skip=") {
                 skip = parse_dd_num(&b[5..]).unwrap_or(0) as u64;
+            } else if b.starts_with(b"iflag=") {
+                for flag in b[6..].split(|&c| c == b',') {
+                    if flag == b"count_bytes" {
+                        count_bytes = true;
+                    }
+                }
             }
         }
 
@@ -537,27 +544,58 @@ impl Applet for DdApplet {
             None => Box::new(io::stdout()),
         };
 
-        let mut records_in = 0usize;
-        let mut records_out = 0usize;
+        let mut in_full = 0usize;
+        let mut in_part = 0usize;
+        let mut out_full = 0usize;
+        let mut out_part = 0usize;
         let mut total_bytes = 0u64;
 
         let mut buf = vec![0u8; bs];
-        let max_records = count.unwrap_or(usize::MAX);
+        let mut rem_bytes = if count_bytes { count } else { None };
+        let mut rem_records = if !count_bytes { count } else { None };
 
-        while records_in < max_records {
-            let n = input.read(&mut buf)?;
+        loop {
+            if let Some(r) = rem_records {
+                if r == 0 {
+                    break;
+                }
+            }
+            if let Some(b) = rem_bytes {
+                if b == 0 {
+                    break;
+                }
+            }
+            let to_read = match rem_bytes {
+                Some(b) => bs.min(b),
+                None => bs,
+            };
+            let n = input.read(&mut buf[..to_read])?;
             if n == 0 {
                 break;
             }
-            records_in += 1;
+            if n == bs {
+                in_full += 1;
+            } else {
+                in_part += 1;
+            }
             output.write_all(&buf[..n])?;
-            records_out += 1;
+            if n == bs {
+                out_full += 1;
+            } else {
+                out_part += 1;
+            }
             total_bytes += n as u64;
+            if let Some(ref mut r) = rem_records {
+                *r -= 1;
+            }
+            if let Some(ref mut b) = rem_bytes {
+                *b -= n;
+            }
         }
 
         output.flush()?;
-        eprintln!("{}+0 records in", records_in);
-        eprintln!("{}+0 records out", records_out);
+        eprintln!("{}+{} records in", in_full, in_part);
+        eprintln!("{}+{} records out", out_full, out_part);
         eprintln!("{} bytes copied", total_bytes);
 
         Ok(0)

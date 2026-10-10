@@ -48,6 +48,30 @@ fn take_val(b: &[u8], j: usize, i: &mut usize, args: &[OsString]) -> Vec<u8> {
     }
 }
 
+enum PasteInput {
+    File(BufReader<std::fs::File>),
+    Stdin,
+}
+
+fn next_line_paste(
+    input: &mut PasteInput,
+    stdin_lock: &mut io::StdinLock,
+    buf: &mut Vec<u8>,
+) -> Result<bool> {
+    buf.clear();
+    let n = match input {
+        PasteInput::File(r) => r.read_until(b'\n', buf)?,
+        PasteInput::Stdin => stdin_lock.read_until(b'\n', buf)?,
+    };
+    if n == 0 {
+        return Ok(false);
+    }
+    if buf.last() == Some(&b'\n') {
+        buf.pop();
+    }
+    Ok(true)
+}
+
 pub struct PasteApplet;
 impl Applet for PasteApplet {
     fn name(&self) -> &'static str {
@@ -99,43 +123,80 @@ impl Applet for PasteApplet {
         }
         let out = io::stdout();
         let mut w = out.lock();
+        let stdin = io::stdin();
+        let mut stdin_lock = stdin.lock();
         let mut buf = Vec::with_capacity(4096);
+
         if serial {
             for f in &files {
-                let mut r = open_input(f)?;
+                let mut input = if f.as_os_str() == "-" {
+                    PasteInput::Stdin
+                } else {
+                    PasteInput::File(BufReader::new(std::fs::File::open(f)?))
+                };
                 let mut first = true;
                 let mut di = 0;
-                while next_line(&mut r, &mut buf)? {
+                while next_line_paste(&mut input, &mut stdin_lock, &mut buf)? {
                     if !first {
-                        w.write_all(&[delims[di % delims.len()]])?;
+                        let d = delims[di % delims.len()];
+                        if d != 0 {
+                            w.write_all(&[d])?;
+                        }
                         di += 1;
                     }
                     first = false;
                     w.write_all(&buf)?;
                 }
-                w.write_all(b"\n")?;
+                if !first {
+                    w.write_all(b"\n")?;
+                }
             }
         } else {
-            let mut readers: Vec<Box<dyn BufRead>> = Vec::with_capacity(files.len());
+            let mut inputs: Vec<Option<PasteInput>> = Vec::with_capacity(files.len());
             for f in &files {
-                readers.push(open_input(f)?);
+                let input = if f.as_os_str() == "-" {
+                    PasteInput::Stdin
+                } else {
+                    PasteInput::File(BufReader::new(std::fs::File::open(f)?))
+                };
+                inputs.push(Some(input));
             }
-            let n = readers.len();
+
+            let mut lines: Vec<Option<Vec<u8>>> = vec![None; inputs.len()];
             loop {
                 let mut any = false;
-                for k in 0..n {
-                    if k > 0 {
-                        w.write_all(&[delims[(k - 1) % delims.len()]])?;
-                    }
-                    if next_line(&mut readers[k], &mut buf)? {
-                        any = true;
-                        w.write_all(&buf)?;
+                for k in 0..inputs.len() {
+                    if let Some(ref mut inp) = inputs[k] {
+                        if next_line_paste(inp, &mut stdin_lock, &mut buf)? {
+                            any = true;
+                            lines[k] = Some(buf.clone());
+                        } else {
+                            inputs[k] = None;
+                            lines[k] = None;
+                        }
+                    } else {
+                        lines[k] = None;
                     }
                 }
                 if !any {
                     break;
                 }
-                w.write_all(b"\n")?;
+                let mut del_idx = 0;
+                for k in 0..inputs.len() {
+                    if let Some(ref line_buf) = lines[k] {
+                        w.write_all(line_buf)?;
+                    }
+                    let delim = if k == inputs.len() - 1 {
+                        b'\n'
+                    } else {
+                        let d = delims[del_idx];
+                        del_idx = (del_idx + 1) % delims.len();
+                        d
+                    };
+                    if delim != 0 {
+                        w.write_all(&[delim])?;
+                    }
+                }
             }
         }
         Ok(0)
