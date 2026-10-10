@@ -94,7 +94,7 @@ fn main() {
         let applet_name = first_arg;
         let sub_args: Vec<OsString> = raw_args[2..].to_vec();
 
-        if sub_args.first().map(|s| s.to_string_lossy()) == Some("--help".into()) {
+        if sub_args.first().map(|s| s.to_string_lossy()) == Some("--help".into()) && applet_name != "test" && applet_name != "[" && applet_name != "echo" {
             if let Some(entry) = find_applet(&applet_name) {
                 print_applet_help(entry);
                 process::exit(0);

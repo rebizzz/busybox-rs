@@ -1,57 +1,9 @@
 use crate::core::{Applet, Result};
 use std::ffi::{CString, OsString};
-use std::fs::{self};
-use std::io::Read;
+use std::fs;
 use std::os::unix::ffi::OsStrExt;
 use std::os::unix::fs::FileTypeExt;
 use std::path::Path;
-
-struct Tok<'a> {
-    v: &'a [&'a [u8]],
-    i: usize,
-}
-
-impl<'a> Tok<'a> {
-    fn peek(&self) -> Option<&'a [u8]> {
-        self.v.get(self.i).copied()
-    }
-    fn next(&mut self) -> Option<&'a [u8]> {
-        let t = self.v.get(self.i).copied();
-        if t.is_some() {
-            self.i += 1;
-        }
-        t
-    }
-}
-
-fn eval_or(t: &mut Tok) -> std::result::Result<bool, Vec<u8>> {
-    let mut v = eval_and(t)?;
-    while t.peek() == Some(b"-o") {
-        t.next();
-        let rhs = eval_and(t)?;
-        v = v || rhs;
-    }
-    Ok(v)
-}
-
-fn eval_and(t: &mut Tok) -> std::result::Result<bool, Vec<u8>> {
-    let mut v = eval_not(t)?;
-    while t.peek() == Some(b"-a") {
-        t.next();
-        let rhs = eval_not(t)?;
-        v = v && rhs;
-    }
-    Ok(v)
-}
-
-fn eval_not(t: &mut Tok) -> std::result::Result<bool, Vec<u8>> {
-    if t.peek() == Some(b"!") {
-        t.next();
-        Ok(!eval_not(t)?)
-    } else {
-        eval_primary(t)
-    }
-}
 
 fn parse_int(s: &[u8]) -> Option<i64> {
     let s = std::str::from_utf8(s).ok()?;
@@ -71,6 +23,28 @@ fn parse_int(s: &[u8]) -> Option<i64> {
         v = v.checked_mul(10)?.checked_add((c - b'0') as i64)?;
     }
     Some(if neg { -v } else { v })
+}
+
+fn is_unary(op: &[u8]) -> bool {
+    matches!(
+        op,
+        b"-e"
+            | b"-f"
+            | b"-d"
+            | b"-r"
+            | b"-w"
+            | b"-x"
+            | b"-s"
+            | b"-L"
+            | b"-h"
+            | b"-c"
+            | b"-b"
+            | b"-p"
+            | b"-S"
+            | b"-n"
+            | b"-z"
+            | b"-t"
+    )
 }
 
 fn file_unary(op: &[u8], path: &[u8]) -> std::result::Result<bool, Vec<u8>> {
@@ -123,30 +97,10 @@ fn file_unary(op: &[u8], path: &[u8]) -> std::result::Result<bool, Vec<u8>> {
 
             Ok(unsafe { libc::isatty(fd) } == 1)
         }
+        b"-n" => Ok(!path.is_empty()),
+        b"-z" => Ok(path.is_empty()),
         _ => Err(b"unknown unary operator".to_vec()),
     }
-}
-
-fn is_unary(op: &[u8]) -> bool {
-    matches!(
-        op,
-        b"-e"
-            | b"-f"
-            | b"-d"
-            | b"-r"
-            | b"-w"
-            | b"-x"
-            | b"-s"
-            | b"-L"
-            | b"-h"
-            | b"-c"
-            | b"-b"
-            | b"-p"
-            | b"-S"
-            | b"-n"
-            | b"-z"
-            | b"-t"
-    )
 }
 
 fn is_binop(op: &[u8]) -> bool {
@@ -215,6 +169,100 @@ fn eval_binary(a: &[u8], op: &[u8], c: &[u8]) -> std::result::Result<bool, Vec<u
     }
 }
 
+fn eval_posix(args: &[&[u8]]) -> std::result::Result<bool, Vec<u8>> {
+    match args.len() {
+        0 => Ok(false),
+        1 => Ok(!args[0].is_empty()),
+        2 => {
+            if args[0] == b"!" {
+                Ok(args[1].is_empty())
+            } else if is_unary(args[0]) {
+                file_unary(args[0], args[1])
+            } else {
+                Err(b"unknown unary operator".to_vec())
+            }
+        }
+        3 => {
+            if is_binop(args[1]) {
+                eval_binary(args[0], args[1], args[2])
+            } else if args[0] == b"!" {
+                eval_posix(&args[1..]).map(|v| !v)
+            } else if args[0] == b"(" && args[2] == b")" {
+                eval_posix(&args[1..2])
+            } else if is_unary(args[0]) {
+                // E.g. test a -a ! or test -f = a
+                // If it's not a binop at args[1], fallback to general parser
+                eval_expr_slice(args)
+            } else {
+                eval_expr_slice(args)
+            }
+        }
+        4 => {
+            if args[0] == b"!" {
+                eval_posix(&args[1..]).map(|v| !v)
+            } else if args[0] == b"(" && args[3] == b")" {
+                eval_posix(&args[1..3])
+            } else {
+                eval_expr_slice(args)
+            }
+        }
+        _ => eval_expr_slice(args),
+    }
+}
+
+struct Tok<'a> {
+    v: &'a [&'a [u8]],
+    i: usize,
+}
+
+impl<'a> Tok<'a> {
+    fn peek(&self) -> Option<&'a [u8]> {
+        self.v.get(self.i).copied()
+    }
+    fn next(&mut self) -> Option<&'a [u8]> {
+        let t = self.v.get(self.i).copied();
+        if t.is_some() {
+            self.i += 1;
+        }
+        t
+    }
+}
+
+fn eval_or(t: &mut Tok) -> std::result::Result<bool, Vec<u8>> {
+    let mut v = eval_and(t)?;
+    while t.peek() == Some(b"-o") {
+        t.next();
+        let rhs = eval_and(t)?;
+        v = v || rhs;
+    }
+    Ok(v)
+}
+
+fn eval_and(t: &mut Tok) -> std::result::Result<bool, Vec<u8>> {
+    let mut v = eval_not(t)?;
+    while t.peek() == Some(b"-a") {
+        t.next();
+        let rhs = eval_not(t)?;
+        v = v && rhs;
+    }
+    Ok(v)
+}
+
+fn eval_not(t: &mut Tok) -> std::result::Result<bool, Vec<u8>> {
+    if t.peek() == Some(b"!") {
+        // If ! is at the end of the input (no following tokens), it's treated as a string argument "!"
+        if t.i + 1 >= t.v.len() {
+            t.next();
+            Ok(true)
+        } else {
+            t.next();
+            Ok(!eval_not(t)?)
+        }
+    } else {
+        eval_primary(t)
+    }
+}
+
 fn eval_primary(t: &mut Tok) -> std::result::Result<bool, Vec<u8>> {
     match t.next() {
         None => Err(b"missing argument".to_vec()),
@@ -226,17 +274,6 @@ fn eval_primary(t: &mut Tok) -> std::result::Result<bool, Vec<u8>> {
             }
         }
         Some(a) => {
-            if is_unary(a) {
-                let arg = t.next().ok_or_else(|| b"argument expected".to_vec())?;
-                if a == b"-n" {
-                    return Ok(!arg.is_empty());
-                }
-                if a == b"-z" {
-                    return Ok(arg.is_empty());
-                }
-                return file_unary(a, arg);
-            }
-
             if let Some(op) = t.peek() {
                 if is_binop(op) {
                     t.next();
@@ -244,20 +281,23 @@ fn eval_primary(t: &mut Tok) -> std::result::Result<bool, Vec<u8>> {
                     return eval_binary(a, op, c);
                 }
             }
-
-            if is_unary(a)
-                || is_binop(a)
-                || a == b"!"
-                || a == b"("
-                || a == b")"
-                || a == b"-a"
-                || a == b"-o"
-            {
-                return Err(b"argument expected".to_vec());
+            if is_unary(a) {
+                if let Some(arg) = t.next() {
+                    return file_unary(a, arg);
+                }
             }
             Ok(!a.is_empty())
         }
     }
+}
+
+fn eval_expr_slice(args: &[&[u8]]) -> std::result::Result<bool, Vec<u8>> {
+    let mut t = Tok { v: args, i: 0 };
+    let res = eval_or(&mut t)?;
+    if t.i != args.len() {
+        return Err(b"too many arguments".to_vec());
+    }
+    Ok(res)
 }
 
 pub(crate) fn run_test(name: &str, args: &[OsString]) -> Result<i32> {
@@ -271,18 +311,9 @@ pub(crate) fn run_test(name: &str, args: &[OsString]) -> Result<i32> {
     } else {
         &raw
     };
-    if expr.is_empty() {
-        return Ok(1);
-    }
-    let mut t = Tok { v: expr, i: 0 };
-    match eval_or(&mut t) {
-        Ok(v) => {
-            if t.i != expr.len() {
-                eprintln!("{}: too many arguments", name);
-                return Ok(2);
-            }
-            Ok(if v { 0 } else { 1 })
-        }
+
+    match eval_posix(expr) {
+        Ok(v) => Ok(if v { 0 } else { 1 }),
         Err(msg) => {
             eprintln!("{}: {}", name, String::from_utf8_lossy(&msg));
             Ok(2)
