@@ -23,7 +23,7 @@ pub const FLAG_i: u32 = 1 << 13;
 pub const FLAG_bb: u32 = 0x8000_0000;
 pub const FLAG_no_tie_break: u32 = 0x4000_0000;
 
-extern "C" {
+unsafe extern "C" {
     fn strverscmp(s1: *const libc::c_char, s2: *const libc::c_char) -> libc::c_int;
 }
 

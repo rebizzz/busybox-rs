@@ -107,22 +107,20 @@ fn trim_trailing_spaces_and_print(s: &str) {
 }
 
 fn build_row(julian: bool, dp: &[i32]) -> String {
-    let mut res = String::new();
+    let mut parts = Vec::new();
     for &day in dp.iter().take(7) {
         if day != SPACE {
             if julian {
-                res.push_str(&format!("{:4}", day));
+                parts.push(format!("{:3}", day));
             } else {
-                res.push_str(&format!("{:3}", day));
+                parts.push(format!("{:2}", day));
             }
         } else {
-            let width = if julian { 4 } else { 3 };
-            for _ in 0..width {
-                res.push(' ');
-            }
+            let width = if julian { 3 } else { 2 };
+            parts.push(" ".repeat(width));
         }
     }
-    res
+    parts.join(" ")
 }
 
 fn center_string(s: &str, width: usize) -> String {
