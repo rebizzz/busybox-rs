@@ -372,7 +372,7 @@ fn run_ed(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "egrep")]
 fn run_egrep(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::findutils::grep::EgrepApplet.run(args)
+    crate::applets::findutils::egrep::EgrepApplet.run(args)
 }
 
 #[cfg(feature = "eject")]
@@ -472,7 +472,7 @@ fn run_fgconsole(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "fgrep")]
 fn run_fgrep(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::findutils::grep::FgrepApplet.run(args)
+    crate::applets::findutils::fgrep::FgrepApplet.run(args)
 }
 
 #[cfg(feature = "find")]
