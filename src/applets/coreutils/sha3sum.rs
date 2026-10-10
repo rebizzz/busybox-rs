@@ -138,7 +138,7 @@ applet!(
     run_sha3sum
 );
 fn run_sha3sum(args: &[OsString]) -> Result<i32> {
-    let mut bits = 512usize;
+    let mut bits = 224usize;
     let mut rest: Vec<OsString> = Vec::new();
     let mut i = 0;
     while i < args.len() {
