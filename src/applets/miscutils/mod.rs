@@ -1,10 +1,26 @@
 use crate::core::Applet;
 use std::sync::Arc;
 
+pub mod common;
 pub mod hardware;
+pub mod bc;
+pub mod dc;
+pub mod less;
+pub mod more;
+pub mod man;
 
 pub fn register(applets: &mut Vec<Arc<dyn Applet>>) {
     let _ = applets;
+    #[cfg(feature = "bc")]
+    applets.push(Arc::new(bc::BcApplet));
+    #[cfg(feature = "dc")]
+    applets.push(Arc::new(dc::DcApplet));
+    #[cfg(feature = "less")]
+    applets.push(Arc::new(less::LessApplet));
+    #[cfg(feature = "more")]
+    applets.push(Arc::new(more::MoreApplet));
+    #[cfg(feature = "man")]
+    applets.push(Arc::new(man::ManApplet));
     #[cfg(feature = "fdflush")]
     applets.push(Arc::new(hardware::FdflushApplet));
     #[cfg(feature = "fdformat")]

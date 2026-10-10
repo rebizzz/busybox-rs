@@ -2,12 +2,12 @@ use crate::core::{Applet, applet::AppletEntry};
 
 #[cfg(feature = "test")]
 fn run_lbracket(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::util_linux::util::LBracketApplet.run(args)
+    crate::applets::util_linux::lbracket::LBracketApplet.run(args)
 }
 
 #[cfg(feature = "test_extended")]
 fn run_double_lbracket(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::shell::interp::DoubleLBracketApplet.run(args)
+    crate::applets::shell::double_lbracket::DoubleLBracketApplet.run(args)
 }
 
 #[cfg(feature = "acpid")]
@@ -32,12 +32,12 @@ fn run_adduser(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "adjtimex")]
 fn run_adjtimex(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::util_linux::sys_arch::AdjtimexApplet.run(args)
+    crate::applets::util_linux::adjtimex::AdjtimexApplet.run(args)
 }
 
 #[cfg(feature = "arch")]
 fn run_arch(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::core::ArchApplet.run(args)
+    crate::applets::coreutils::arch::ArchApplet.run(args)
 }
 
 #[cfg(feature = "arp")]
@@ -52,37 +52,37 @@ fn run_arping(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "ascii")]
 fn run_ascii(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::crypto_attr::AsciiApplet.run(args)
+    crate::applets::coreutils::ascii::AsciiApplet.run(args)
 }
 
 #[cfg(feature = "ash")]
 fn run_ash(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::shell::interp::AshApplet.run(args)
+    crate::applets::shell::ash::AshApplet.run(args)
 }
 
 #[cfg(feature = "awk")]
 fn run_awk(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::shell::interp::AwkApplet.run(args)
+    crate::applets::editors::awk::AwkApplet.run(args)
 }
 
 #[cfg(feature = "base32")]
 fn run_base32(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::crypto_attr::Base32Applet.run(args)
+    crate::applets::coreutils::base32::Base32Applet.run(args)
 }
 
 #[cfg(feature = "base64")]
 fn run_base64(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::crypto_attr::Base64Applet.run(args)
+    crate::applets::coreutils::base64::Base64Applet.run(args)
 }
 
 #[cfg(feature = "basename")]
 fn run_basename(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::fs::BasenameApplet.run(args)
+    crate::applets::coreutils::basename::BasenameApplet.run(args)
 }
 
 #[cfg(feature = "bc")]
 fn run_bc(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::shell::interp::BcApplet.run(args)
+    crate::applets::miscutils::bc::BcApplet.run(args)
 }
 
 #[cfg(feature = "beep")]
@@ -97,7 +97,7 @@ fn run_blkdiscard(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "blkid")]
 fn run_blkid(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::crypto_attr::BlkidApplet.run(args)
+    crate::applets::coreutils::blkid::BlkidApplet.run(args)
 }
 
 #[cfg(feature = "blockdev")]
@@ -117,17 +117,17 @@ fn run_brctl(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "bunzip2")]
 fn run_bunzip2(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::archival::archival::Bunzip2Applet.run(args)
+    crate::applets::archival::bunzip2::Bunzip2Applet.run(args)
 }
 
 #[cfg(feature = "bzcat")]
 fn run_bzcat(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::archival::archival::BzcatApplet.run(args)
+    crate::applets::archival::bzcat::BzcatApplet.run(args)
 }
 
 #[cfg(feature = "bzip2")]
 fn run_bzip2(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::archival::archival::Bzip2Applet.run(args)
+    crate::applets::archival::bzip2::Bzip2Applet.run(args)
 }
 
 #[cfg(feature = "cal")]
@@ -137,7 +137,7 @@ fn run_cal(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "cat")]
 fn run_cat(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::text::CatApplet.run(args)
+    crate::applets::coreutils::cat::CatApplet.run(args)
 }
 
 #[cfg(feature = "chat")]
@@ -147,22 +147,22 @@ fn run_chat(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "chattr")]
 fn run_chattr(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::crypto_attr::ChattrApplet.run(args)
+    crate::applets::coreutils::chattr::ChattrApplet.run(args)
 }
 
 #[cfg(feature = "chgrp")]
 fn run_chgrp(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::perms::ChgrpApplet.run(args)
+    crate::applets::coreutils::chgrp::ChgrpApplet.run(args)
 }
 
 #[cfg(feature = "chmod")]
 fn run_chmod(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::perms::ChmodApplet.run(args)
+    crate::applets::coreutils::chmod::ChmodApplet.run(args)
 }
 
 #[cfg(feature = "chown")]
 fn run_chown(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::perms::ChownApplet.run(args)
+    crate::applets::coreutils::chown::ChownApplet.run(args)
 }
 
 #[cfg(feature = "chpasswd")]
@@ -172,7 +172,7 @@ fn run_chpasswd(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "chpst")]
 fn run_chpst(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::archival::package::ChpstApplet.run(args)
+    crate::applets::archival::chpst::ChpstApplet.run(args)
 }
 
 #[cfg(feature = "chroot")]
@@ -192,12 +192,12 @@ fn run_chvt(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "cksum")]
 fn run_cksum(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::archival::archival::CksumApplet.run(args)
+    crate::applets::archival::cksum::CksumApplet.run(args)
 }
 
 #[cfg(feature = "clear")]
 fn run_clear(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::core::ClearApplet.run(args)
+    crate::applets::coreutils::clear::ClearApplet.run(args)
 }
 
 #[cfg(feature = "cmp")]
@@ -207,7 +207,7 @@ fn run_cmp(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "comm")]
 fn run_comm(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::stream::CommApplet.run(args)
+    crate::applets::coreutils::comm::CommApplet.run(args)
 }
 
 #[cfg(feature = "conspy")]
@@ -217,17 +217,17 @@ fn run_conspy(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "cp")]
 fn run_cp(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::fs::CpApplet.run(args)
+    crate::applets::coreutils::cp::CpApplet.run(args)
 }
 
 #[cfg(feature = "cpio")]
 fn run_cpio(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::archival::archival::CpioApplet.run(args)
+    crate::applets::archival::cpio::CpioApplet.run(args)
 }
 
 #[cfg(feature = "crc32")]
 fn run_crc32(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::crypto_attr::Crc32Applet.run(args)
+    crate::applets::coreutils::crc32::Crc32Applet.run(args)
 }
 
 #[cfg(feature = "crond")]
@@ -257,17 +257,17 @@ fn run_cut(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "date")]
 fn run_date(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::editors::editor::DateApplet.run(args)
+    crate::applets::editors::date::DateApplet.run(args)
 }
 
 #[cfg(feature = "dc")]
 fn run_dc(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::shell::interp::DcApplet.run(args)
+    crate::applets::miscutils::dc::DcApplet.run(args)
 }
 
 #[cfg(feature = "dd")]
 fn run_dd(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::process_misc::DdApplet.run(args)
+    crate::applets::coreutils::dd::DdApplet.run(args)
 }
 
 #[cfg(feature = "deallocvt")]
@@ -297,7 +297,7 @@ fn run_devmem(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "df")]
 fn run_df(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::perms::DfApplet.run(args)
+    crate::applets::coreutils::df::DfApplet.run(args)
 }
 
 #[cfg(feature = "dhcprelay")]
@@ -307,17 +307,17 @@ fn run_dhcprelay(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "diff")]
 fn run_diff(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::editors::editor::DiffApplet.run(args)
+    crate::applets::editors::diff::DiffApplet.run(args)
 }
 
 #[cfg(feature = "dirname")]
 fn run_dirname(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::fs::DirnameApplet.run(args)
+    crate::applets::coreutils::dirname::DirnameApplet.run(args)
 }
 
 #[cfg(feature = "dmesg")]
 fn run_dmesg(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::util_linux::util::DmesgApplet.run(args)
+    crate::applets::util_linux::dmesg::DmesgApplet.run(args)
 }
 
 #[cfg(feature = "dnsd")]
@@ -332,22 +332,22 @@ fn run_dnsdomainname(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "dos2unix")]
 fn run_dos2unix(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::text2::Dos2unixApplet.run(args)
+    crate::applets::coreutils::dos2unix::Dos2unixApplet.run(args)
 }
 
 #[cfg(feature = "dpkg")]
 fn run_dpkg(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::archival::package::DpkgApplet.run(args)
+    crate::applets::archival::dpkg::DpkgApplet.run(args)
 }
 
 #[cfg(feature = "dpkg_deb")]
 fn run_dpkg_deb(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::archival::package::DpkgDebApplet.run(args)
+    crate::applets::archival::dpkg_deb::DpkgDebApplet.run(args)
 }
 
 #[cfg(feature = "du")]
 fn run_du(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::perms::DuApplet.run(args)
+    crate::applets::coreutils::du::DuApplet.run(args)
 }
 
 #[cfg(feature = "dumpkmap")]
@@ -357,17 +357,17 @@ fn run_dumpkmap(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "dumpleases")]
 fn run_dumpleases(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::util_linux::sys_control::DumpleasesApplet.run(args)
+    crate::applets::util_linux::dumpleases::DumpleasesApplet.run(args)
 }
 
 #[cfg(feature = "echo")]
 fn run_echo(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::core::EchoApplet.run(args)
+    crate::applets::coreutils::echo::EchoApplet.run(args)
 }
 
 #[cfg(feature = "ed")]
 fn run_ed(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::shell::interp::EdApplet.run(args)
+    crate::applets::editors::ed::EdApplet.run(args)
 }
 
 #[cfg(feature = "egrep")]
@@ -382,17 +382,17 @@ fn run_eject(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "env")]
 fn run_env(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::editors::editor::EnvApplet.run(args)
+    crate::applets::editors::env::EnvApplet.run(args)
 }
 
 #[cfg(feature = "envdir")]
 fn run_envdir(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::archival::package::EnvdirApplet.run(args)
+    crate::applets::archival::envdir::EnvdirApplet.run(args)
 }
 
 #[cfg(feature = "envuidgid")]
 fn run_envuidgid(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::archival::package::EnvuidgidApplet.run(args)
+    crate::applets::archival::envuidgid::EnvuidgidApplet.run(args)
 }
 
 #[cfg(feature = "ether_wake")]
@@ -402,17 +402,17 @@ fn run_ether_wake(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "expand")]
 fn run_expand(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::tabs::ExpandApplet.run(args)
+    crate::applets::coreutils::expand::ExpandApplet.run(args)
 }
 
 #[cfg(feature = "expr")]
 fn run_expr(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::editors::editor::ExprApplet.run(args)
+    crate::applets::editors::expr::ExprApplet.run(args)
 }
 
 #[cfg(feature = "factor")]
 fn run_factor(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::numbers::FactorApplet.run(args)
+    crate::applets::coreutils::factor::FactorApplet.run(args)
 }
 
 #[cfg(feature = "fakeidentd")]
@@ -422,22 +422,22 @@ fn run_fakeidentd(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "fallocate")]
 fn run_fallocate(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::util_linux::sys_arch::FallocateApplet.run(args)
+    crate::applets::util_linux::fallocate::FallocateApplet.run(args)
 }
 
 #[cfg(feature = "false")]
 fn run_false(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::core::FalseApplet.run(args)
+    crate::applets::coreutils::r#false::FalseApplet.run(args)
 }
 
 #[cfg(feature = "fatattr")]
 fn run_fatattr(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::crypto_attr::FatattrApplet.run(args)
+    crate::applets::coreutils::fatattr::FatattrApplet.run(args)
 }
 
 #[cfg(feature = "fatlabel")]
 fn run_fatlabel(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::util_linux::disk_fs::FatlabelApplet.run(args)
+    crate::applets::util_linux::fatlabel::FatlabelApplet.run(args)
 }
 
 #[cfg(feature = "fbset")]
@@ -462,7 +462,7 @@ fn run_fdformat(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "fdisk")]
 fn run_fdisk(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::util_linux::disk_fs::FdiskApplet.run(args)
+    crate::applets::util_linux::fdisk::FdiskApplet.run(args)
 }
 
 #[cfg(feature = "fgconsole")]
@@ -482,12 +482,12 @@ fn run_find(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "findfs")]
 fn run_findfs(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::crypto_attr::FindfsApplet.run(args)
+    crate::applets::coreutils::findfs::FindfsApplet.run(args)
 }
 
 #[cfg(feature = "flock")]
 fn run_flock(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::util_linux::util::FlockApplet.run(args)
+    crate::applets::util_linux::flock::FlockApplet.run(args)
 }
 
 #[cfg(feature = "fold")]
@@ -507,22 +507,22 @@ fn run_freeramdisk(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "fsck")]
 fn run_fsck(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::util_linux::disk_fs::FsckApplet.run(args)
+    crate::applets::util_linux::fsck::FsckApplet.run(args)
 }
 
 #[cfg(feature = "fsck_minix")]
 fn run_fsck_minix(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::util_linux::disk_fs::FsckMinixApplet.run(args)
+    crate::applets::util_linux::fsck_minix::FsckMinixApplet.run(args)
 }
 
 #[cfg(feature = "fsfreeze")]
 fn run_fsfreeze(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::util_linux::sys_control::FsfreezeApplet.run(args)
+    crate::applets::util_linux::fsfreeze::FsfreezeApplet.run(args)
 }
 
 #[cfg(feature = "fstrim")]
 fn run_fstrim(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::util_linux::disk_fs::FstrimApplet.run(args)
+    crate::applets::util_linux::fstrim::FstrimApplet.run(args)
 }
 
 #[cfg(feature = "fsync")]
@@ -547,17 +547,17 @@ fn run_ftpput(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "fuser")]
 fn run_fuser(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::process_misc::FuserApplet.run(args)
+    crate::applets::coreutils::fuser::FuserApplet.run(args)
 }
 
 #[cfg(feature = "getfattr")]
 fn run_getfattr(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::crypto_attr::GetfattrApplet.run(args)
+    crate::applets::coreutils::getfattr::GetfattrApplet.run(args)
 }
 
 #[cfg(feature = "getopt")]
 fn run_getopt(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::archival::package::GetoptApplet.run(args)
+    crate::applets::archival::getopt::GetoptApplet.run(args)
 }
 
 #[cfg(feature = "getty")]
@@ -577,12 +577,12 @@ fn run_groups(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "gunzip")]
 fn run_gunzip(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::archival::archival::GunzipApplet.run(args)
+    crate::applets::archival::gunzip::GunzipApplet.run(args)
 }
 
 #[cfg(feature = "gzip")]
 fn run_gzip(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::archival::archival::GzipApplet.run(args)
+    crate::applets::archival::gzip::GzipApplet.run(args)
 }
 
 #[cfg(feature = "halt")]
@@ -592,7 +592,7 @@ fn run_halt(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "hd")]
 fn run_hd(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::crypto_attr::HdApplet.run(args)
+    crate::applets::coreutils::hd::HdApplet.run(args)
 }
 
 #[cfg(feature = "hdparm")]
@@ -602,22 +602,22 @@ fn run_hdparm(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "head")]
 fn run_head(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::text::HeadApplet.run(args)
+    crate::applets::coreutils::head::HeadApplet.run(args)
 }
 
 #[cfg(feature = "hexdump")]
 fn run_hexdump(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::crypto_attr::HexdumpApplet.run(args)
+    crate::applets::coreutils::hexdump::HexdumpApplet.run(args)
 }
 
 #[cfg(feature = "hexedit")]
 fn run_hexedit(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::crypto_attr::HexeditApplet.run(args)
+    crate::applets::coreutils::hexedit::HexeditApplet.run(args)
 }
 
 #[cfg(feature = "hostid")]
 fn run_hostid(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::editors::editor::HostidApplet.run(args)
+    crate::applets::editors::hostid::HostidApplet.run(args)
 }
 
 #[cfg(feature = "hostname")]
@@ -632,12 +632,12 @@ fn run_httpd(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "hush")]
 fn run_hush(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::shell::interp::HushApplet.run(args)
+    crate::applets::shell::hush::HushApplet.run(args)
 }
 
 #[cfg(feature = "hwclock")]
 fn run_hwclock(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::util_linux::sys_arch::HwclockApplet.run(args)
+    crate::applets::util_linux::hwclock::HwclockApplet.run(args)
 }
 
 #[cfg(feature = "i2cdetect")]
@@ -712,7 +712,7 @@ fn run_insmod(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "install")]
 fn run_install(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::editors::editor::InstallApplet.run(args)
+    crate::applets::editors::install::InstallApplet.run(args)
 }
 
 #[cfg(feature = "ionice")]
@@ -722,7 +722,7 @@ fn run_ionice(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "iostat")]
 fn run_iostat(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::crypto_attr::IostatApplet.run(args)
+    crate::applets::coreutils::iostat::IostatApplet.run(args)
 }
 
 #[cfg(feature = "ip")]
@@ -742,12 +742,12 @@ fn run_ipcalc(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "ipcrm")]
 fn run_ipcrm(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::crypto_attr::IpcrmApplet.run(args)
+    crate::applets::coreutils::ipcrm::IpcrmApplet.run(args)
 }
 
 #[cfg(feature = "ipcs")]
 fn run_ipcs(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::crypto_attr::IpcsApplet.run(args)
+    crate::applets::coreutils::ipcs::IpcsApplet.run(args)
 }
 
 #[cfg(feature = "iplink")]
@@ -777,7 +777,7 @@ fn run_iptunnel(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "join")]
 fn run_join(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::editors::editor::JoinApplet.run(args)
+    crate::applets::editors::join::JoinApplet.run(args)
 }
 
 #[cfg(feature = "kbd_mode")]
@@ -812,22 +812,22 @@ fn run_last(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "less")]
 fn run_less(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::shell::interp::LessApplet.run(args)
+    crate::applets::miscutils::less::LessApplet.run(args)
 }
 
 #[cfg(feature = "link")]
 fn run_link(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::fs::LinkApplet.run(args)
+    crate::applets::coreutils::link::LinkApplet.run(args)
 }
 
 #[cfg(feature = "linux32")]
 fn run_linux32(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::util_linux::sys_arch::Linux32Applet.run(args)
+    crate::applets::util_linux::linux32::Linux32Applet.run(args)
 }
 
 #[cfg(feature = "linux64")]
 fn run_linux64(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::util_linux::sys_arch::Linux64Applet.run(args)
+    crate::applets::util_linux::linux64::Linux64Applet.run(args)
 }
 
 #[cfg(feature = "linuxrc")]
@@ -837,7 +837,7 @@ fn run_linuxrc(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "ln")]
 fn run_ln(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::perms::LnApplet.run(args)
+    crate::applets::coreutils::ln::LnApplet.run(args)
 }
 
 #[cfg(feature = "loadfont")]
@@ -872,37 +872,37 @@ fn run_logread(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "losetup")]
 fn run_losetup(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::crypto_attr::LosetupApplet.run(args)
+    crate::applets::coreutils::losetup::LosetupApplet.run(args)
 }
 
 #[cfg(feature = "lpd")]
 fn run_lpd(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::util_linux::sys_control::LpdApplet.run(args)
+    crate::applets::util_linux::lpd::LpdApplet.run(args)
 }
 
 #[cfg(feature = "lpq")]
 fn run_lpq(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::util_linux::sys_control::LpqApplet.run(args)
+    crate::applets::util_linux::lpq::LpqApplet.run(args)
 }
 
 #[cfg(feature = "lpr")]
 fn run_lpr(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::util_linux::sys_control::LprApplet.run(args)
+    crate::applets::util_linux::lpr::LprApplet.run(args)
 }
 
 #[cfg(feature = "ls")]
 fn run_ls(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::fs::LsApplet.run(args)
+    crate::applets::coreutils::ls::LsApplet.run(args)
 }
 
 #[cfg(feature = "lsattr")]
 fn run_lsattr(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::crypto_attr::LsattrApplet.run(args)
+    crate::applets::coreutils::lsattr::LsattrApplet.run(args)
 }
 
 #[cfg(feature = "lsblk")]
 fn run_lsblk(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::util_linux::util::LsblkApplet.run(args)
+    crate::applets::util_linux::lsblk::LsblkApplet.run(args)
 }
 
 #[cfg(feature = "lsmod")]
@@ -932,42 +932,42 @@ fn run_lsusb(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "lzcat")]
 fn run_lzcat(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::archival::archival::LzcatApplet.run(args)
+    crate::applets::archival::lzcat::LzcatApplet.run(args)
 }
 
 #[cfg(feature = "lzma")]
 fn run_lzma(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::archival::archival::LzmaApplet.run(args)
+    crate::applets::archival::lzma::LzmaApplet.run(args)
 }
 
 #[cfg(feature = "lzop")]
 fn run_lzop(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::archival::archival::LzopApplet.run(args)
+    crate::applets::archival::lzop::LzopApplet.run(args)
 }
 
 #[cfg(feature = "makedevs")]
 fn run_makedevs(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::crypto_attr::MakedevsApplet.run(args)
+    crate::applets::coreutils::makedevs::MakedevsApplet.run(args)
 }
 
 #[cfg(feature = "makemime")]
 fn run_makemime(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::crypto_attr::MakemimeApplet.run(args)
+    crate::applets::coreutils::makemime::MakemimeApplet.run(args)
 }
 
 #[cfg(feature = "man")]
 fn run_man(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::shell::interp::ManApplet.run(args)
+    crate::applets::miscutils::man::ManApplet.run(args)
 }
 
 #[cfg(feature = "md5sum")]
 fn run_md5sum(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::checksums::Md5SumApplet.run(args)
+    crate::applets::coreutils::md5sum::Md5SumApplet.run(args)
 }
 
 #[cfg(feature = "mdev")]
 fn run_mdev(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::crypto_attr::MdevApplet.run(args)
+    crate::applets::coreutils::mdev::MdevApplet.run(args)
 }
 
 #[cfg(feature = "mesg")]
@@ -987,42 +987,42 @@ fn run_mim(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "mkdir")]
 fn run_mkdir(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::fs::MkdirApplet.run(args)
+    crate::applets::coreutils::mkdir::MkdirApplet.run(args)
 }
 
 #[cfg(feature = "mkdosfs")]
 fn run_mkdosfs(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::util_linux::disk_fs::MkdosfsApplet.run(args)
+    crate::applets::util_linux::mkdosfs::MkdosfsApplet.run(args)
 }
 
 #[cfg(feature = "mke2fs")]
 fn run_mke2fs(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::util_linux::disk_fs::Mke2fsApplet.run(args)
+    crate::applets::util_linux::mke2fs::Mke2fsApplet.run(args)
 }
 
 #[cfg(feature = "mkfifo")]
 fn run_mkfifo(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::process_misc::MkfifoApplet.run(args)
+    crate::applets::coreutils::mkfifo::MkfifoApplet.run(args)
 }
 
 #[cfg(feature = "mkfs_ext2")]
 fn run_mkfs_ext2(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::util_linux::disk_fs::MkfsExt2Applet.run(args)
+    crate::applets::util_linux::mkfs_ext2::MkfsExt2Applet.run(args)
 }
 
 #[cfg(feature = "mkfs_minix")]
 fn run_mkfs_minix(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::util_linux::disk_fs::MkfsMinixApplet.run(args)
+    crate::applets::util_linux::mkfs_minix::MkfsMinixApplet.run(args)
 }
 
 #[cfg(feature = "mkfs_vfat")]
 fn run_mkfs_vfat(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::util_linux::disk_fs::MkfsVfatApplet.run(args)
+    crate::applets::util_linux::mkfs_vfat::MkfsVfatApplet.run(args)
 }
 
 #[cfg(feature = "mknod")]
 fn run_mknod(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::process_misc::MknodApplet.run(args)
+    crate::applets::coreutils::mknod::MknodApplet.run(args)
 }
 
 #[cfg(feature = "mkpasswd")]
@@ -1032,12 +1032,12 @@ fn run_mkpasswd(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "mkswap")]
 fn run_mkswap(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::util_linux::sys_control::MkswapApplet.run(args)
+    crate::applets::util_linux::mkswap::MkswapApplet.run(args)
 }
 
 #[cfg(feature = "mktemp")]
 fn run_mktemp(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::editors::editor::MktempApplet.run(args)
+    crate::applets::editors::mktemp::MktempApplet.run(args)
 }
 
 #[cfg(feature = "modinfo")]
@@ -1052,32 +1052,32 @@ fn run_modprobe(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "more")]
 fn run_more(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::shell::interp::MoreApplet.run(args)
+    crate::applets::miscutils::more::MoreApplet.run(args)
 }
 
 #[cfg(feature = "mount")]
 fn run_mount(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::util_linux::util::MountApplet.run(args)
+    crate::applets::util_linux::mount::MountApplet.run(args)
 }
 
 #[cfg(feature = "mountpoint")]
 fn run_mountpoint(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::crypto_attr::MountpointApplet.run(args)
+    crate::applets::coreutils::mountpoint::MountpointApplet.run(args)
 }
 
 #[cfg(feature = "mpstat")]
 fn run_mpstat(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::crypto_attr::MpstatApplet.run(args)
+    crate::applets::coreutils::mpstat::MpstatApplet.run(args)
 }
 
 #[cfg(feature = "mt")]
 fn run_mt(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::archival::package::MtApplet.run(args)
+    crate::applets::archival::mt::MtApplet.run(args)
 }
 
 #[cfg(feature = "mv")]
 fn run_mv(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::fs::MvApplet.run(args)
+    crate::applets::coreutils::mv::MvApplet.run(args)
 }
 
 #[cfg(feature = "nameif")]
@@ -1087,17 +1087,17 @@ fn run_nameif(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "nanddump")]
 fn run_nanddump(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::archival::package::NanddumpApplet.run(args)
+    crate::applets::archival::nanddump::NanddumpApplet.run(args)
 }
 
 #[cfg(feature = "nandwrite")]
 fn run_nandwrite(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::archival::package::NandwriteApplet.run(args)
+    crate::applets::archival::nandwrite::NandwriteApplet.run(args)
 }
 
 #[cfg(feature = "nbd_client")]
 fn run_nbd_client(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::util_linux::sys_control::NbdClientApplet.run(args)
+    crate::applets::util_linux::nbd_client::NbdClientApplet.run(args)
 }
 
 #[cfg(feature = "nc")]
@@ -1112,22 +1112,22 @@ fn run_netstat(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "nice")]
 fn run_nice(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::process_misc::NiceApplet.run(args)
+    crate::applets::coreutils::nice::NiceApplet.run(args)
 }
 
 #[cfg(feature = "nl")]
 fn run_nl(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::text2::NlApplet.run(args)
+    crate::applets::coreutils::nl::NlApplet.run(args)
 }
 
 #[cfg(feature = "nmeter")]
 fn run_nmeter(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::process_misc::NmeterApplet.run(args)
+    crate::applets::coreutils::nmeter::NmeterApplet.run(args)
 }
 
 #[cfg(feature = "nohup")]
 fn run_nohup(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::process_misc::NohupApplet.run(args)
+    crate::applets::coreutils::nohup::NohupApplet.run(args)
 }
 
 #[cfg(feature = "nologin")]
@@ -1137,12 +1137,12 @@ fn run_nologin(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "nproc")]
 fn run_nproc(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::core::NprocApplet.run(args)
+    crate::applets::coreutils::nproc::NprocApplet.run(args)
 }
 
 #[cfg(feature = "nsenter")]
 fn run_nsenter(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::util_linux::sys_control::NsenterApplet.run(args)
+    crate::applets::util_linux::nsenter::NsenterApplet.run(args)
 }
 
 #[cfg(feature = "nslookup")]
@@ -1157,17 +1157,17 @@ fn run_ntpd(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "od")]
 fn run_od(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::text2::OdApplet.run(args)
+    crate::applets::coreutils::od::OdApplet.run(args)
 }
 
 #[cfg(feature = "openvt")]
 fn run_openvt(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::util_linux::sys_control::OpenvtApplet.run(args)
+    crate::applets::util_linux::openvt::OpenvtApplet.run(args)
 }
 
 #[cfg(feature = "partprobe")]
 fn run_partprobe(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::util_linux::sys_control::PartprobeApplet.run(args)
+    crate::applets::util_linux::partprobe::PartprobeApplet.run(args)
 }
 
 #[cfg(feature = "passwd")]
@@ -1177,12 +1177,12 @@ fn run_passwd(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "paste")]
 fn run_paste(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::text2::PasteApplet.run(args)
+    crate::applets::coreutils::paste::PasteApplet.run(args)
 }
 
 #[cfg(feature = "patch")]
 fn run_patch(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::editors::editor::PatchApplet.run(args)
+    crate::applets::editors::patch::PatchApplet.run(args)
 }
 
 #[cfg(feature = "pgrep")]
@@ -1207,12 +1207,12 @@ fn run_ping6(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "pipe_progress")]
 fn run_pipe_progress(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::archival::package::PipeProgressApplet.run(args)
+    crate::applets::archival::pipe_progress::PipeProgressApplet.run(args)
 }
 
 #[cfg(feature = "pivot_root")]
 fn run_pivot_root(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::util_linux::sys_arch::PivotRootApplet.run(args)
+    crate::applets::util_linux::pivot_root::PivotRootApplet.run(args)
 }
 
 #[cfg(feature = "pkill")]
@@ -1237,12 +1237,12 @@ fn run_poweroff(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "powertop")]
 fn run_powertop(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::process_misc::PowertopApplet.run(args)
+    crate::applets::coreutils::powertop::PowertopApplet.run(args)
 }
 
 #[cfg(feature = "printenv")]
 fn run_printenv(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::core::PrintenvApplet.run(args)
+    crate::applets::coreutils::printenv::PrintenvApplet.run(args)
 }
 
 #[cfg(feature = "printf")]
@@ -1262,12 +1262,12 @@ fn run_pscan(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "pstree")]
 fn run_pstree(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::process_misc::PstreeApplet.run(args)
+    crate::applets::coreutils::pstree::PstreeApplet.run(args)
 }
 
 #[cfg(feature = "pwd")]
 fn run_pwd(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::core::PwdApplet.run(args)
+    crate::applets::coreutils::pwd::PwdApplet.run(args)
 }
 
 #[cfg(feature = "pwdx")]
@@ -1277,7 +1277,7 @@ fn run_pwdx(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "raidautorun")]
 fn run_raidautorun(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::util_linux::disk_fs::RaidautorunApplet.run(args)
+    crate::applets::util_linux::raidautorun::RaidautorunApplet.run(args)
 }
 
 #[cfg(feature = "rdate")]
@@ -1287,7 +1287,7 @@ fn run_rdate(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "rdev")]
 fn run_rdev(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::util_linux::sys_arch::RdevApplet.run(args)
+    crate::applets::util_linux::rdev::RdevApplet.run(args)
 }
 
 #[cfg(feature = "readahead")]
@@ -1297,17 +1297,17 @@ fn run_readahead(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "readlink")]
 fn run_readlink(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::link::ReadlinkApplet.run(args)
+    crate::applets::coreutils::readlink::ReadlinkApplet.run(args)
 }
 
 #[cfg(feature = "readprofile")]
 fn run_readprofile(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::util_linux::sys_arch::ReadprofileApplet.run(args)
+    crate::applets::util_linux::readprofile::ReadprofileApplet.run(args)
 }
 
 #[cfg(feature = "realpath")]
 fn run_realpath(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::link::RealpathApplet.run(args)
+    crate::applets::coreutils::realpath::RealpathApplet.run(args)
 }
 
 #[cfg(feature = "reboot")]
@@ -1317,7 +1317,7 @@ fn run_reboot(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "reformime")]
 fn run_reformime(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::crypto_attr::ReformimeApplet.run(args)
+    crate::applets::coreutils::reformime::ReformimeApplet.run(args)
 }
 
 #[cfg(feature = "remove_shell")]
@@ -1332,7 +1332,7 @@ fn run_renice(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "reset")]
 fn run_reset(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::core::ResetApplet.run(args)
+    crate::applets::coreutils::reset::ResetApplet.run(args)
 }
 
 #[cfg(feature = "resize")]
@@ -1342,7 +1342,7 @@ fn run_resize(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "resume")]
 fn run_resume(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::util_linux::disk_fs::ResumeApplet.run(args)
+    crate::applets::util_linux::resume::ResumeApplet.run(args)
 }
 
 #[cfg(feature = "rev")]
@@ -1352,12 +1352,12 @@ fn run_rev(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "rm")]
 fn run_rm(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::fs::RmApplet.run(args)
+    crate::applets::coreutils::rm::RmApplet.run(args)
 }
 
 #[cfg(feature = "rmdir")]
 fn run_rmdir(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::fs::RmdirApplet.run(args)
+    crate::applets::coreutils::rmdir::RmdirApplet.run(args)
 }
 
 #[cfg(feature = "rmmod")]
@@ -1372,27 +1372,27 @@ fn run_route(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "rpm")]
 fn run_rpm(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::archival::package::RpmApplet.run(args)
+    crate::applets::archival::rpm::RpmApplet.run(args)
 }
 
 #[cfg(feature = "rpm2cpio")]
 fn run_rpm2cpio(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::archival::package::Rpm2cpioApplet.run(args)
+    crate::applets::archival::rpm2cpio::Rpm2cpioApplet.run(args)
 }
 
 #[cfg(feature = "rtcwake")]
 fn run_rtcwake(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::util_linux::sys_arch::RtcwakeApplet.run(args)
+    crate::applets::util_linux::rtcwake::RtcwakeApplet.run(args)
 }
 
 #[cfg(feature = "run_init")]
 fn run_run_init(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::util_linux::sys_arch::RunInitApplet.run(args)
+    crate::applets::util_linux::run_init::RunInitApplet.run(args)
 }
 
 #[cfg(feature = "run_parts")]
 fn run_run_parts(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::util_linux::sys_arch::RunPartsApplet.run(args)
+    crate::applets::util_linux::run_parts::RunPartsApplet.run(args)
 }
 
 #[cfg(feature = "runlevel")]
@@ -1402,37 +1402,37 @@ fn run_runlevel(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "runsv")]
 fn run_runsv(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::archival::package::RunsvApplet.run(args)
+    crate::applets::archival::runsv::RunsvApplet.run(args)
 }
 
 #[cfg(feature = "runsvdir")]
 fn run_runsvdir(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::archival::package::RunsvdirApplet.run(args)
+    crate::applets::archival::runsvdir::RunsvdirApplet.run(args)
 }
 
 #[cfg(feature = "rx")]
 fn run_rx(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::archival::package::RxApplet.run(args)
+    crate::applets::archival::rx::RxApplet.run(args)
 }
 
 #[cfg(feature = "script")]
 fn run_script(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::archival::package::ScriptApplet.run(args)
+    crate::applets::archival::script::ScriptApplet.run(args)
 }
 
 #[cfg(feature = "scriptreplay")]
 fn run_scriptreplay(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::archival::package::ScriptreplayApplet.run(args)
+    crate::applets::archival::scriptreplay::ScriptreplayApplet.run(args)
 }
 
 #[cfg(feature = "sed")]
 fn run_sed(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::editors::editor::SedApplet.run(args)
+    crate::applets::editors::sed::SedApplet.run(args)
 }
 
 #[cfg(feature = "seedrng")]
 fn run_seedrng(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::util_linux::sys_arch::SeedrngApplet.run(args)
+    crate::applets::util_linux::seedrng::SeedrngApplet.run(args)
 }
 
 #[cfg(feature = "sendmail")]
@@ -1442,12 +1442,12 @@ fn run_sendmail(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "seq")]
 fn run_seq(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::numbers::SeqApplet.run(args)
+    crate::applets::coreutils::seq::SeqApplet.run(args)
 }
 
 #[cfg(feature = "setarch")]
 fn run_setarch(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::util_linux::sys_arch::SetarchApplet.run(args)
+    crate::applets::util_linux::setarch::SetarchApplet.run(args)
 }
 
 #[cfg(feature = "setconsole")]
@@ -1457,7 +1457,7 @@ fn run_setconsole(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "setfattr")]
 fn run_setfattr(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::crypto_attr::SetfattrApplet.run(args)
+    crate::applets::coreutils::setfattr::SetfattrApplet.run(args)
 }
 
 #[cfg(feature = "setfont")]
@@ -1472,17 +1472,17 @@ fn run_setkeycodes(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "setlogcons")]
 fn run_setlogcons(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::util_linux::sys_control::SetlogconsApplet.run(args)
+    crate::applets::util_linux::setlogcons::SetlogconsApplet.run(args)
 }
 
 #[cfg(feature = "setpriv")]
 fn run_setpriv(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::archival::package::SetprivApplet.run(args)
+    crate::applets::archival::setpriv::SetprivApplet.run(args)
 }
 
 #[cfg(feature = "setserial")]
 fn run_setserial(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::util_linux::sys_control::SetserialApplet.run(args)
+    crate::applets::util_linux::setserial::SetserialApplet.run(args)
 }
 
 #[cfg(feature = "setsid")]
@@ -1492,7 +1492,7 @@ fn run_setsid(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "setuidgid")]
 fn run_setuidgid(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::archival::package::SetuidgidApplet.run(args)
+    crate::applets::archival::setuidgid::SetuidgidApplet.run(args)
 }
 
 #[cfg(feature = "sh")]
@@ -1502,27 +1502,27 @@ fn run_sh(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "sha1sum")]
 fn run_sha1sum(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::checksums::Sha1SumApplet.run(args)
+    crate::applets::coreutils::sha1sum::Sha1SumApplet.run(args)
 }
 
 #[cfg(feature = "sha256sum")]
 fn run_sha256sum(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::checksums::Sha256SumApplet.run(args)
+    crate::applets::coreutils::sha256sum::Sha256SumApplet.run(args)
 }
 
 #[cfg(feature = "sha384sum")]
 fn run_sha384sum(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::crypto_attr::Sha384sumApplet.run(args)
+    crate::applets::coreutils::sha384sum::Sha384sumApplet.run(args)
 }
 
 #[cfg(feature = "sha3sum")]
 fn run_sha3sum(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::crypto_attr::Sha3sumApplet.run(args)
+    crate::applets::coreutils::sha3sum::Sha3sumApplet.run(args)
 }
 
 #[cfg(feature = "sha512sum")]
 fn run_sha512sum(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::checksums::Sha512SumApplet.run(args)
+    crate::applets::coreutils::sha512sum::Sha512SumApplet.run(args)
 }
 
 #[cfg(feature = "showkey")]
@@ -1532,12 +1532,12 @@ fn run_showkey(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "shred")]
 fn run_shred(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::process_misc::ShredApplet.run(args)
+    crate::applets::coreutils::shred::ShredApplet.run(args)
 }
 
 #[cfg(feature = "shuf")]
 fn run_shuf(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::editors::editor::ShufApplet.run(args)
+    crate::applets::editors::shuf::ShufApplet.run(args)
 }
 
 #[cfg(feature = "slattach")]
@@ -1547,17 +1547,17 @@ fn run_slattach(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "sleep")]
 fn run_sleep(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::core::SleepApplet.run(args)
+    crate::applets::coreutils::sleep::SleepApplet.run(args)
 }
 
 #[cfg(feature = "smemcap")]
 fn run_smemcap(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::util_linux::sys_arch::SmemcapApplet.run(args)
+    crate::applets::util_linux::smemcap::SmemcapApplet.run(args)
 }
 
 #[cfg(feature = "softlimit")]
 fn run_softlimit(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::archival::package::SoftlimitApplet.run(args)
+    crate::applets::archival::softlimit::SoftlimitApplet.run(args)
 }
 
 #[cfg(feature = "sort")]
@@ -1567,7 +1567,7 @@ fn run_sort(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "split")]
 fn run_split(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::editors::editor::SplitApplet.run(args)
+    crate::applets::editors::split::SplitApplet.run(args)
 }
 
 #[cfg(feature = "ssl_client")]
@@ -1587,17 +1587,17 @@ fn run_start_stop_daemon(args: &[std::ffi::OsString]) -> crate::core::Result<i32
 
 #[cfg(feature = "stat")]
 fn run_stat(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::perms::StatApplet.run(args)
+    crate::applets::coreutils::stat::StatApplet.run(args)
 }
 
 #[cfg(feature = "strings")]
 fn run_strings(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::stream::StringsApplet.run(args)
+    crate::applets::coreutils::strings::StringsApplet.run(args)
 }
 
 #[cfg(feature = "stty")]
 fn run_stty(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::util_linux::sys_control::SttyApplet.run(args)
+    crate::applets::util_linux::stty::SttyApplet.run(args)
 }
 
 #[cfg(feature = "su")]
@@ -1612,57 +1612,57 @@ fn run_sulogin(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "sum")]
 fn run_sum(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::checksums::SumApplet.run(args)
+    crate::applets::coreutils::sum::SumApplet.run(args)
 }
 
 #[cfg(feature = "sv")]
 fn run_sv(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::archival::package::SvApplet.run(args)
+    crate::applets::archival::sv::SvApplet.run(args)
 }
 
 #[cfg(feature = "svc")]
 fn run_svc(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::archival::package::SvcApplet.run(args)
+    crate::applets::archival::svc::SvcApplet.run(args)
 }
 
 #[cfg(feature = "svlogd")]
 fn run_svlogd(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::archival::package::SvlogdApplet.run(args)
+    crate::applets::archival::svlogd::SvlogdApplet.run(args)
 }
 
 #[cfg(feature = "svok")]
 fn run_svok(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::util_linux::sys_control::SvokApplet.run(args)
+    crate::applets::util_linux::svok::SvokApplet.run(args)
 }
 
 #[cfg(feature = "swaplabel")]
 fn run_swaplabel(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::crypto_attr::SwaplabelApplet.run(args)
+    crate::applets::coreutils::swaplabel::SwaplabelApplet.run(args)
 }
 
 #[cfg(feature = "swapoff")]
 fn run_swapoff(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::util_linux::sys_control::SwapoffApplet.run(args)
+    crate::applets::util_linux::swapoff::SwapoffApplet.run(args)
 }
 
 #[cfg(feature = "swapon")]
 fn run_swapon(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::util_linux::sys_control::SwaponApplet.run(args)
+    crate::applets::util_linux::swapon::SwaponApplet.run(args)
 }
 
 #[cfg(feature = "switch_root")]
 fn run_switch_root(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::util_linux::sys_arch::SwitchRootApplet.run(args)
+    crate::applets::util_linux::switch_root::SwitchRootApplet.run(args)
 }
 
 #[cfg(feature = "sync")]
 fn run_sync(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::core::SyncApplet.run(args)
+    crate::applets::coreutils::sync::SyncApplet.run(args)
 }
 
 #[cfg(feature = "sysctl")]
 fn run_sysctl(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::util_linux::sys_control::SysctlApplet.run(args)
+    crate::applets::util_linux::sysctl::SysctlApplet.run(args)
 }
 
 #[cfg(feature = "syslogd")]
@@ -1672,17 +1672,17 @@ fn run_syslogd(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "tac")]
 fn run_tac(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::editors::editor::TacApplet.run(args)
+    crate::applets::editors::tac::TacApplet.run(args)
 }
 
 #[cfg(feature = "tail")]
 fn run_tail(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::text::TailApplet.run(args)
+    crate::applets::coreutils::tail::TailApplet.run(args)
 }
 
 #[cfg(feature = "tar")]
 fn run_tar(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::archival::archival::TarApplet.run(args)
+    crate::applets::archival::tar::TarApplet.run(args)
 }
 
 #[cfg(feature = "taskset")]
@@ -1697,7 +1697,7 @@ fn run_tcpsvd(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "tee")]
 fn run_tee(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::stream::TeeApplet.run(args)
+    crate::applets::coreutils::tee::TeeApplet.run(args)
 }
 
 #[cfg(feature = "telnet")]
@@ -1712,7 +1712,7 @@ fn run_telnetd(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "test")]
 fn run_test(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::util_linux::util::TestApplet.run(args)
+    crate::applets::util_linux::test::TestApplet.run(args)
 }
 
 #[cfg(feature = "tftp")]
@@ -1727,12 +1727,12 @@ fn run_tftpd(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "time")]
 fn run_time(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::process_misc::TimeApplet.run(args)
+    crate::applets::coreutils::time::TimeApplet.run(args)
 }
 
 #[cfg(feature = "timeout")]
 fn run_timeout(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::editors::editor::TimeoutApplet.run(args)
+    crate::applets::editors::timeout::TimeoutApplet.run(args)
 }
 
 #[cfg(feature = "top")]
@@ -1742,7 +1742,7 @@ fn run_top(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "touch")]
 fn run_touch(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::fs::TouchApplet.run(args)
+    crate::applets::coreutils::touch::TouchApplet.run(args)
 }
 
 #[cfg(feature = "tr")]
@@ -1767,32 +1767,32 @@ fn run_tree(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "true")]
 fn run_true(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::core::TrueApplet.run(args)
+    crate::applets::coreutils::r#true::TrueApplet.run(args)
 }
 
 #[cfg(feature = "truncate")]
 fn run_truncate(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::editors::editor::TruncateApplet.run(args)
+    crate::applets::editors::truncate::TruncateApplet.run(args)
 }
 
 #[cfg(feature = "ts")]
 fn run_ts(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::editors::editor::TsApplet.run(args)
+    crate::applets::editors::ts::TsApplet.run(args)
 }
 
 #[cfg(feature = "tsort")]
 fn run_tsort(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::numbers::TsortApplet.run(args)
+    crate::applets::coreutils::tsort::TsortApplet.run(args)
 }
 
 #[cfg(feature = "tty")]
 fn run_tty(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::process_misc::TtyApplet.run(args)
+    crate::applets::coreutils::tty::TtyApplet.run(args)
 }
 
 #[cfg(feature = "ttysize")]
 fn run_ttysize(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::util_linux::sys_control::TtysizeApplet.run(args)
+    crate::applets::util_linux::ttysize::TtysizeApplet.run(args)
 }
 
 #[cfg(feature = "tunctl")]
@@ -1802,37 +1802,37 @@ fn run_tunctl(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "ubiattach")]
 fn run_ubiattach(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::archival::package::UbiattachApplet.run(args)
+    crate::applets::archival::ubiattach::UbiattachApplet.run(args)
 }
 
 #[cfg(feature = "ubidetach")]
 fn run_ubidetach(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::archival::package::UbidetachApplet.run(args)
+    crate::applets::archival::ubidetach::UbidetachApplet.run(args)
 }
 
 #[cfg(feature = "ubimkvol")]
 fn run_ubimkvol(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::archival::package::UbimkvolApplet.run(args)
+    crate::applets::archival::ubimkvol::UbimkvolApplet.run(args)
 }
 
 #[cfg(feature = "ubirename")]
 fn run_ubirename(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::archival::package::UbirenameApplet.run(args)
+    crate::applets::archival::ubirename::UbirenameApplet.run(args)
 }
 
 #[cfg(feature = "ubirmvol")]
 fn run_ubirmvol(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::archival::package::UbirmvolApplet.run(args)
+    crate::applets::archival::ubirmvol::UbirmvolApplet.run(args)
 }
 
 #[cfg(feature = "ubirsvol")]
 fn run_ubirsvol(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::archival::package::UbirsvolApplet.run(args)
+    crate::applets::archival::ubirsvol::UbirsvolApplet.run(args)
 }
 
 #[cfg(feature = "ubiupdatevol")]
 fn run_ubiupdatevol(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::archival::package::UbiupdatevolApplet.run(args)
+    crate::applets::archival::ubiupdatevol::UbiupdatevolApplet.run(args)
 }
 
 #[cfg(feature = "udhcpc")]
@@ -1857,12 +1857,12 @@ fn run_udpsvd(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "uevent")]
 fn run_uevent(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::crypto_attr::UeventApplet.run(args)
+    crate::applets::coreutils::uevent::UeventApplet.run(args)
 }
 
 #[cfg(feature = "umount")]
 fn run_umount(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::util_linux::util::UmountApplet.run(args)
+    crate::applets::util_linux::umount::UmountApplet.run(args)
 }
 
 #[cfg(feature = "uname")]
@@ -1872,42 +1872,42 @@ fn run_uname(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "unexpand")]
 fn run_unexpand(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::tabs::UnexpandApplet.run(args)
+    crate::applets::coreutils::unexpand::UnexpandApplet.run(args)
 }
 
 #[cfg(feature = "uniq")]
 fn run_uniq(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::stream::UniqApplet.run(args)
+    crate::applets::coreutils::uniq::UniqApplet.run(args)
 }
 
 #[cfg(feature = "unix2dos")]
 fn run_unix2dos(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::text2::Unix2dosApplet.run(args)
+    crate::applets::coreutils::unix2dos::Unix2dosApplet.run(args)
 }
 
 #[cfg(feature = "unlink")]
 fn run_unlink(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::fs::UnlinkApplet.run(args)
+    crate::applets::coreutils::unlink::UnlinkApplet.run(args)
 }
 
 #[cfg(feature = "unlzma")]
 fn run_unlzma(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::archival::archival::UnlzmaApplet.run(args)
+    crate::applets::archival::unlzma::UnlzmaApplet.run(args)
 }
 
 #[cfg(feature = "unshare")]
 fn run_unshare(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::util_linux::sys_control::UnshareApplet.run(args)
+    crate::applets::util_linux::unshare::UnshareApplet.run(args)
 }
 
 #[cfg(feature = "unxz")]
 fn run_unxz(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::archival::archival::UnxzApplet.run(args)
+    crate::applets::archival::unxz::UnxzApplet.run(args)
 }
 
 #[cfg(feature = "unzip")]
 fn run_unzip(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::archival::package::UnzipApplet.run(args)
+    crate::applets::archival::unzip::UnzipApplet.run(args)
 }
 
 #[cfg(feature = "uptime")]
@@ -1917,12 +1917,12 @@ fn run_uptime(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "users")]
 fn run_users(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::process_misc::UsersApplet.run(args)
+    crate::applets::coreutils::users::UsersApplet.run(args)
 }
 
 #[cfg(feature = "usleep")]
 fn run_usleep(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::process_misc::UsleepApplet.run(args)
+    crate::applets::coreutils::usleep::UsleepApplet.run(args)
 }
 
 #[cfg(feature = "uudecode")]
@@ -1937,7 +1937,7 @@ fn run_uuencode(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "uuidgen")]
 fn run_uuidgen(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::crypto_attr::UuidgenApplet.run(args)
+    crate::applets::coreutils::uuidgen::UuidgenApplet.run(args)
 }
 
 #[cfg(feature = "vconfig")]
@@ -1947,7 +1947,7 @@ fn run_vconfig(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "vi")]
 fn run_vi(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::shell::interp::ViApplet.run(args)
+    crate::applets::editors::vi::ViApplet.run(args)
 }
 
 #[cfg(feature = "vlock")]
@@ -1962,12 +1962,12 @@ fn run_vmstat(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "volname")]
 fn run_volname(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::crypto_attr::VolnameApplet.run(args)
+    crate::applets::coreutils::volname::VolnameApplet.run(args)
 }
 
 #[cfg(feature = "w")]
 fn run_w(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::process_misc::WApplet.run(args)
+    crate::applets::coreutils::w::WApplet.run(args)
 }
 
 #[cfg(feature = "wall")]
@@ -1977,7 +1977,7 @@ fn run_wall(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "watch")]
 fn run_watch(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::util_linux::sys_control::WatchApplet.run(args)
+    crate::applets::util_linux::watch::WatchApplet.run(args)
 }
 
 #[cfg(feature = "watchdog")]
@@ -1987,7 +1987,7 @@ fn run_watchdog(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "wc")]
 fn run_wc(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::text::WcApplet.run(args)
+    crate::applets::coreutils::wc::WcApplet.run(args)
 }
 
 #[cfg(feature = "wget")]
@@ -1997,17 +1997,17 @@ fn run_wget(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "which")]
 fn run_which(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::fs::WhichApplet.run(args)
+    crate::applets::coreutils::which::WhichApplet.run(args)
 }
 
 #[cfg(feature = "who")]
 fn run_who(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::process_misc::WhoApplet.run(args)
+    crate::applets::coreutils::who::WhoApplet.run(args)
 }
 
 #[cfg(feature = "whoami")]
 fn run_whoami(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::core::WhoamiApplet.run(args)
+    crate::applets::coreutils::whoami::WhoamiApplet.run(args)
 }
 
 #[cfg(feature = "whois")]
@@ -2017,7 +2017,7 @@ fn run_whois(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "xargs")]
 fn run_xargs(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::shell::shell::XargsApplet.run(args)
+    crate::applets::findutils::xargs::XargsApplet.run(args)
 }
 
 #[cfg(feature = "xxd")]
@@ -2027,22 +2027,22 @@ fn run_xxd(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
 
 #[cfg(feature = "xz")]
 fn run_xz(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::archival::archival::XzApplet.run(args)
+    crate::applets::archival::xz::XzApplet.run(args)
 }
 
 #[cfg(feature = "xzcat")]
 fn run_xzcat(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::archival::archival::XzcatApplet.run(args)
+    crate::applets::archival::xzcat::XzcatApplet.run(args)
 }
 
 #[cfg(feature = "yes")]
 fn run_yes(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::coreutils::core::YesApplet.run(args)
+    crate::applets::coreutils::yes::YesApplet.run(args)
 }
 
 #[cfg(feature = "zcat")]
 fn run_zcat(args: &[std::ffi::OsString]) -> crate::core::Result<i32> {
-    crate::applets::archival::package::ZcatApplet.run(args)
+    crate::applets::archival::zcat::ZcatApplet.run(args)
 }
 
 #[cfg(feature = "zcip")]

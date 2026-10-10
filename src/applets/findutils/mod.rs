@@ -15,3 +15,4 @@ pub fn register(applets: &mut Vec<Arc<dyn Applet>>) {
     #[cfg(feature = "fgrep")]
     applets.push(Arc::new(grep::FgrepApplet));
 }
+pub mod xargs;
