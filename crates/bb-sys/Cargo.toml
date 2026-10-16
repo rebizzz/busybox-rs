@@ -1,0 +1,10 @@
+[package]
+name = "bb-sys"
+version = "1.0.1"
+edition = "2024"
+authors = ["Busybox-RS Contributors"]
+description = "Low-level system and unsafe libc layer for BusyBox in Rust"
+license = "MIT"
+
+[dependencies]
+libc = "0.2"

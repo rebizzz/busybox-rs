@@ -1,0 +1,10 @@
+[package]
+name = "bb-core"
+version = "1.0.1"
+edition = "2024"
+authors = ["Busybox-RS Contributors"]
+description = "Core library utilities for BusyBox in Rust"
+license = "MIT"
+
+[dependencies]
+bb-sys = { path = "../bb-sys" }

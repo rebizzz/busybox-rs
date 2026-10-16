@@ -1,0 +1,40 @@
+use crate::core::{Applet, Result};
+use std::ffi::OsString;
+use std::io::{self, Write};
+use std::os::unix::ffi::OsStrExt;
+use std::env;
+
+pub struct PrintenvApplet;
+impl Applet for PrintenvApplet {
+    fn name(&self) -> &'static str {
+        "printenv"
+    }
+    fn description(&self) -> &'static str {
+        "Print all or part of environment"
+    }
+    fn run(&self, args: &[OsString]) -> Result<i32> {
+        let stdout = io::stdout();
+        let mut handle = stdout.lock();
+        if args.is_empty() {
+            for (k, v) in env::vars_os() {
+                handle.write_all(k.as_bytes())?;
+                handle.write_all(b"=")?;
+                handle.write_all(v.as_bytes())?;
+                handle.write_all(b"\n")?;
+            }
+            Ok(0)
+        } else {
+            let mut ret = 0;
+            for arg in args {
+                match env::var_os(arg) {
+                    Some(val) => {
+                        handle.write_all(val.as_bytes())?;
+                        handle.write_all(b"\n")?;
+                    }
+                    None => ret = 1,
+                }
+            }
+            Ok(ret)
+        }
+    }
+}

@@ -1,36 +1,21 @@
 use crate::core::Applet;
 use std::sync::Arc;
 
-pub mod interp;
+pub mod ash;
+pub mod common;
+pub mod double_lbracket;
+pub mod hush;
 #[allow(clippy::module_inception)]
 pub mod shell;
 
 pub fn register(applets: &mut Vec<Arc<dyn Applet>>) {
     let _ = applets;
     #[cfg(feature = "ash")]
-    applets.push(Arc::new(interp::AshApplet));
+    applets.push(Arc::new(ash::AshApplet));
     #[cfg(feature = "hush")]
-    applets.push(Arc::new(interp::HushApplet));
-    #[cfg(feature = "awk")]
-    applets.push(Arc::new(interp::AwkApplet));
-    #[cfg(feature = "ed")]
-    applets.push(Arc::new(interp::EdApplet));
-    #[cfg(feature = "vi")]
-    applets.push(Arc::new(interp::ViApplet));
-    #[cfg(feature = "less")]
-    applets.push(Arc::new(interp::LessApplet));
-    #[cfg(feature = "more")]
-    applets.push(Arc::new(interp::MoreApplet));
-    #[cfg(feature = "man")]
-    applets.push(Arc::new(interp::ManApplet));
-    #[cfg(feature = "dc")]
-    applets.push(Arc::new(interp::DcApplet));
-    #[cfg(feature = "bc")]
-    applets.push(Arc::new(interp::BcApplet));
+    applets.push(Arc::new(hush::HushApplet));
     #[cfg(feature = "test_extended")]
-    applets.push(Arc::new(interp::DoubleLBracketApplet));
-    #[cfg(feature = "xargs")]
-    applets.push(Arc::new(shell::XargsApplet));
+    applets.push(Arc::new(double_lbracket::DoubleLBracketApplet));
     #[cfg(feature = "sh")]
     applets.push(Arc::new(shell::ShApplet));
 }

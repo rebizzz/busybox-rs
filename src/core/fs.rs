@@ -9,7 +9,6 @@ use std::path::{Path, PathBuf};
 
 use crate::core::errors::BbError;
 
-/// Opens a path or standard input if path is "-" or empty
 pub fn open_or_stdin(path: &Path) -> std::result::Result<Box<dyn Read>, BbError> {
     if path.as_os_str() == "-" {
         Ok(Box::new(io::stdin()))
@@ -46,7 +45,6 @@ pub fn read_bytes_or_stdin(path: &Path) -> std::result::Result<Vec<u8>, BbError>
     Ok(buf)
 }
 
-/// Options controlling file and directory copying.
 #[derive(Debug, Clone)]
 pub struct CopyOptions {
     pub preserve_status: bool,
@@ -678,7 +676,6 @@ pub fn copy_file_entry(
     Ok(())
 }
 
-/// Recursively copy a file or directory preserving Unix semantics
 pub fn copy_recursive(src: &Path, dst: &Path) -> std::result::Result<(), BbError> {
     let options = CopyOptions {
         recursive: true,

@@ -79,9 +79,7 @@ clippy:
 	@$(CARGO) clippy --all-targets -- -D warnings
 
 bloatcheck: busybox
-	@echo "=== BusyBox Binary Footprint ==="
-	@size $(BIN) 2>/dev/null || true
-	@ls -lh $(BIN)
+	@./scripts/bloat-check.sh $(BIN)
 
 clean:
 	@$(CARGO) clean

@@ -1,0 +1,10 @@
+pub mod bbunzip;
+pub mod bzip2;
+pub mod cpio;
+pub mod dpkg;
+pub mod dpkg_deb;
+pub mod gzip;
+pub mod lzop;
+pub mod rpm;
+pub mod tar;
+pub mod unzip;

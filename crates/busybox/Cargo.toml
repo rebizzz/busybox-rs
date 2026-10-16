@@ -1,0 +1,17 @@
+[package]
+name = "busybox-bin"
+version = "1.0.1"
+edition = "2024"
+authors = ["Busybox-RS Contributors"]
+description = "Multi-call binary dispatcher for BusyBox in Rust"
+license = "GPL-2.0-only"
+
+[[bin]]
+name = "busybox"
+path = "src/main.rs"
+
+[dependencies]
+libc = "0.2"
+bb-core = { path = "../bb-core" }
+bb-sys = { path = "../bb-sys" }
+bb-applets = { path = "../bb-applets" }

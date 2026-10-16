@@ -1,137 +1,197 @@
 use crate::core::Applet;
 use std::sync::Arc;
 
-pub mod config;
-pub mod servers;
-pub mod sockets;
-pub mod tools;
+pub mod common;
+pub mod ifconfig;
+pub mod route;
+pub mod netstat;
+pub mod arp;
+pub mod arping;
+pub mod ether_wake;
+pub mod nameif;
+pub mod ip;
+pub mod ipaddr;
+pub mod iplink;
+pub mod ipneigh;
+pub mod iproute;
+pub mod iprule;
+pub mod iptunnel;
+pub mod ifup;
+pub mod ifdown;
+pub mod ifenslave;
+pub mod ifplugd;
+pub mod vconfig;
+pub mod tunctl;
+pub mod slattach;
+pub mod brctl;
+pub mod httpd;
+pub mod ftpd;
+pub mod ftpget;
+pub mod ftpput;
+pub mod tftp;
+pub mod tftpd;
+pub mod telnet;
+pub mod telnetd;
+pub mod inetd;
+pub mod fakeidentd;
+pub mod dnsd;
+pub mod dhcprelay;
+pub mod udhcpc;
+pub mod udhcpc6;
+pub mod udhcpd;
+pub mod tcpsvd;
+pub mod udpsvd;
+pub mod nc;
+pub mod ping;
+pub mod ping6;
+pub mod traceroute;
+pub mod traceroute6;
+pub mod whois;
+pub mod nslookup;
+pub mod ssl_client;
+pub mod ssl_server;
+pub mod zcip;
+pub mod wget;
+pub mod sendmail;
+pub mod popmaildir;
+pub mod ntpd;
+pub mod rdate;
+pub mod chat;
+pub mod microcom;
+pub mod pscan;
+pub mod dnsdomainname;
+pub mod ipcalc;
+pub mod watchdog;
+pub mod conspy;
+pub mod setconsole;
+pub mod resize;
 
 pub fn register(applets: &mut Vec<Arc<dyn Applet>>) {
     let _ = applets;
     #[cfg(feature = "ifconfig")]
-    applets.push(Arc::new(config::IfconfigApplet));
+    applets.push(Arc::new(ifconfig::IfconfigApplet));
     #[cfg(feature = "route")]
-    applets.push(Arc::new(config::RouteApplet));
+    applets.push(Arc::new(route::RouteApplet));
     #[cfg(feature = "netstat")]
-    applets.push(Arc::new(config::NetstatApplet));
+    applets.push(Arc::new(netstat::NetstatApplet));
     #[cfg(feature = "arp")]
-    applets.push(Arc::new(config::ArpApplet));
+    applets.push(Arc::new(arp::ArpApplet));
     #[cfg(feature = "arping")]
-    applets.push(Arc::new(config::ArpingApplet));
+    applets.push(Arc::new(arping::ArpingApplet));
     #[cfg(feature = "ether_wake")]
-    applets.push(Arc::new(config::EtherWakeApplet));
+    applets.push(Arc::new(ether_wake::EtherWakeApplet));
     #[cfg(feature = "nameif")]
-    applets.push(Arc::new(config::NameifApplet));
+    applets.push(Arc::new(nameif::NameifApplet));
     #[cfg(feature = "ip")]
-    applets.push(Arc::new(config::IpApplet));
+    applets.push(Arc::new(ip::IpApplet));
     #[cfg(feature = "ipaddr")]
-    applets.push(Arc::new(config::IpaddrApplet));
+    applets.push(Arc::new(ipaddr::IpaddrApplet));
     #[cfg(feature = "iplink")]
-    applets.push(Arc::new(config::IplinkApplet));
+    applets.push(Arc::new(iplink::IplinkApplet));
     #[cfg(feature = "ipneigh")]
-    applets.push(Arc::new(config::IpneighApplet));
+    applets.push(Arc::new(ipneigh::IpneighApplet));
     #[cfg(feature = "iproute")]
-    applets.push(Arc::new(config::IprouteApplet));
+    applets.push(Arc::new(iproute::IprouteApplet));
     #[cfg(feature = "iprule")]
-    applets.push(Arc::new(config::IpruleApplet));
+    applets.push(Arc::new(iprule::IpruleApplet));
     #[cfg(feature = "iptunnel")]
-    applets.push(Arc::new(config::IptunnelApplet));
+    applets.push(Arc::new(iptunnel::IptunnelApplet));
     #[cfg(feature = "ifup")]
-    applets.push(Arc::new(config::IfupApplet));
+    applets.push(Arc::new(ifup::IfupApplet));
     #[cfg(feature = "ifdown")]
-    applets.push(Arc::new(config::IfdownApplet));
+    applets.push(Arc::new(ifdown::IfdownApplet));
     #[cfg(feature = "ifenslave")]
-    applets.push(Arc::new(config::IfenslaveApplet));
+    applets.push(Arc::new(ifenslave::IfenslaveApplet));
     #[cfg(feature = "ifplugd")]
-    applets.push(Arc::new(config::IfplugdApplet));
+    applets.push(Arc::new(ifplugd::IfplugdApplet));
     #[cfg(feature = "vconfig")]
-    applets.push(Arc::new(config::VconfigApplet));
+    applets.push(Arc::new(vconfig::VconfigApplet));
     #[cfg(feature = "tunctl")]
-    applets.push(Arc::new(config::TunctlApplet));
+    applets.push(Arc::new(tunctl::TunctlApplet));
     #[cfg(feature = "slattach")]
-    applets.push(Arc::new(config::SlattachApplet));
+    applets.push(Arc::new(slattach::SlattachApplet));
     #[cfg(feature = "brctl")]
-    applets.push(Arc::new(config::BrctlApplet));
+    applets.push(Arc::new(brctl::BrctlApplet));
     #[cfg(feature = "httpd")]
-    applets.push(Arc::new(servers::HttpdApplet));
+    applets.push(Arc::new(httpd::HttpdApplet));
     #[cfg(feature = "ftpd")]
-    applets.push(Arc::new(servers::FtpdApplet));
+    applets.push(Arc::new(ftpd::FtpdApplet));
     #[cfg(feature = "ftpget")]
-    applets.push(Arc::new(servers::FtpgetApplet));
+    applets.push(Arc::new(ftpget::FtpgetApplet));
     #[cfg(feature = "ftpput")]
-    applets.push(Arc::new(servers::FtpputApplet));
+    applets.push(Arc::new(ftpput::FtpputApplet));
     #[cfg(feature = "tftp")]
-    applets.push(Arc::new(servers::TftpApplet));
+    applets.push(Arc::new(tftp::TftpApplet));
     #[cfg(feature = "tftpd")]
-    applets.push(Arc::new(servers::TftpdApplet));
+    applets.push(Arc::new(tftpd::TftpdApplet));
     #[cfg(feature = "telnet")]
-    applets.push(Arc::new(servers::TelnetApplet));
+    applets.push(Arc::new(telnet::TelnetApplet));
     #[cfg(feature = "telnetd")]
-    applets.push(Arc::new(servers::TelnetdApplet));
+    applets.push(Arc::new(telnetd::TelnetdApplet));
     #[cfg(feature = "inetd")]
-    applets.push(Arc::new(servers::InetdApplet));
+    applets.push(Arc::new(inetd::InetdApplet));
     #[cfg(feature = "fakeidentd")]
-    applets.push(Arc::new(servers::FakeidentdApplet));
+    applets.push(Arc::new(fakeidentd::FakeidentdApplet));
     #[cfg(feature = "dnsd")]
-    applets.push(Arc::new(servers::DnsdApplet));
+    applets.push(Arc::new(dnsd::DnsdApplet));
     #[cfg(feature = "dhcprelay")]
-    applets.push(Arc::new(servers::DhcprelayApplet));
+    applets.push(Arc::new(dhcprelay::DhcprelayApplet));
     #[cfg(feature = "udhcpc")]
-    applets.push(Arc::new(servers::UdhcpcApplet));
+    applets.push(Arc::new(udhcpc::UdhcpcApplet));
     #[cfg(feature = "udhcpc6")]
-    applets.push(Arc::new(servers::Udhcpc6Applet));
+    applets.push(Arc::new(udhcpc6::Udhcpc6Applet));
     #[cfg(feature = "udhcpd")]
-    applets.push(Arc::new(servers::UdhcpdApplet));
+    applets.push(Arc::new(udhcpd::UdhcpdApplet));
     #[cfg(feature = "tcpsvd")]
-    applets.push(Arc::new(sockets::TcpsvdApplet));
+    applets.push(Arc::new(tcpsvd::TcpsvdApplet));
     #[cfg(feature = "udpsvd")]
-    applets.push(Arc::new(sockets::UdpsvdApplet));
+    applets.push(Arc::new(udpsvd::UdpsvdApplet));
     #[cfg(feature = "nc")]
-    applets.push(Arc::new(sockets::NcApplet));
+    applets.push(Arc::new(nc::NcApplet));
     #[cfg(feature = "ping")]
-    applets.push(Arc::new(sockets::PingApplet));
+    applets.push(Arc::new(ping::PingApplet));
     #[cfg(feature = "ping6")]
-    applets.push(Arc::new(sockets::Ping6Applet));
+    applets.push(Arc::new(ping6::Ping6Applet));
     #[cfg(feature = "traceroute")]
-    applets.push(Arc::new(sockets::TracerouteApplet));
+    applets.push(Arc::new(traceroute::TracerouteApplet));
     #[cfg(feature = "traceroute6")]
-    applets.push(Arc::new(sockets::Traceroute6Applet));
+    applets.push(Arc::new(traceroute6::Traceroute6Applet));
     #[cfg(feature = "whois")]
-    applets.push(Arc::new(sockets::WhoisApplet));
+    applets.push(Arc::new(whois::WhoisApplet));
     #[cfg(feature = "nslookup")]
-    applets.push(Arc::new(sockets::NslookupApplet));
+    applets.push(Arc::new(nslookup::NslookupApplet));
     #[cfg(feature = "ssl_client")]
-    applets.push(Arc::new(sockets::SslClientApplet));
+    applets.push(Arc::new(ssl_client::SslClientApplet));
     #[cfg(feature = "ssl_server")]
-    applets.push(Arc::new(sockets::SslServerApplet));
+    applets.push(Arc::new(ssl_server::SslServerApplet));
     #[cfg(feature = "zcip")]
-    applets.push(Arc::new(tools::ZcipApplet));
+    applets.push(Arc::new(zcip::ZcipApplet));
     #[cfg(feature = "wget")]
-    applets.push(Arc::new(tools::WgetApplet));
+    applets.push(Arc::new(wget::WgetApplet));
     #[cfg(feature = "sendmail")]
-    applets.push(Arc::new(tools::SendmailApplet));
+    applets.push(Arc::new(sendmail::SendmailApplet));
     #[cfg(feature = "popmaildir")]
-    applets.push(Arc::new(tools::PopmaildirApplet));
+    applets.push(Arc::new(popmaildir::PopmaildirApplet));
     #[cfg(feature = "ntpd")]
-    applets.push(Arc::new(tools::NtpdApplet));
+    applets.push(Arc::new(ntpd::NtpdApplet));
     #[cfg(feature = "rdate")]
-    applets.push(Arc::new(tools::RdateApplet));
+    applets.push(Arc::new(rdate::RdateApplet));
     #[cfg(feature = "chat")]
-    applets.push(Arc::new(tools::ChatApplet));
+    applets.push(Arc::new(chat::ChatApplet));
     #[cfg(feature = "microcom")]
-    applets.push(Arc::new(tools::MicrocomApplet));
+    applets.push(Arc::new(microcom::MicrocomApplet));
     #[cfg(feature = "pscan")]
-    applets.push(Arc::new(tools::PscanApplet));
+    applets.push(Arc::new(pscan::PscanApplet));
     #[cfg(feature = "dnsdomainname")]
-    applets.push(Arc::new(tools::DnsdomainnameApplet));
+    applets.push(Arc::new(dnsdomainname::DnsdomainnameApplet));
     #[cfg(feature = "ipcalc")]
-    applets.push(Arc::new(tools::IpcalcApplet));
+    applets.push(Arc::new(ipcalc::IpcalcApplet));
     #[cfg(feature = "watchdog")]
-    applets.push(Arc::new(tools::WatchdogApplet));
+    applets.push(Arc::new(watchdog::WatchdogApplet));
     #[cfg(feature = "conspy")]
-    applets.push(Arc::new(tools::ConspyApplet));
+    applets.push(Arc::new(conspy::ConspyApplet));
     #[cfg(feature = "setconsole")]
-    applets.push(Arc::new(tools::SetconsoleApplet));
+    applets.push(Arc::new(setconsole::SetconsoleApplet));
     #[cfg(feature = "resize")]
-    applets.push(Arc::new(tools::ResizeApplet));
+    applets.push(Arc::new(resize::ResizeApplet));
 }

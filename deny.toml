@@ -1,0 +1,16 @@
+[licenses]
+unlicensed = "deny"
+allow = ["MIT", "Apache-2.0"]
+
+[bans]
+multiple-versions = "deny"
+wildcards = "deny"
+
+[advisories]
+vulnerability = "deny"
+unmaintained = "warn"
+yanked = "warn"
+
+[sources]
+unknown-registry = "deny"
+unknown-git = "deny"

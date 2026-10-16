@@ -1,25 +1,12 @@
-// Pure Rust cryptographic and non-cryptographic digest implementations.
-// Covers:
-// - MD5 (RFC 1321)
-// - SHA-1 (FIPS 180-1)
-// - SHA-256 (FIPS 180-2)
-// - SHA-512 (FIPS 180-2)
-// - BSD checksum (16-bit rotating sum)
-// - System V checksum (16-bit sum)
-
 pub trait Digest {
     fn update(&mut self, data: &[u8]);
     fn finalize_hex(self: Box<Self>) -> String;
 }
 
-// ============================================================================
-// MD5 (RFC 1321)
-// ============================================================================
-
 #[derive(Clone)]
 pub struct Md5 {
     state: [u32; 4],
-    count: u64, // total bytes
+    count: u64,
     buffer: [u8; 64],
 }
 
@@ -71,13 +58,11 @@ impl Md5 {
         let bit_len = self.count.wrapping_mul(8);
         let idx = (self.count & 0x3f) as usize;
 
-        // Pad with 0x80 then zeros
         let pad_len = if idx < 56 { 56 - idx } else { 120 - idx };
         let mut pad = [0u8; 128];
         pad[0] = 0x80;
         self.update(&pad[..pad_len]);
 
-        // Append 64-bit length in little-endian
         let len_bytes = bit_len.to_le_bytes();
         self.update(&len_bytes);
 
@@ -131,7 +116,6 @@ impl Md5 {
             };
         }
 
-        // Round 1
         step!(f, a, b, c, d, m[0], 7, 0xd76aa478);
         step!(f, d, a, b, c, m[1], 12, 0xe8c7b756);
         step!(f, c, d, a, b, m[2], 17, 0x242070db);
@@ -149,7 +133,6 @@ impl Md5 {
         step!(f, c, d, a, b, m[14], 17, 0xa679438e);
         step!(f, b, c, d, a, m[15], 22, 0x49b40821);
 
-        // Round 2
         step!(g, a, b, c, d, m[1], 5, 0xf61e2562);
         step!(g, d, a, b, c, m[6], 9, 0xc040b340);
         step!(g, c, d, a, b, m[11], 14, 0x265e5a51);
@@ -167,7 +150,6 @@ impl Md5 {
         step!(g, c, d, a, b, m[7], 14, 0x676f02d9);
         step!(g, b, c, d, a, m[12], 20, 0x8d2a4c8a);
 
-        // Round 3
         step!(h, a, b, c, d, m[5], 4, 0xfffa3942);
         step!(h, d, a, b, c, m[8], 11, 0x8771f681);
         step!(h, c, d, a, b, m[11], 16, 0x6d9d6122);
@@ -185,7 +167,6 @@ impl Md5 {
         step!(h, c, d, a, b, m[15], 16, 0x1fa27cf8);
         step!(h, b, c, d, a, m[2], 23, 0xc4ac5665);
 
-        // Round 4
         step!(i, a, b, c, d, m[0], 6, 0xf4292244);
         step!(i, d, a, b, c, m[7], 10, 0x432aff97);
         step!(i, c, d, a, b, m[14], 15, 0xab9423a7);
@@ -220,14 +201,10 @@ impl Digest for Md5 {
     }
 }
 
-// ============================================================================
-// SHA-1 (FIPS 180-1)
-// ============================================================================
-
 #[derive(Clone)]
 pub struct Sha1 {
     state: [u32; 5],
-    count: u64, // total bytes
+    count: u64,
     buffer: [u8; 64],
 }
 
@@ -358,14 +335,10 @@ impl Digest for Sha1 {
     }
 }
 
-// ============================================================================
-// SHA-256 (FIPS 180-2)
-// ============================================================================
-
 #[derive(Clone)]
 pub struct Sha256 {
     state: [u32; 8],
-    count: u64, // total bytes
+    count: u64,
     buffer: [u8; 64],
 }
 
@@ -522,14 +495,10 @@ impl Digest for Sha256 {
     }
 }
 
-// ============================================================================
-// SHA-512 (FIPS 180-2)
-// ============================================================================
-
 #[derive(Clone)]
 pub struct Sha512 {
     state: [u64; 8],
-    count: u128, // total bytes
+    count: u128,
     buffer: [u8; 128],
 }
 
@@ -758,13 +727,6 @@ impl Digest for Sha512 {
     }
 }
 
-// ============================================================================
-// BSD & System V Checksums
-// ============================================================================
-
-/// BSD 16-bit rotating checksum algorithm:
-/// s = (s >> 1) + ((s & 1) << 15) + byte; s &= 0xffff;
-/// Block count is total_bytes in 1K blocks: (total_bytes + 1023) / 1024
 #[derive(Clone, Default)]
 pub struct BsdSum {
     checksum: u32,
@@ -789,19 +751,12 @@ impl BsdSum {
         self.checksum = s;
     }
 
-    /// Returns (checksum, 1K_blocks)
     pub fn finalize(&self) -> (u32, u64) {
         let blocks = self.total_bytes.div_ceil(1024);
         (self.checksum, blocks)
     }
 }
 
-/// System V 16-bit checksum algorithm:
-/// s = sum of all bytes modulo 2^32.
-/// Then:
-/// r = (s & 0xffff) + (s >> 16);
-/// final_s = (r & 0xffff) + (r >> 16);
-/// Block count is total_bytes in 512-byte blocks: (total_bytes + 511) / 512
 #[derive(Clone, Default)]
 pub struct SysVSum {
     sum: u32,
@@ -825,7 +780,6 @@ impl SysVSum {
         self.sum = s;
     }
 
-    /// Returns (checksum, 512_blocks)
     pub fn finalize(&self) -> (u32, u64) {
         let r = (self.sum & 0xffff) + (self.sum >> 16);
         let s = (r & 0xffff) + (r >> 16);
@@ -833,10 +787,6 @@ impl SysVSum {
         (s, blocks)
     }
 }
-
-// ============================================================================
-// Helper
-// ============================================================================
 
 fn hex_encode(bytes: &[u8]) -> String {
     let mut s = String::with_capacity(bytes.len() * 2);
